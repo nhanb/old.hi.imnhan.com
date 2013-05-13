@@ -6,7 +6,7 @@ AUTHOR = u'Bùi Thành Nhân'
 SITENAME = u'Nhanb'
 SITEURL = ''
 
-TIMEZONE = 'Europe/Paris'
+TIMEZONE = 'Asia/Ho_Chi_Minh'
 
 DEFAULT_LANG = u'en'
 
@@ -22,8 +22,8 @@ LINKS = (('Pelican', 'http://getpelican.com/'),
          )
 
 # Social widget
-SOCIAL = (('You can add links in your config file', '#'),
-          ('Another social link', '#'),)
+#SOCIAL = (('You can add links in your config file', '#'),
+          #('Another social link', '#'),)
 
 DEFAULT_PAGINATION = 10
 

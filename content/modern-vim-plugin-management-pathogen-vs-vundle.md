@@ -1,4 +1,4 @@
-Date: 2013-05-13
+Date: 2013-05-13 12:00
 Title: "Modern vim plugin management - Pathogen vs Vundle"
 Category: Blog
 Tags: tutorial
