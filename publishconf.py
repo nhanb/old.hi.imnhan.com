@@ -10,19 +10,23 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
-SITEURL = 'http://nhanb.github.io/blog'
-RELATIVE_URLS = True
+SITEURL = 'http://blog.nerdyweekly.com'
+RELATIVE_URLS = False
 
+FEED_DOMAIN = SITEURL
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
 DELETE_OUTPUT_DIRECTORY = True
 
-# Copy CNAME file to output
+# Copy static files to output
 FILES_TO_COPY = (('extra/CNAME', 'CNAME'),
                  ('extra/README.markdown', 'README.markdown'))
 
+ARTICLE_URL = 'posts/{date:%Y}/{date:%b}/{slug}.html'
+ARTICLE_SAVE_AS = 'posts/{date:%Y}/{date:%b}/{slug}.html'
+
 # Following items are often useful when publishing
 
-#DISQUS_SITENAME = ""
-#GOOGLE_ANALYTICS = ""
+DISQUS_SITENAME = "nerdyweekly"
+GOOGLE_ANALYTICS = "UA-40876322-1"

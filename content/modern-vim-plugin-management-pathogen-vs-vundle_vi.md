@@ -1,17 +1,18 @@
 date: 2013-05-13 12:00
 title: Modern vim plugin management - Pathogen vs Vundle
 slug: modern-vim-plugin-management-pathogen-vs-vundle
-lang: en
+lang: vi
 category: Tutorials
 tags: vim
 summary: Pimp your vim with little effort
+status: draft
 
+Dành cho những ai lười đọc: Vundle tốt hơn Pathogen.
 
-For the impatient ones: Vundle is better than pathogen, use it.
-
-This post will explain how vim plugins work and how to easily manage your plugins with
-third-party tools: Pathogen or Vundle. I assume you are using a Linux distro and have git
-already installed. If not, consult Dr. Google for more details.
+Bài viết này sẽ giải thich cách hoạt động của plugin trong vim và cách quản lý plugins bằng những
+công cụ được cộng đồng phát triển: Pathogen hoặc Vundle. Trong bài viết này tôi sẽ làm hướng dẫn
+cụ thể cho máy chạy Linux (dễ nhất là Ubuntu) và đã cài sẵn git. Nếu không rõ, bạn có thể hỏi
+Google.
 
 ## Vim plugins anatomy
 
