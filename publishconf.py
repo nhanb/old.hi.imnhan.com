@@ -10,8 +10,8 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
-SITEURL = 'http://blog.nerdyweekly.com/blog'
-RELATIVE_URLS = False
+SITEURL = 'http://nhanb.github.io/blog'
+RELATIVE_URLS = True
 
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
@@ -19,7 +19,8 @@ CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 DELETE_OUTPUT_DIRECTORY = True
 
 # Copy CNAME file to output
-FILES_TO_COPY = (('extra/CNAME', 'CNAME'),)
+FILES_TO_COPY = (('extra/CNAME', 'CNAME'),
+                 ('extra/README.markdown', 'README.markdown'))
 
 # Following items are often useful when publishing
 
