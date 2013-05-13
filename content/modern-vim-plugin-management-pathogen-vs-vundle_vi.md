@@ -1,40 +1,39 @@
 date: 2013-05-13 12:00
-title: Modern vim plugin management - Pathogen vs Vundle
+title: Quản lý plugin trong vim - Pathogen vs Vundle
 slug: modern-vim-plugin-management-pathogen-vs-vundle
 lang: vi
 category: Tutorials
 tags: vim
 summary: Pimp your vim with little effort
-status: draft
 
 Dành cho những ai lười đọc: Vundle tốt hơn Pathogen.
 
 Bài viết này sẽ giải thich cách hoạt động của plugin trong vim và cách quản lý plugins bằng những
-công cụ được cộng đồng phát triển: Pathogen hoặc Vundle. Trong bài viết này tôi sẽ làm hướng dẫn
-cụ thể cho máy chạy Linux (dễ nhất là Ubuntu) và đã cài sẵn git. Nếu không rõ, bạn có thể hỏi
+công cụ được cộng đồng phát triển: Pathogen hoặc Vundle. Trong bài viết này tôi chỉ làm hướng dẫn
+cụ thể cho máy chạy Linux và đã cài sẵn git. Nếu không rõ cách cài git, bạn có thể hỏi
 Google.
 
-## Vim plugins anatomy
+# Cấu trúc vim plugins
 
-A vim plugin is simply a set of files that alter vim's behavior or add new functionalities to it.
-To make this possible, by default vim looks for files in your home folder (which is 
-`/home/username` or `~`):
+Một plugin trong vim đơn giản chỉ là 1 nhóm các files có nhiệm vụ thay đổi hoặc thêm tính
+năng cho vim. Theo mặc định thì vim sẽ tìm trong home folder của người dùng (chính là
+`/home/username` hoặc có thể viết tắt là `~`):
 
-### ~/.vimrc (file)
+## ~/.vimrc (file)
 
-This is where you put your personalizations to vim: indentations, keybindings, etc. This post
-will not discuss in detail how you do your customizations. For now just know that it's there.
+Đây là nơi bạn tùy biến mọi thứ trong vim: căn lề, gán phím, vân vân... Bài viết này sẽ không đề
+cập chi tiết cách tùy biến như thế nào. Lúc này bạn chỉ cần biết là nó có 1 file đó.
 
-You will probably want to move this file into your ~/.vim folder to be able to manage everything
-inside 1 folder. I will create `~/.vim/vimrc` then create a symlink pointing to it. Open a
-terminal and type:
+Để tiện quản lý, chúng ta hãy đem file này vào folder `~/.vim`. Hãy tạo một file `~/.vim/vimrc`
+rồi dẫn symlink trỏ vào nó:
 
     :::bash
+    touch ~/.vim/vimrc
     ln -s ~/.vim/vimrc ~/.vimrc
 
-### ~/.vim (directory)
+## ~/.vim (directory)
 
-This should contain a bunch of subdirectories. Some examples:
+Folder này sẽ chứa một vài folder con khác. Ví dụ:
 
 - autoload
 - ftplugin
@@ -42,11 +41,10 @@ This should contain a bunch of subdirectories. Some examples:
 - syntax
 - doc
 
-Each of these directories serves a particular purpose: `colors` contains colorschemes, `syntax`
-lets you add new rules for syntax highlighting, `doc` contains documentation...  
-A plugin will typically put its files into more than one directory here. For example, here is
-a plugin called [tagbar](https://github.com/majutsushi/tagbar), and I've installed it by
-copying its content into my `~/.vim` folder:
+Mỗi folder đều có một nhiệm vụ nhất định: `colors` chứa colorschemes, `syntax` cho phép
+bạn tùy chỉnh tô màu code, `doc` chứa tài liệu hướng dẫn... Một plugin thường sẽ chèn nhiều
+file vào nhiều folder ở đây. Hãy lấy plugin [tagbar](https://github.com/majutsushi/tagbar)
+làm ví dụ: ta sẽ cài nó bằng cách copy hết nội dung của nó vào `~/.vim`:
 
     :::bash
     ~/.vim
@@ -104,7 +102,7 @@ which file belongs to which plugin. Oh, don't forget the merged `doc/tags` file!
 Now imagine you have 20-30 plugins installed (which is normal, by the way). It's not a
 pretty sight now, is it?
 
-## Pathogen to the rescue!
+# Pathogen to the rescue!
 
 The legendary Tim Pope came up with a genius solution:
 [pathogen](https://github.com/tpope/vim-pathogen).
@@ -156,7 +154,7 @@ It means that each folder here can be considered a new `.vim` folder where vim l
 appropriate configuration files. The plugins are now isolated so removing or updating them
 becomes trivial: just remove or update its own directory.
 
-## Pathogen + Git
+# Pathogen + Git
 
 Everything goes to the cloud these days, and certainly your vim setup should as well. If you
 haven't created a [Github](https://github.com) account, do it now. Create an empty repository
@@ -224,7 +222,7 @@ remove the folder by hand. See
 [this Stackoverflow question](http://stackoverflow.com/questions/1260748/how-do-i-remove-a-git-submodule)
 for detailed instructions.
 
-## Vundle, the new cool kid
+# Vundle, the new cool kid
 
 This time let's start fresh: remove all submodules and pathogen. Your bundle folder should be
 now empty. Clone [Vundle](https://github.com/gmarik/vundle):
