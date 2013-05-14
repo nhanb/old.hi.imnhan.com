@@ -15,16 +15,26 @@ FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 
-# Blogroll
-LINKS = (('Pelican', 'http://getpelican.com/'),
-         ('Python.org', 'http://python.org/'),
-         ('Jinja2', 'http://jinja.pocoo.org/')
-         )
+## Blogroll
+#LINKS = (('Pelican', 'http://getpelican.com/'),
+         #('Python.org', 'http://python.org/'),
+         #('Jinja2', 'http://jinja.pocoo.org/')
+         #)
 
-# Social widget
-#SOCIAL = (('You can add links in your config file', '#'),
-          #('Another social link', '#'),)
+# Copy static files to output
+FILES_TO_COPY = (('extra/CNAME', 'CNAME'),
+                 ('extra/README.markdown', 'README.markdown'),
+                 ('extra/favicon.ico', 'favicon.ico'))
+
+ARTICLE_URL = '{date:%Y}/{date:%m}/{slug}/'
+ARTICLE_SAVE_AS = '{date:%Y}/{date:%m}/{slug}/index.html'
+ARTICLE_LANG_URL = '{date:%Y}/{date:%m}/{slug}-{lang}/'
+ARTICLE_LANG_SAVE_AS = '{date:%Y}/{date:%m}/{slug}-{lang}/index.html'
 
 DEFAULT_PAGINATION = 10
 
 STATIC_PATHS = ['images']
+
+# Social widget
+#SOCIAL = (('You can add links in your config file', '#'),
+          #('Another social link', '#'),)
