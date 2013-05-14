@@ -15,11 +15,7 @@ FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 
-## Blogroll
-#LINKS = (('Pelican', 'http://getpelican.com/'),
-         #('Python.org', 'http://python.org/'),
-         #('Jinja2', 'http://jinja.pocoo.org/')
-         #)
+STATIC_PATHS = ['images']
 
 # Copy static files to output
 FILES_TO_COPY = (('extra/CNAME', 'CNAME'),
@@ -31,10 +27,28 @@ ARTICLE_SAVE_AS = '{date:%Y}/{date:%m}/{slug}/index.html'
 ARTICLE_LANG_URL = '{date:%Y}/{date:%m}/{slug}-{lang}/'
 ARTICLE_LANG_SAVE_AS = '{date:%Y}/{date:%m}/{slug}-{lang}/index.html'
 
-DEFAULT_PAGINATION = 10
+PAGE_URL = ('pages/{slug}/')
+PAGE_SAVE_AS = ('pages/{slug}/index.html')
+PAGE_LANG_URL = ('pages/{slug}-{lang}/')
+PAGE_LANG_SAVE_AS = ('pages/{slug}-{lang}/index.html')
 
-STATIC_PATHS = ['images']
+AUTHOR_URL = ('author/{slug}/')
+AUTHOR_SAVE_AS = ('author/{slug}/index.html')
+
+CATEGORY_URL = ('category/{slug}/')
+CATEGORY_SAVE_AS = ('category/{slug}/index.html')
+
+TAG_URL = ('tag/{slug}/')
+TAG_SAVE_AS = ('tag/{slug}/index.html')
+
+DEFAULT_PAGINATION = 10
 
 # Social widget
 #SOCIAL = (('You can add links in your config file', '#'),
           #('Another social link', '#'),)
+
+## Blogroll
+#LINKS = (('Pelican', 'http://getpelican.com/'),
+         #('Python.org', 'http://python.org/'),
+         #('Jinja2', 'http://jinja.pocoo.org/')
+         #)
