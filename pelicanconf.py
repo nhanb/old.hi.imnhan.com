@@ -43,6 +43,14 @@ TAG_SAVE_AS = ('tag/{slug}/index.html')
 
 DEFAULT_PAGINATION = 10
 
+THEME = "~/dev/pelican-otopress-theme/"
+
+GITHUB_USERNAME = "nhanb"
+FACEBOOK_USERNAME = "thanhnhanb"
+
+AUTHOR_NAME = "Bùi Thành Nhân"
+AUTHOR_SLUG = "nhanb"
+
 # Social widget
 #SOCIAL = (('You can add links in your config file', '#'),
           #('Another social link', '#'),)
