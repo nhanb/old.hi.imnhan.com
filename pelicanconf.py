@@ -6,6 +6,8 @@ AUTHOR = u'Bùi Thành Nhân'
 SITENAME = u'Nhanb'
 SITEURL = ''
 
+THEME=u'/home/nhanb/dev/pelican-octopress-theme'
+
 TIMEZONE = 'Asia/Ho_Chi_Minh'
 
 DEFAULT_LANG = u'en'
@@ -43,7 +45,7 @@ TAG_SAVE_AS = ('tag/{slug}/index.html')
 
 DEFAULT_PAGINATION = 10
 
-THEME = "~/dev/pelican-otopress-theme/"
+#THEME = "/home/nhanb/Dropbox/dev/pelican-simplicity-theme"
 
 GITHUB_USERNAME = "nhanb"
 FACEBOOK_USERNAME = "thanhnhanb"
