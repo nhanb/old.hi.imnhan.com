@@ -105,7 +105,7 @@ accelerate the download. This is where `aria2c` jumps in: it takes the direct li
         print shell_output
 
 That's it! I just needed to launch this script, turn off the laptop screen and go to bed. This
-morning I woke up seeing the whole course with almost 200 lessons downloaded. Imagine having to
+morning I woke up seeing the whole course with almost 100 lessons downloaded. Imagine having to
 manually download all that by clicking each link... You don't wanna go there, do you?
 
 So that's just a very simple example of what automation helps your every day life. Of course its
