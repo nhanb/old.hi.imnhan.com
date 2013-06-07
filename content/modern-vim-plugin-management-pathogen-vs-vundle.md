@@ -4,7 +4,7 @@ slug: modern-vim-plugin-management-pathogen-vs-vundle
 lang: en
 category: tutorials
 tags: vim
-summary: Pimp your vim with little effort
+summary: Pimp your vim with little effort.
 
 
 For the impatient ones: Vundle is better than pathogen, use it.
@@ -13,7 +13,7 @@ This post will explain how vim plugins work and how to easily manage your plugin
 third-party tools: Pathogen or Vundle. I assume you are using a Linux distro and have git
 already installed. If not, consult Dr. Google for more details.
 
-# Vim plugins anatomy
+## Vim plugins anatomy
 
 A vim plugin is simply a set of files that alter vim's behavior or add new functionalities to it.
 To make this possible, by default vim looks for files in your home folder (which is 
@@ -103,7 +103,7 @@ which file belongs to which plugin. Oh, don't forget the merged `doc/tags` file!
 Now imagine you have 20-30 plugins installed (which is normal, by the way). It's not a
 pretty sight now, is it?
 
-# Pathogen to the rescue!
+## Pathogen to the rescue!
 
 The legendary Tim Pope came up with a genius solution:
 [pathogen](https://github.com/tpope/vim-pathogen).
@@ -155,7 +155,7 @@ It means that each folder here can be considered a new `.vim` folder where vim l
 appropriate configuration files. The plugins are now isolated so removing or updating them
 becomes trivial: just remove or update its own directory.
 
-# Pathogen + Git
+## Pathogen + Git
 
 Everything goes to the cloud these days, and certainly your vim setup should as well. If you
 haven't created a [Github](https://github.com) account, do it now. Create an empty repository
@@ -223,7 +223,7 @@ remove the folder by hand. See
 [this Stackoverflow question](http://stackoverflow.com/questions/1260748/how-do-i-remove-a-git-submodule)
 for detailed instructions.
 
-# Vundle, the new cool kid
+## Vundle, the new cool kid
 
 This time let's start fresh: remove all submodules and pathogen. Your bundle folder should be
 now empty. Clone [Vundle](https://github.com/gmarik/vundle):

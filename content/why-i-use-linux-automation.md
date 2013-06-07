@@ -3,14 +3,14 @@ Date: 2013-06-07 08:02
 Category: tutorials
 Tags: python, linux
 Slug: why-i-use-linux-automation
-Summary: Repeating is boring
+Summary: Repeating is for losers.
 
 (In this post, when I say Linux, I mean any popular GNU/Linux distribution. Hope this clarification
 will keep the nitpickers away.)
 
 First let's discuss *why* automation rocks.
 
-# Repetition is evil (and boring)
+## Repetition is evil (and boring)
 
 As a (would-be) software engineer, the *repetition is evil* notion has been planted in my head for
 far more times than anything else, and for good reasons.
@@ -26,7 +26,7 @@ like re-watching the last episode of BBC's *Sherlock* to look for clues to how h
 or trying to figure out what that "Han shot first" meme means (sorry, I'm from the later
 generation).
 
-# Automation needs command line tools
+## Automation needs command line tools
 
 Because, of course, GUI programs are (nearly) impossible to interact with in our scripts. Sure
 you can try mouse click emulation tools and stuff like that, but is it really worth the effort?
@@ -38,7 +38,7 @@ the whole Windows ecosystem is built around GUI use.
 It's a whole different matter in Linux: from the good old awk, sed, grep, wget to the new shiny
 aria2... Almost anything you can think of is available as a command line tool.
 
-# Putting them all together
+## Putting them all together
 
 Just like any UNIX-like system, Linux tools utilize the One True Phylosophy: Do only 1 thing, and
 do it well. (okay, I'm paraphrasing a bit, but you get the idea)

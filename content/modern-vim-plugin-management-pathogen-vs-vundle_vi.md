@@ -4,7 +4,7 @@ slug: modern-vim-plugin-management-pathogen-vs-vundle
 lang: vi
 category: Tutorials
 tags: vim
-summary: Pimp your vim with little effort
+summary: Pimp your vim with little effort.
 
 Dành cho những ai lười đọc: Vundle tốt hơn Pathogen.
 
