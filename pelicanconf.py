@@ -22,7 +22,9 @@ STATIC_PATHS = ['images']
 # Copy static files to output
 FILES_TO_COPY = (('extra/CNAME', 'CNAME'),
                  ('extra/README.markdown', 'README.markdown'),
-                 ('extra/favicon.ico', 'favicon.ico'))
+                 ('extra/favicon.ico', 'favicon.ico'),
+                 ('extra/cal.html', 'calendar/index.html')
+                 )
 
 ARTICLE_URL = '{date:%Y}/{date:%m}/{slug}/'
 ARTICLE_SAVE_AS = '{date:%Y}/{date:%m}/{slug}/index.html'
