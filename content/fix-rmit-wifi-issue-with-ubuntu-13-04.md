@@ -12,7 +12,7 @@ the RMIT-WPA network just never allowed me to establish a connection. The most a
 that it had been working fine in previous versions (12.04, 12.10).
 
 After days of googling, I finally pinpointed the issue: a certain version of NetworkManager
-bundled in Ubuntu 13.04 has a bug that automatically turn CA certificate usage to *true* for any
+bundled in Ubuntu 13.04 has a bug that automatically turns CA certificate usage to *true* for any
 WPA2 wifi network, even if we choose to use none in the GUI.
 
 ![RMIT wi-fi settings](/static/images/rmit_wifi.png)
