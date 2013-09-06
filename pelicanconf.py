@@ -3,7 +3,8 @@
 from __future__ import unicode_literals
 
 AUTHOR = u'Bùi Thành Nhân'
-SITENAME = u'Nhanb'
+SITENAME = u'Nerdy Weekly'
+SITESUBTITLE = u'By nhanb'
 SITEURL = ''
 
 THEME = u'/home/nhanb/open-source/pelican-octopress-theme'
@@ -58,7 +59,8 @@ AUTHOR_SLUG = "nhanb"
 # Social widget
 SOCIAL = (('Github', 'https://github.com/nhanb'),
           ('Facebook', 'https://www.facebook.com/thanhnhanb'),
-          ('Google+', 'https://plus.google.com/114388334309097537564'),
+          ('Google+',
+           'https://plus.google.com/114388334309097537564?rel=author'),
           )
 
 ## Blogroll
