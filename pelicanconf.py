@@ -6,7 +6,7 @@ AUTHOR = u'Bùi Thành Nhân'
 SITENAME = u'Nhanb'
 SITEURL = ''
 
-THEME=u'/home/nhanb/dev/pelican-octopress-theme'
+THEME = u'/home/nhanb/open-source/pelican-octopress-theme'
 
 TIMEZONE = 'Asia/Ho_Chi_Minh'
 
@@ -56,8 +56,10 @@ AUTHOR_NAME = "Bùi Thành Nhân"
 AUTHOR_SLUG = "nhanb"
 
 # Social widget
-#SOCIAL = (('You can add links in your config file', '#'),
-          #('Another social link', '#'),)
+SOCIAL = (('Github', 'https://github.com/nhanb'),
+          ('Facebook', 'https://www.facebook.com/thanhnhanb'),
+          ('Google+', 'https://plus.google.com/114388334309097537564'),
+          )
 
 ## Blogroll
 #LINKS = (('Pelican', 'http://getpelican.com/'),
