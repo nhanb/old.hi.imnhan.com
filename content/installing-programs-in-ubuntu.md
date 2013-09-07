@@ -114,7 +114,7 @@ Here are some basic commands to get you started:
 - `sudo apt-get install package-name` to install package
 - `sudo apt-get remove package-name` - it's obvious isn't it?
 - `sudo apt-get update` - update package list. Note that it only updates the list, not the packages
-- `sudo apt-get upgrade` - update packages
+- `sudo apt-get upgrade` - upgrade packages to their latest versions
 
 There will be programs that are not available on the official repositories, but are provided as
 package files (Dropbox for example). Remember that the right package format for Ubuntu is `.deb`
