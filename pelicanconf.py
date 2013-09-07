@@ -26,6 +26,7 @@ FILES_TO_COPY = (('extra/CNAME', 'CNAME'),
                  ('extra/favicon.ico', 'favicon.ico'),
                  ('extra/favicon.png', 'favicon.png'),
                  ('extra/cal.html', 'calendar/index.html'),
+                 ('extra/404.html', '404.html'),
                  ('extra/google3f40dbd543a603fa.html',
                   'google3f40dbd543a603fa.html'),
                  )

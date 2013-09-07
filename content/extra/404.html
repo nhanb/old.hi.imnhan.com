@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 Not Found</title>
+    <meta charset="utf-8" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+    <style class="text/css">
+        body {
+            font-family: "Open Sans", "sans-serif";
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 90px;
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 25px;
+            width: 50%;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>404 Not Found</h1>
+    <p id="msg"> Looks like you're lost!<br />
+    Click <a href="/">here</a> to go back to the home page</p>
+
+    <script type="text/javascript" charset="utf-8">
+
+// Courtesy of stackoverflow
+function getURLParameter(name) {
+    return decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]);
+}
+
+function attemptRedirect(count) {
+    var url = window.location.href.toString();
+    var regex = /\/[0-9]{4}\/[0-9]{2}\//;
+    var newUrl = url.replace(regex, "/posts/");
+    if (newUrl !== url) {
+        setInterval(function(){
+            if(count == 0) {
+                document.location.href = newUrl + "?smartass=yes";
+            }
+
+            document.getElementById("msg").innerHTML = "No worries, I'm using my <b>psychic power<\/b> to redirect you the correct article in <b>" + count + "<\/b> seconds...";
+
+            count -= 1;
+        }, 1000);
+    }
+}
+
+function fuckingScope() {
+    var count = 5;
+    var param = getURLParameter("smartass");
+    if (param === "yes") {
+        var msg = "Well, looks like my <b>psychic power<\/b>'s a bit off today...";
+        msg += ' Redirecting you to my <b><a href="/">home page<\/a><\/b>... ';
+        document.getElementById("msg").innerHTML = msg;
+        setInterval(function(){document.location.href = "/"}, 4000);
+    } else {
+        attemptRedirect(count);
+    }
+}
+
+// Plain JS because, well, who gives a fuck about $(document).ready()?
+fuckingScope();
+
+    </script>
+</body>
+</html>
