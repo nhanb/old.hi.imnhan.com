@@ -24,5 +24,10 @@ months or so. This blog is where I write down interesting things I discover, or 
 myself by writing technical tutorials. On occasional bad days I might throw all my ramblings here
 too, but hopefully those will be rare.
 
+This blog uses [Pelican](http://getpelican.com) - a static site generator written in Python. The
+static files are hosted on Github Pages. The theme used here is a (very slightly) modified fork
+from [pelican-octopress-theme](https://github.com/duilio/pelican-octopress-theme). All the
+markdown content files can also be found on my [github repo](https://github.com/nhanb/blog).
+
 I always appreciate feedback or further discussions on my posts, so feel free to point out if you
 think I said something stupid. That's it. Enjoy reading!
