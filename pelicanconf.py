@@ -24,6 +24,7 @@ STATIC_PATHS = ['images']
 FILES_TO_COPY = (('extra/CNAME', 'CNAME'),
                  ('extra/README.markdown', 'README.markdown'),
                  ('extra/favicon.ico', 'favicon.ico'),
+                 ('extra/favicon.png', 'favicon.png'),
                  ('extra/cal.html', 'calendar/index.html'),
                  ('extra/google3f40dbd543a603fa.html',
                   'google3f40dbd543a603fa.html'),
@@ -52,9 +53,6 @@ DEFAULT_PAGINATION = 10
 
 #THEME = "/home/nhanb/Dropbox/dev/pelican-simplicity-theme"
 
-GITHUB_USERNAME = "nhanb"
-FACEBOOK_USERNAME = "thanhnhanb"
-
 AUTHOR_NAME = "Bùi Thành Nhân"
 AUTHOR_SLUG = "nhanb"
 
@@ -70,3 +68,5 @@ SOCIAL = (('Github', 'https://github.com/nhanb'),
          #('Python.org', 'http://python.org/'),
          #('Jinja2', 'http://jinja.pocoo.org/')
          #)
+
+THEME_STATIC_PATHS = ['static']
