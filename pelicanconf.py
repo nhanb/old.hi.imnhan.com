@@ -12,6 +12,7 @@ THEME = u'/home/nhanb/open-source/pelican-octopress-theme'
 TIMEZONE = 'Asia/Ho_Chi_Minh'
 
 DEFAULT_LANG = u'en'
+TYPOGRYFY = True
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
@@ -52,9 +53,7 @@ TAG_SAVE_AS = ('tag/{slug}/index.html')
 
 DEFAULT_PAGINATION = 10
 
-#THEME = "/home/nhanb/Dropbox/dev/pelican-simplicity-theme"
-
-AUTHOR_NAME = "Bùi Thành Nhân"
+AUTHOR_NAME = u'Bùi Thành Nhân'
 AUTHOR_SLUG = "nhanb"
 
 # Social widget
@@ -71,3 +70,7 @@ SOCIAL = (('Github', 'https://github.com/nhanb'),
          #)
 
 THEME_STATIC_PATHS = ['static']
+
+MENUITEMS = (
+    ('Blog', '/'),
+)
