@@ -5,7 +5,7 @@ Title: About
 ![My face](/static/images/nhan.jpg)
 
 My name is **Bùi Thành Nhân**. I'm an undergraduate at RMIT Vietnam, focusing myself on web
-delvelopment, mostly backend but I'm also taking huge interests in frontend frameworks too (twitter
+delvelopment, mostly backend but I'm also taking huge interests in frontend frameworks (twitter
 bootstrap, angularjs, etc.).
 
 I have a working knowledge of Java desktop programming, experience on web programming with PHP and
@@ -19,7 +19,7 @@ the gym (always going for the lighter dumbbells) or swimming.
 
 ## About this blog
 
-My mind is a sad mess which cannot hold much important/interesting information after a couple of
+My mind is a sad mess that cannot hold much important/interesting information after a couple of
 months or so. This blog is where I write down interesting things I discover, or practice expressing
 myself by writing technical tutorials. On occasional bad days I might throw all my ramblings here
 too, but hopefully those will be rare.

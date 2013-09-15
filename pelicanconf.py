@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Bùi Thành Nhân'
 SITENAME = u'Nerdy Weekly'
-SITESUBTITLE = u'By nhanb'
+SITESUBTITLE = u'Thoughts on programming, technology and being awesome in general'
 SITEURL = ''
 
 THEME = u'/home/nhanb/open-source/pelican-octopress-theme'
@@ -12,7 +12,7 @@ THEME = u'/home/nhanb/open-source/pelican-octopress-theme'
 TIMEZONE = 'Asia/Ho_Chi_Minh'
 
 DEFAULT_LANG = u'en'
-TYPOGRYFY = True
+TYPOGRIFY = True
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
