@@ -70,7 +70,7 @@ Unfortunately, most programs have a lot of files instead of one, and they are sc
 different folders. Let's have a look at the files of `wget` - the downloader that's included in
 every major Linux distribution:
 
-![Wget files](/static/images/wget-installed-files.png)
+![Wget files](/images/wget-installed-files.png)
 
 It's not that the developers chose to annoy us by scattering them all over the place. It's simply
 complying to Linux structure: executable files go to **/usr/bin**, man pages (user manuals that
@@ -98,7 +98,7 @@ a **package manager**. Of course besides installing, a package manager also mana
 and removals of programs. Ubuntu is based on Debian, so it inherits Debian's great package manager
 called **aptitude** (or simply `apt`). Let's take a look at wget's dependencies:
 
-![Wget files](/static/images/wget-dependencies.png)
+![Wget files](/images/wget-dependencies.png)
 
 The package manager maintains a list of available packages and their dependency/dependant
 relationships. For Ubuntu, the list is updated regularly on Canonical's official servers. Everytime
@@ -126,7 +126,7 @@ Aptitude is only a command-line program, which is not very user-friendly. Synapt
 that provides a nice user interface that's easy to use, while internally it uses `apt` to do all
 the actual work.
 
-![Wget files](/static/images/wget-dependencies.png)
+![Wget files](/images/wget-dependencies.png)
 
 Ubuntu Software Center is more than a GUI wrapper for `apt`. It is something similar to Apple's
 appstore with all those program ratings and promotions. It's nice for beginners but the fact that

@@ -15,7 +15,7 @@ After days of googling, I finally pinpointed the issue: a certain version of Net
 bundled in Ubuntu 13.04 has a bug that automatically turns CA certificate usage to *true* for any
 WPA2 wifi network, even if we choose to use none in the GUI.
 
-![RMIT wi-fi settings](/static/images/rmit_wifi.png)
+![RMIT wi-fi settings](/images/rmit_wifi.png)
 
 ## The solution
 

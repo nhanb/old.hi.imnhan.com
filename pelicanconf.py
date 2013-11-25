@@ -19,18 +19,22 @@ FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 
-STATIC_PATHS = ['images']
+STATIC_PATHS = ['images', 'extra']
 
-# Copy static files to output
-FILES_TO_COPY = (('extra/CNAME', 'CNAME'),
-                 ('extra/README.markdown', 'README.markdown'),
-                 ('extra/favicon.ico', 'favicon.ico'),
-                 ('extra/favicon.png', 'favicon.png'),
-                 ('extra/cal.html', 'calendar/index.html'),
-                 ('extra/404.html', '404.html'),
-                 ('extra/google3f40dbd543a603fa.html',
-                  'google3f40dbd543a603fa.html'),
-                 )
+EXTRA_PATH_METADATA = {
+    'extra/CNAME': {'path': 'CNAME'},
+    'extra/README.markdown': {'path': 'README.markdown'},
+    'extra/favicon.ico': {'path': 'favicon.ico'},
+    'extra/favicon.png': {'path': 'favicon.png'},
+    'extra/cal.html': {'path': 'calendar/index.html'},
+    'extra/404.html': {'path': '404.html'},
+    'extra/google3f40dbd543a603fa.html':
+    {'path': 'google3f40dbd543a603fa.html'}
+}
+
+## Copy static files to output
+#FILES_TO_COPY = (
+                 #)
 
 ARTICLE_URL = 'posts/{slug}/'
 ARTICLE_SAVE_AS = 'posts/{slug}/index.html'
