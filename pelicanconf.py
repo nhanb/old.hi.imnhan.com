@@ -78,3 +78,6 @@ THEME_STATIC_PATHS = ['static']
 MENUITEMS = (
     ('Blog', '/'),
 )
+
+PLUGIN_PATH = '/home/nhanb/open-source/pelican-plugins'
+PLUGINS = ["optimize_images"]
