@@ -2,7 +2,7 @@ Title: Installing programs in Ubuntu
 Date: 2013-09-06 21:03
 Category: tutorials
 Tags: ubuntu, linux
-Summary: Or the story of runtime paths, executables, packages and package managers.
+Summary: Or the story of runtime paths, executables, packages and package managers
 
 This article will not only explain how to install stuff, but it will (hopefully) also give readers
 a better understanding about Linux's structure for storing and executing programs, ultimately

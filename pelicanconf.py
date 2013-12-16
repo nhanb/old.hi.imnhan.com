@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Bùi Thành Nhân'
 SITENAME = u'Nerdy Weekly'
-SITESUBTITLE = u'Thoughts on programming, technology and being awesome in general'
+SITESUBTITLE = u'Thoughts on programming and other stuff that matters'
 SITEURL = ''
 
 THEME = u'/home/nhanb/open-source/pelican-octopress-theme'
@@ -31,10 +31,6 @@ EXTRA_PATH_METADATA = {
     'extra/google3f40dbd543a603fa.html':
     {'path': 'google3f40dbd543a603fa.html'}
 }
-
-## Copy static files to output
-#FILES_TO_COPY = (
-                 #)
 
 ARTICLE_URL = 'posts/{slug}/'
 ARTICLE_SAVE_AS = 'posts/{slug}/index.html'
