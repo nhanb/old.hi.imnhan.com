@@ -31,3 +31,14 @@ permission. If you're not sure how to do this, open a terminal and enter this co
 This is a [known bug](https://bugs.launchpad.net/ubuntu/+source/network-manager/+bug/1104476) and
 many have complained about it. There seems to be no developer assigned to fix it though. I'll keep
 you updated on the issue.
+
+### Update (Dec 16, 2013)
+
+A fix has been released in GNOME upstream but not incorporated into official Ubuntu repositories
+yet. An impatient contributor has created his own PPA to provide the fixed package. To install it,
+enter the following commands:
+
+    :::bash
+    sudo sudo add-apt-repository ppa:pritambaral/nms
+    sudo apt-get update
+    sudo apt-get install network-manager-gnome
