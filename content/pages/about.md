@@ -2,7 +2,7 @@ Title: About
 
 ## About me
 
-![My face](/static/images/nhan.jpg)
+![My face](/images/nhan.jpg)
 
 My name is **Bùi Thành Nhân**. I'm an undergraduate at RMIT Vietnam, focusing myself on web
 delvelopment, mostly backend but I'm also taking huge interests in frontend frameworks (twitter
