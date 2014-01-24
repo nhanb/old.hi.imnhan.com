@@ -14,7 +14,7 @@ from a non-tech company asked me:
 > \- What do you mean by "more or less"? [...] Have you built anything at all?  
 
 Then I went on trying to explain what my recent side project - 
-[pytaku](https://pytaku.appspot.com) - does and why it is awesome for me. He seemed to be
+[pytaku](https://pytaku-legacy.appspot.com) - does and why it is awesome for me. He seemed to be
 disinterested halfway through so I decided to shut up anyway.
 
 Sure, I have done stuff every now and then, be it assignment work or something I decided to create
@@ -77,3 +77,77 @@ getSystemLookAndFeel() could only detect GNOME's. When developing `ajmg` I disco
 to wrote my own method that extended the thing to detect more DEs, but soon after that I thought
 "What the hell, why do I even have to do this?" and decided that Swing was dead to me (or any
 desktop Linux user for that matter).
+
+## Second and third year: enough of this <del>bull</del> school crap. I'm making stuff for myself!
+
+To be fair, the next 2 years have offered a number of new stuff: C/C++ programming, a taste of the
+M$ .NET C# stack (still impressed by Visual Studio's vi mode plugin), more Java,
+[Android app programming](http://truongtx.me/2013/05/02/agent-069-game/), and some neat security
+tricks. However, none of those intrigued me much, so I decided to start making things for my own:
+
+### Shell scripts
+
+If you have taken a look at my [dotfiles](https://github.com/nhanb/dotfiles), you'll notice that I
+do write a bunch of shell scripts to automate stuff I do often. The one I'm currently proudest of
+is [rmiproxy_silent](https://github.com/nhanb/dotfiles/blob/master/scripts/rmitproxy_silent), a
+script that automatically dectects whether I am using RMIT's network and set/clear the appropriate
+proxy settings. Another one that I can't live without is
+[install.sh](https://github.com/nhanb/dotfiles/blob/master/install.sh), a script that helps install
+all my dotfiles, sets up zsh and various things. It saved me *a lot* of time whenever I reinstall
+my system.
+
+Obligatory mention of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh/), greatest invention
+since sliced bread!
+
+### AJMG, then Pytaku, then... who knows?
+
+The original idea was actually creating a Java Swing program that helps download manga. It was born
+out of spite of [DomDomSoft](http://blog.domdomsoft.com/), a manga downloader that requires
+"donation" to unlock full functionalities. "I could do that, and I'll open source the crap out of
+it, because open source is awesome", I thought. Spent some time and got the minimal program
+working program:
+
+![](/images/ajmg.png)
+
+This program did help me get a firm knowledge of java's thread manipulation and using http proxy
+(so I could exploit RMIT's awesome network bandwidth). I also succeeded in achieving separation of
+concern to a certain level this time, allowing contributors (if any) to easily add support for
+other manga reader sites. But then again, Swing's quirks put me off, so my bad habit of losing
+interest quickly kicked in and the project stopped there.
+
+Then came [Pytaku](https://pytaku-legacy.appspot.com), ajmg's spiritual successor. At this point I
+knew enough of python and wanted to try out Google App Engine, so I decided to make a web version
+of AJMG, with the difference that instead of downloading directly, it forwards it to the user's
+Dropbox folder. Why not Google Drive you ask? Because they haven't even bothered to release an
+official Linux client for it. Shame on you, Google!
+
+Loads of exciting things were learned along the way: how URL handling works in
+webapp2 and in other web frameworks in general, proper templating (can't believe I ever wrote
+`<?php echo $title; ?>`... not cool!), OAuth2 (more than a few "Aha!" moments working with this
+little guy...), Google's Datastore and NoSQL ingeneral, and of course, Twitter Bootstrap - saving
+clueless non-designer developers since its inception.
+
+And now, I'm rewriting it from scratch, this time trying out TDD, making use of
+[travis-ci](https://travis-ci.org/nhanb/pytaku), which will be especially helpful to periodically
+test if a manga site has changed its page layout and screwed up Pytaku's scraping code. Have
+encountered a number of quirks when trying to set up the correct testing boilerplate for a Google
+App Engine project, but it seems everything will be smooth from now on. This holiday season I plan
+to at least roll out an alpha version for testing. Stay tuned if you're interested!
+
+## To sum it up...
+
+I don't believe in developing products I myself don't want to use. I want to make things that make
+my life easier, and if that helps others too then it's a huge bonus. This is why Github is my
+favorite company right now, and
+[How GitHub uses GitHub to build GitHub](https://www.youtube.com/watch?v=qyz3jkOBbQY) remains the
+best developer speech I have ever seen.
+
+Right now I haven't made a full-blown program that I can confidently distribute to end users, but I
+certainly have made quite a few nifty tools to improve my day-to-day computing tasks and learned a
+lot along the way. Right now I cannot confidently answer this big question by pointing them to a
+polished website detailing every nook and cranny of my shiny widely-used, battle-tested program,
+but I'm confident I have the right knowledge to get there. If there is such a thing as "Lunar New
+Year Resolution", I guess mine is that one year from now, I will have a satisfying answer to this
+question. Watch out world, I'm coming!
+
+So, have *you* built anything cool recently?
