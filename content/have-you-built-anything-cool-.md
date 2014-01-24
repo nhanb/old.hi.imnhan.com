@@ -46,4 +46,34 @@ since a recent youtube update)
 That was my first touch on jQueryUI and regular expressions; I also learned how RMIT's mekong
 server sucked to the point that it didn't allow `get_file_contents()`.
 
-I also learned about MVC and GUI programming with Java swing.
+About school assignments? Nothing interesting: standard barebones LAMP CMS with jQuery glitter
+sprinkled on top. Not a bad experience but meh.
+
+I also learned about MVC and GUI programming with Java swing. I did write a movie ticket program
+with a (pretty minimal) seat picker and
+[a battleship-inspired game](https://github.com/nhanb/sealord): 
+
+![Cinema Movie Picker](/images/cinema_1.png "Cinema Movie Picker")
+![Seat Picker](/images/cinema_2.png "Seat Picker")
+![Sealord](/images/sealord.png)
+
+Then it occurred to me that programming GUI interfaces for desktop programs is much more tedius
+than doing it for the web, especially when working with the now-not-favored Swing toolkit.
+Nightmarish days...
+
+Another lession learned the hard way was that "MVC" is not even a concrete thing, and there is
+hardly any obvious "one true way" to implement that. I spent much more time planning for plumbing
+code than I the time I spent actually writing "feature" code. And the result, now looking back, was
+not even that good. And yeah, there was no such thing as "separation of concerns" in my code back
+then, which eventually led to countless times of tracing obscure stack traces for debugging (good
+thing I had a lot of free time back then).
+
+To rub salt in the wound, I came to realize that nobody cared how Swing looked on any desktop
+environment other than OS X and Windows. Font rendering was painful to look at, and the only way to
+make it *a little bit* more acceptable was using a
+[forked version of OpenJDK](http://www.webupd8.org/2013/06/install-openjdk-patched-with-font-fixes.html).
+WTF guys? And that's not the only problem; let's talk Look And Feel. The built-in
+getSystemLookAndFeel() could only detect GNOME's. When developing `ajmg` I discovered that and had
+to wrote my own method that extended the thing to detect more DEs, but soon after that I thought
+"What the hell, why do I even have to do this?" and decided that Swing was dead to me (or any
+desktop Linux user for that matter).
