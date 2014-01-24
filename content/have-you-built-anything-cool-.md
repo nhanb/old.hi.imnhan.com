@@ -124,7 +124,7 @@ official Linux client for it. Shame on you, Google!
 Loads of exciting things were learned along the way: how URL handling works in
 webapp2 and in other web frameworks in general, proper templating (can't believe I ever wrote
 `<?php echo $title; ?>`... not cool!), OAuth2 (more than a few "Aha!" moments working with this
-little guy...), Google's Datastore and NoSQL ingeneral, and of course, Twitter Bootstrap - saving
+little guy...), Google's Datastore and NoSQL in general, and of course, Twitter Bootstrap - saving
 clueless non-designer developers since its inception.
 
 And now, I'm rewriting it from scratch, this time trying out TDD, making use of
