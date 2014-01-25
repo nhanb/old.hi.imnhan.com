@@ -1,7 +1,6 @@
 Title: "Have you built anything cool?"
 Slug: have-you-built-anything-cool
 Date: 2013-12-04 08:55:44
-Status: draft
 
 So recently I went to a *networking event* - something I have never liked or been good at. I'm
 not sure if I'm one of those introverts or if I'm just socially awkward, but the very idea of
