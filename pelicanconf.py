@@ -76,4 +76,3 @@ MENUITEMS = (
 )
 
 PLUGIN_PATH = '/home/nhanb/open-source/pelican-plugins'
-PLUGINS = ["optimize_images"]
