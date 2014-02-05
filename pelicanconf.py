@@ -57,11 +57,13 @@ AUTHOR_NAME = u'Bùi Thành Nhân'
 AUTHOR_SLUG = "nhanb"
 
 # Social widget
-SOCIAL = (('Github', 'https://github.com/nhanb'),
-          ('Facebook', 'https://www.facebook.com/thanhnhanb'),
-          ('Google+',
-           'https://plus.google.com/114388334309097537564?rel=author'),
-          )
+SOCIAL = (
+    ('Atom', '/feeds/atom.xml'),
+    ('Github', 'https://github.com/nhanb'),
+    ('Facebook', 'https://www.facebook.com/thanhnhanb'),
+    ('Google+',
+     'https://plus.google.com/114388334309097537564?rel=author'),
+)
 
 ## Blogroll
 #LINKS = (('Pelican', 'http://getpelican.com/'),
@@ -76,3 +78,9 @@ MENUITEMS = (
 )
 
 PLUGIN_PATH = '/home/nhanb/open-source/pelican-plugins'
+
+FEED_DOMAIN = SITEURL
+FEED_ALL_ATOM = 'feeds/all.atom.xml'
+FEED_ATOM = 'feeds/atom.xml'
+FEED_RSS = 'feeds/rss.xml'
+CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
