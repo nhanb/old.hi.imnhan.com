@@ -7,8 +7,8 @@ its **Files** file manager (yeah, I'm still hating their naming decisions with a
 flickering when I play fullscreen OpenGL games, and the automatic collapsing of workspaces. I've
 had enough of that. Let's go back to xfce! But hey, (X)ubuntu 14.04 is nearly out but I don't want
 to install an alpha version right now, and installing 13.10 just to update 2 months later is insane
-(to me, at least). That's when I noticed Manjaro - a battery-included distro based on Arch. All
-hail rolling release!
+(to me, at least). That's when I noticed [Manjaro][3] - a battery-included distro based on Arch.
+All hail rolling release!
 
 Although Manjaro comes packed with most of the apps that I would install on any other distro
 anyway: GIMP, LibreOffice, Steam, etc., here are some additional steps I took to make it rock.
@@ -69,3 +69,4 @@ Now that's better!
 
 [1]: https://wiki.archlinux.org/index.php/MS_Fonts
 [2]: http://wiki.manjaro.org/index.php?title=Improve_Font_Rendering
+[3]: http://manjaro.org/
