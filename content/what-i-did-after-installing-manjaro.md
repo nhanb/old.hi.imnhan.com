@@ -1,6 +1,8 @@
 Title: What I did after installing Manjaro xfce
 Slug: what-i-did-after-installing-manjaro-xfce
 Date: 2014-02-04 20:20:13
+Category: tutorials
+Tags: arch, linux
 
 After about 2 months with elementary OS, I got sick of the guaranteed once-every-hour crashes of
 its **Files** file manager (yeah, I'm still hating their naming decisions with a passion), the
