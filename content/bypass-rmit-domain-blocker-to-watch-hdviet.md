@@ -45,7 +45,7 @@ This time it works, which means only the domain is blocked, not the IP.
 
 One thing worth noting about hdviet: The video is not served as 1 single file, it is instead
 chopped into multiple parts, which are loaded in order. Therefore, our first job is to
-automatically replace `v-01.vn-hd.com` with the IP in all of the request.
+automatically replace `v-01.vn-hd.com` with the IP in all of the requests.
 
 ## Twisted proxy
 
@@ -62,7 +62,7 @@ To install twisted, use `pip`:
     :::bash
     sudo pip install twisted
 
-Since the default implementation doesn't support HTTPS, we'll use a [powered-up one][4] I found on
+Since the default implementation doesn't support HTTPS, we'll use a [powered-up one][3] I found on
 GitHub, written by Peter Ruibal. Let's clone this thing:
 
     :::bash
