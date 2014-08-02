@@ -1,3 +1,4 @@
 pelican==3.3
 Markdown
 typogrify
+ghp-import
