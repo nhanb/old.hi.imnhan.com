@@ -4,6 +4,12 @@ Category: tutorials
 Tags: linux, vim
 Slug: enable-italic-text-vim-tmux-gnome-terminal
 
+**Update**: As `egmont` pointed out in the comments: setting `TERM=xterm` inside tmux is
+discouraged and will cause wrong behavior in some programs. Changing all instances of
+`xterm-256color` to `screen-256color` in this tutorial should work, but I'm no longer using
+gnome-terminal so I can't test that. I'm now a KDE convert by the way; italic text Just
+Works<sup>tm</sup> with Konsole. Neat, eh?
+
 It has bothered me for a while what I can't get terminal vim to display *italic* text. It might
 seem trivial but it makes a world of difference when I'm editing Markdown or HTML. Here's what gvim
 looks like:
