@@ -1,8 +1,9 @@
 Title: Introducing Pytaku - the last online manga reader you'll ever need
 Date: 2015-01-02 21:19
-Category: Pytaku
+Category: side projects
+Tags: pytaku
 
-[Pytaku][pytaku] is an online manga reader that scrapes data from multiple Vietnamese and Enligsh
+[Pytaku][pytaku] is an online manga reader that scrapes data from multiple Vietnamese and English
 manga sites, giving you one single place to keep track of your reading progress and watch for new
 chapters with ease. Here are some of the features implemented so far:
 
