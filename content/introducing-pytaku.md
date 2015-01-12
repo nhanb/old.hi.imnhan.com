@@ -42,9 +42,9 @@ on that, then send it to me to install.
 
 ## Open source and free to run your own site
 
-Pytaku's source code is released under the permissive MIT license and [put on GitHub][1].  Since
-it's written to be run on Google App Engine which is free for small sites, tech-savvy people can
-set up their own private pytaku clone in a few minutes. Check out the [README file][2] for
+Pytaku's source code is released under the free-as-in-freedom [GPLv3][gpl] and [put on GitHub][1].
+Since it's written to be run on Google App Engine which is free for small sites, tech-savvy people
+can set up their own private pytaku clone in a few minutes. Check out the [README file][2] for
 instructions.
 
 ## Open to suggestions and (hopefully contructive) criticism
@@ -65,3 +65,4 @@ chat room][3].
 [img2]: /images/pytaku_02_bookmarked_series.png
 [img3]: /images/pytaku_03_vietnamese.png
 [pytaku]: https://pytaku.appspot.com
+[gpl]: https://www.gnu.org/licenses/quick-guide-gplv3.html
