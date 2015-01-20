@@ -1,4 +1,4 @@
-Title: Introducing Pytaku - the last online manga reader you'll ever need
+Title: Introducing Pytaku - the only online manga reader you'll ever need
 Date: 2015-01-02 21:19
 Category: side projects
 Tags: pytaku
