@@ -1,7 +1,8 @@
 Title: Dẹp ibus-unikey đi, dùng fcitx-unikey nhé!
 Slug: ibus-is-dead-to-me-use-fcitx-instead
 Date: 2015-01-29 20:41
-Category: misc, tutorials
+Category: tutorials
+lang: vi
 
 Sáng ra Netrunner bảo có vài chục cái update, mình chủ quan `dist-upgrade -y` rồi để đó không màng
 đến nữa. Nửa tiếng sau, ibus không thèm chơi với firefox!  :|
