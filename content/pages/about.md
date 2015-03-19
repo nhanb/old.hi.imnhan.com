@@ -4,18 +4,11 @@ Title: About
 
 ![My face](/images/nhan.jpg)
 
-My name is **Bùi Thành Nhân**. I'm an undergraduate at RMIT Vietnam, focusing myself on web
-development, mostly backend but I'm also taking huge interests in frontend frameworks (twitter
-bootstrap, knockoutjs, etc.).
+My name is **Bùi Thành Nhân**. I'm a software engineer with a strong focus on web backend
+development and operations.
 
-I have a working knowledge of Java desktop programming, experience on web programming with PHP and
-setting up simple LAMP stacks. My current interests are python as a web backend language (Google
-App Engine anyone?) and tinkering with frontend frameworks.
-
-I usually go with the handle **nhanb** on most social networks, you can find links to my profiles
-on the sidebar. In my free time I enjoy tinkering with shell scripts (sometimes pythons scripts
-too) to try out ways to improve productivity. When I'm not being a nerd, you can find me attempting
-to produce something passable as music with my guitar.
+I usually go with the handle **nhanb** on most social networks; you can find links to my profiles
+on the sidebar.
 
 ## About this blog
 
