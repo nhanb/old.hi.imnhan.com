@@ -30,7 +30,7 @@ Note that older versions of `gnome-terminal` do not support italic text. To chec
 does support it, run this command:
 
 ```bash
-$ echo "\e[3m foo \e[23m"
+$ echo -e "\e[3m foo \e[23m"
 ```
 
 If your version of gnome-terminal supports it, an italic *foo* will appear. If not, upgrade it! :)
