@@ -58,6 +58,7 @@ AUTHOR_SLUG = "nhanb"
 
 # Social widget
 SOCIAL = (
+    ('Résumé', 'http://resume.nerdyweekly.com'),
     ('Github', 'https://github.com/nhanb'),
     ('Facebook', 'https://www.facebook.com/thanhnhanb'),
     ('Google+',
