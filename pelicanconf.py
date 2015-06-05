@@ -7,7 +7,7 @@ SITENAME = u'Nerdy Weekly'
 SITESUBTITLE = u'Thoughts on programming and other stuff that matters'
 SITEURL = ''
 
-THEME = u'/home/nhanb/open-source/pelican-octopress-theme'
+THEME = u'./motherfucking-pelican-theme'
 
 TIMEZONE = 'Asia/Ho_Chi_Minh'
 
@@ -51,25 +51,10 @@ CATEGORY_SAVE_AS = ('category/{slug}/index.html')
 TAG_URL = ('tag/{slug}/')
 TAG_SAVE_AS = ('tag/{slug}/index.html')
 
-DEFAULT_PAGINATION = 10
+DEFAULT_PAGINATION = False
 
 AUTHOR_NAME = u'Bùi Thành Nhân'
 AUTHOR_SLUG = "nhanb"
-
-# Social widget
-SOCIAL = (
-    ('Résumé', 'http://resume.nerdyweekly.com'),
-    ('Github', 'https://github.com/nhanb'),
-    ('Facebook', 'https://www.facebook.com/thanhnhanb'),
-    ('Google+',
-     'https://plus.google.com/114388334309097537564?rel=author'),
-)
-
-## Blogroll
-#LINKS = (('Pelican', 'http://getpelican.com/'),
-         #('Python.org', 'http://python.org/'),
-         #('Jinja2', 'http://jinja.pocoo.org/')
-         #)
 
 THEME_STATIC_PATHS = ['static']
 
@@ -83,3 +68,5 @@ FEED_DOMAIN = SITEURL
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 FEED_ATOM = 'feeds/atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
+
+GITHUB_USERNAME = 'nhanb'
