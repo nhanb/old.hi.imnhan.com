@@ -4,11 +4,12 @@ Title: About
 
 ![My face](/images/nhan.jpg)
 
-My name is **Bùi Thành Nhân**. I'm a software engineer with a keen interest in DevOps. Here's [my
-résumé][4] if anyone's interested.
+My name is **Bùi Thành Nhân**. I'm a Vietnamese software engineer with a keen interest in DevOps.
+Here's [my résumé][4] if anyone's interested.
 
-I usually go with the handle **nhanb** on most social networks; you can find links to my profiles
-on the sidebar.
+When I'm not working, I tend to lurk around GitHub, go swimming, or spend an unhealthy amount of
+time reading manga (in fact, my first serious hobby project is [an online manga reader][5]).
+Getting decent at Ultra Street Fighter IV was recently added to my to-do list too.
 
 ## About this blog
 
@@ -28,3 +29,4 @@ think I said something stupid. That's it. Enjoy reading!
 [2]: https://github.com/nhanb/motherfucking-pelican-theme
 [3]: https://github.com/nhanb/blog
 [4]: http://resume.nerdyweekly.com
+[5]: http://www.nerdyweekly.com/posts/introducing-pytaku-the-only-online-manga-reader-youll-ever-need/
