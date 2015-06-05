@@ -4,8 +4,8 @@ Title: About
 
 ![My face](/images/nhan.jpg)
 
-My name is **Bùi Thành Nhân**. I'm a software engineer with a strong focus on web backend
-development and operations. Here's [my résumé][4] if anyone's interested.
+My name is **Bùi Thành Nhân**. I'm a software engineer with a keen interest in DevOps. Here's [my
+résumé][4] if anyone's interested.
 
 I usually go with the handle **nhanb** on most social networks; you can find links to my profiles
 on the sidebar.
