@@ -18,13 +18,13 @@ myself by writing technical tutorials. On occasional bad days I might throw all 
 too, but hopefully those will be rare.
 
 This blog uses [Pelican][1] - a static site generator written in Python. The static files are
-hosted on Github Pages. The theme used here is a (very slightly) modified fork from
-[pelican-octopress-theme][2]. All the markdown files can also be found on my [github repo][3].
+hosted on Github Pages. All the markdown files can also be found on my [github repo][3]. The
+Pelican theme I wrote for this blog can be found [here][2].
 
 I always appreciate feedback or further discussion on my posts, so feel free to point out if you
 think I said something stupid. That's it. Enjoy reading!
 
 [1]: http://getpelican.com
-[2]: https://github.com/duilio/pelican-octopress-theme
+[2]: https://github.com/nhanb/motherfucking-pelican-theme
 [3]: https://github.com/nhanb/blog
 [4]: http://resume.nerdyweekly.com
