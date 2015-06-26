@@ -4,18 +4,17 @@ Title: About
 
 ![My face](/images/nhan.jpg)
 
-My name is **Bùi Thành Nhân**. I'm a Vietnamese software engineer with a keen interest in DevOps.
+My name is **Bùi Thành Nhân**. I'm a Vietnamese software developer with a keen interest in DevOps.
 
 When I'm not working, I tend to lurk around GitHub, go swimming, or spend an unhealthy amount of
 time reading manga (in fact, my first serious hobby project is [an online manga reader][5]).
-Getting decent at Ultra Street Fighter IV was recently added to my to-do list too.
+Getting decent at Ultra Street Fighter IV was recently added to my to-do list as well.
 
 ## About this blog
 
 My mind is a sad mess that cannot hold much important/interesting information after a couple of
-months or so. This blog is where I write down interesting things I discover, or practice expressing
-myself by writing technical tutorials. On occasional bad days I might throw all my ramblings here
-too, but hopefully those will be rare.
+months or so. This blog is where I write down interesting things I discover. On occasional bad days
+I might throw all my ramblings here too, but hopefully those will be rare.
 
 This blog uses [Pelican][1] - a static site generator written in Python. The static files are
 hosted on Github Pages. All the markdown files can also be found on my [github repo][3]. The
