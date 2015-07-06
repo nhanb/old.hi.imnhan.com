@@ -23,7 +23,7 @@ Pelican theme I wrote for this blog can be found [here][2].
 I always appreciate feedback or further discussion on my posts, so feel free to point out if you
 think I said something stupid. That's it. Enjoy reading!
 
-## Wanna hire me?
+## Want to hire me?
 
 I try to keep [my résumé][4] as concise and up-to-date (and pretty) as possible, but if you're into
 full-blown CVs, [here it is][6].
