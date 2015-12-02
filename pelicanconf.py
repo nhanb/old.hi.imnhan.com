@@ -70,3 +70,37 @@ FEED_ATOM = 'feeds/atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
 GITHUB_USERNAME = 'nhanb'
+
+MOTHERFUCKING_GREETINGS = """
+Why hello there, fellow source viewer. Here's a dragon for no reason:
+
+       ^                       ^
+       |\   \        /        /|
+      /  \  |\__  __/|       /  \_
+     / /\ \ \ _ \/ _ /      /    \_
+    / / /\ \ {*}\/{*}      /  / \ \_
+    | | | \ \( (00) )     /  // |\ \_
+    | | | |\ \(V""V)\    /  / | || \|
+    | | | | \ |^--^| \  /  / || || ||
+   / / /  | |( WWWW__ \/  /| || || ||
+  | | | | | |  \______\  / / || || ||
+  | | | / | | )|______\ ) | / | || ||
+  / / /  / /  /______/   /| \ \ || ||
+ / / /  / /  /\_____/  |/ /__\ \ \ \ \_
+ | | | / /  /\______/    \   \__| \ \ \_
+ | | | | | |\______ __    \_    \__|_| \_
+ | | ,___ /\______ _  _     \_       \  |
+ | |/    /\_____  /    \      \__     \ |    /\_
+ |/ |   |\______ |      |        \___  \ |__/  \_
+ v  |   |\______ |      |            \___/     |
+    |   |\______ |      |                    __/
+     \   \________\_    _\               ____/
+   __/   /\_____ __/   /   )\_,      _____/
+  /  ___/  \____/  ___/___)    \______/
+  VVV  V        VVV  V
+
+(ripped off from http://www.retrojunkie.com/asciiart/myth/dragons.htm)
+
+Wanna yell at me for wasting your precious bytes? dragons at nerdyweekly.com is
+the email address you're looking for :)
+"""
