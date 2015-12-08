@@ -1,4 +1,5 @@
 Title: My first DIY fightstick - Part 1
+Slug: my-first-diy-fightstick-part-1
 Date: 2015-12-08 12:50
 
 Ever since I started practicing Street Fighter seriously (albeit with modest results), I've
@@ -28,7 +29,8 @@ The items with asterisks (\*) are those I bought in abundance to make room for d
 
 ![](/images/fightstick_01_mdf.jpg)
 
-The top panel would be layered with 1 MDF and 2 plexiglass pieces:
+The top panel would be layered with 1 MDF and 2 plexiglass pieces (mad illustrating skillz, I
+know):
 
 ![](/images/fightstick_02_top_plan.jpg)
 
@@ -36,8 +38,8 @@ The bottom would simply be 1 MDF and 1 plexiglass so I could also insert bottom 
 
 Since I had zero woodworking experience, I joined the MDF pieces with simple butt joints and good
 old wood glue. You'll notice that there's a significant gap on one corner - turns out the shop
-wasn't too accurate with their cutting. It's not shown here but eventually I had to use a saw
-a longer MDF piece to replace it.
+wasn't too accurate with their cutting. It's not shown here but eventually I had to saw a longer
+MDF piece to replace it.
 
 ![](/images/fightstick_03_glue.jpg)
 
@@ -52,14 +54,20 @@ other was for joystick hole and smaller front side buttons.
 
 ![](/images/fightstick_05_nope_saw.jpg)
 
-As for the actual parts, I ordered the joystick and buttons from [Akishop][akishop]. It ships from Japan so
-the shipping cost to Vietnam is much more reasonable than if I buy from the US. I also bought a
-[Zero Delay PCB kit][zd] from ebay. This one even offers free shipping since it's from China. This kit
-offers easy solder-free wires too so it saved me from a lot of trouble (I still can't find where to
-quick-disconnect terminals to this date). I connected everything to my PC to test if things work as
-expected:
+As for the actual parts, I ordered the joystick and buttons from [Akishop][akishop]. It ships from
+Japan so the shipping cost to Vietnam is much more reasonable than if I buy from the US. I also
+bought a [Zero Delay PCB kit][zd] from ebay. This one even offers free shipping since it's from
+China. This kit offers easy solder-free wires too so it saved me from a lot of trouble (I still
+can't find where to quick-disconnect terminals to this date). I connected everything to my PC to
+test if things work as expected:
 
 ![](/images/fightstick_26_electronics.jpg)
+
+Quick note: the popular wisdom is to buy screw-in buttons for thick panels and scap-in for thin
+ones. However, as my panel is *way* too thick even for screw-ins, snap-ins are actually the better
+choice: you just need to put the buttons in normally - the 2 sides of the button will push against
+the hole and keep it there fairly firmly. I never had a problem with my previous stick which was
+build this way.
 
 ## Actually making it
 
@@ -69,8 +77,8 @@ accidentally button presses.
 
 ![](/images/fightstick_06_front_holes.jpg)
 
-Then I glued the case body together. I didn't have big clamps laying around so I had to make do with
-an elastic string. It worked terribly though.
+Then I glued the case body together. I didn't have big clamps laying around so I had to make do
+with an elastic string. It worked terribly though.
 
 ![](/images/fightstick_07_glue_body.jpg)
 
@@ -119,7 +127,7 @@ few steps (cover edges with non-absorbent material, sand and spray paint multipl
 an acceptably smooth finish.
 
 Here's the first step: cover edges with non-absorbent material. The tutorial suggested using
-spackling, which I have no idea how to obtain it from here. I settled with something we call
+spackling, which I have no idea how to obtain from here. I settled with something Vietnamese people
 "matic" (mastic, perhaps?) which my friends said was to be used for the same purpose. The thing was
 yellow-ish and much more runny than spackling. It was also difficult as hell to work with: the
 moment it's spread on the MDF edge, it starts drying, at which point you can't touch it again
@@ -128,18 +136,19 @@ unless you want an ugly grungy finish (is that even a word?):
 ![](/images/fightstick_15_mastic.jpg)
 
 I waited for the yellow thing to dry, then sanded it again. After a first few coats with glossy
-black spray paint, things don't look too sexy:
+black spray paint, things didn't look too sexy:
 
 ![](/images/fightstick_16_first_coat.jpg)
 
-It does get better with sanding (1200 grit) and more coats though. But then I made the most stupid
+It did get better with sanding (1200 grit) and more coats though. But then I made the most stupid
 decision: glueing the top panel on before drilling:
 
 ![](/images/fightstick_17_top_panel.jpg)
 
 Now why was this bad? Because now I would be forced to drill top panel holes *with* the whole body
 attached, which will expose the whole thing to sawdust, which was generally PITA to clean up - the
-top panel made it a closed shape with corners and spaces all over the place.
+top panel made it a closed shape with corners and spaces all over the place. Also, if I screwed up
+the top MDF panel (which I eventually kinda did), the whole thing would be ruined.
 
 As if that wasn't enough, I did paint it too. The paint layer would later make disgusting drill
 holes:
@@ -196,7 +205,7 @@ also printed a quick picture as a placeholder artwork to see how it would look:
 ![](/images/fightstick_23_bottom.jpg)
 
 As I was excited to finish the putting the top panel together, I hit a wall: because I couldn't
-possible drill perfectly perpendicular screw holes, they could not property attach:
+possibly drill perfectly perpendicular screw holes, they could not property attach:
 
 ![](/images/fightstick_25_loose_screw.jpg)
 
@@ -211,13 +220,13 @@ four corners, the top plexiglass piece flexed, creating a blatantly noticeable g
 
 ## Um... that's it (for now).
 
-That's all of my progress so far. I'm visiting my local Fablab, which is advertised to have CNC
-machines and laser cutters so I'll probably have a chance to produce more accurate panels. Hell, I
-may even redo the whole thing using machine-cut pieces for absolute accuracy and save myself from a
-world of pain.
+That's all of my progress so far. I'm visiting my [local Fablab][fablab], which is advertised to
+have CNC machines and laser cutters so I'll probably have a chance to produce more accurate panels.
+Hell, I may even redo the whole thing using machine-cut pieces for absolute accuracy and save
+myself from a world of pain.
 
-I took a lot of photos as I go, so if you want to see more photos of my progress, just check out my
-[flickr album][flickr].
+I took a lot of photos as I went, so if you want to see more photos of my progress, just check out
+my [flickr album][flickr].
 
 Till next time!
 
@@ -227,4 +236,5 @@ Till next time!
 [tech-talk]: http://forums.shoryuken.com/categories/tech-talk
 [basic-design]: http://www.slagcoin.com/joystick/example2.html
 [paint-guide]: http://forums.shoryuken.com/discussion/67501/how-to-paint-mdf-to-a-mirror-finish-worklog
+[fablab]: http://fablabsaigon.org/
 [flickr]: https://www.flickr.com/photos/nhanb/albums/72157661059385592
