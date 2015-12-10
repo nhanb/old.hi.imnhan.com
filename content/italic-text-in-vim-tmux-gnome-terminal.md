@@ -3,6 +3,7 @@ Date: 2014-08-02 16:46
 Category: tutorials
 Tags: linux, vim
 Slug: enable-italic-text-vim-tmux-gnome-terminal
+Thumb: images/italic_01_gvim.png
 
 **Update**: As `egmont` pointed out in the comments: setting `TERM=xterm` inside tmux is
 discouraged and will cause wrong behavior in some programs. Changing all instances of

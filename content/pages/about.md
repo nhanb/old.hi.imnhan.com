@@ -1,4 +1,5 @@
 Title: About
+Thumb: images/nhan.jpg
 
 ## About me
 

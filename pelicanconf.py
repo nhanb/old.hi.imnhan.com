@@ -71,7 +71,10 @@ CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
 GITHUB_USERNAME = 'nhanb'
 
-MOTHERFUCKING_GREETINGS = """
+# ========= Theme-specific settings follow =============
+
+MOTHERFUCKING_DEFAULT_THUMB = 'images/nhan.jpg'
+MOTHERFUCKING_GREETINGS = '''
 Why hello there, fellow source viewer. Here's a dragon for no reason:
 
        ^                       ^
@@ -103,4 +106,4 @@ Why hello there, fellow source viewer. Here's a dragon for no reason:
 
 Wanna yell at me for wasting your precious bytes? dragons at nerdyweekly.com is
 the email address you're looking for :)
-"""
+'''

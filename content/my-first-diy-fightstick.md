@@ -1,6 +1,7 @@
 Title: My first DIY fightstick - Part 1
 Slug: my-first-diy-fightstick-part-1
 Date: 2015-12-08 12:50
+Thumb: images/fightstick_17_top_panel.jpg
 
 Ever since I started practicing Street Fighter seriously (albeit with modest results), I've
 always wanted to make myself a custom fightstick. Now that I'm not working full-time for anyone,

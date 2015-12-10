@@ -3,6 +3,7 @@ Date: 2014-03-17 21:58
 Category: tutorials
 Tags: ubuntu, linux
 Slug: how-i-bypassed-my-university-domain-blocker-to-access-hdviet
+Thumb: images/hdviet_05_no_sub.png
 
 
 **TL;DR**: Clone [my script from GitHub][4], run it with `python2 server.py 8080`, configure your

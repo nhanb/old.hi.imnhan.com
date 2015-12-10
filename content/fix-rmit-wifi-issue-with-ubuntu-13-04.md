@@ -4,6 +4,7 @@ Category: tutorials
 Tags: ubuntu, linux
 Slug: fix-rmit-wifi-issue-in-ubuntu-13-04-and-variants
 Summary: The problem is NetworkManager - there's a workaround but nobody has been formally assigned to fix it.
+Thumb: images/rmit_wifi.png
 
 ## The issue
 
