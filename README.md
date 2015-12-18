@@ -1,7 +1,23 @@
 # My blog
 
-This is the source code for http://blog.nerdyweekly.com using
+This is the source code for http://www.nerdyweekly.com using
 [Pelican](http://github.com/getpelican/pelican)
+
+# Dev environment
+
+This repo targets Pelican 3.6 on Python 3.4. Initial setup on Ubuntu with virtualenvwrapper looks
+something like this:
+
+```bash
+mkvirtualenv -p `which python3.4` pelican
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+Then use:
+
+  - `make devserver` / `make stopserver` for local dev at port 8000
+  - `make github` to publish to www.nerdyweekly.com
 
 # License
 
