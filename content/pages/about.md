@@ -7,10 +7,9 @@ Thumb: images/nhan.jpg
 
 My name is **Bùi Thành Nhân**. I'm a Vietnamese web developer with a keen interest in DevOps.
 
-When I'm not working, I tend to lurk around GitHub, go swimming, or spend an unhealthy amount of
-time reading manga (in fact, my first serious hobby project is [an online manga reader][5]). I also
-recently got into [fighting games][7]. Give me a shout if you're in Hồ Chí Minh City and would like
-some Street Fighter or Guilty Gear action! :)
+When I'm not working, I tend to lurk around GitHub, go swimming, or try to [get decent at DDR][5].
+I also recently got into [fighting games][7]. Give me a shout if you're in Hồ Chí Minh City and
+would like some Street Fighter or Guilty Gear action! :)
 
 ## About this blog
 
@@ -35,6 +34,6 @@ full-blown CVs, [here it is][6].
 [2]: https://github.com/nhanb/motherfucking-pelican-theme
 [3]: https://github.com/nhanb/blog
 [4]: http://resume.nerdyweekly.com
-[5]: http://www.nerdyweekly.com/posts/introducing-pytaku-the-only-online-manga-reader-youll-ever-need/
+[5]: http://www.stepmania.com/
 [6]: http://nerdyweekly.com/cv
 [7]: http://www.sirlin.net/ptw
