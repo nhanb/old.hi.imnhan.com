@@ -22,7 +22,11 @@ hosted on Github Pages. All the markdown files can also be found on my [github r
 Pelican theme I wrote for this blog can be found [here][2].
 
 I always appreciate feedback or further discussion on my posts, so feel free to point out if you
-think I said something stupid. That's it. Enjoy reading!
+think I said something stupid. :)
+
+### What's with the domain name?
+
+I watched [Triumph of the Nerds][8] at a very impressionable age.
 
 ## Want to hire me?
 
@@ -37,3 +41,4 @@ full-blown CVs, [here it is][6].
 [5]: http://www.stepmania.com/
 [6]: http://nerdyweekly.com/cv
 [7]: http://www.sirlin.net/ptw
+[8]: https://en.wikipedia.org/wiki/Triumph_of_the_Nerds
