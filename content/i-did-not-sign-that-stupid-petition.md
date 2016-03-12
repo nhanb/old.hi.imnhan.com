@@ -39,13 +39,13 @@ Hell, let's throw in some of my own random thoughts to make this more like a blo
 - What's with these petition websites? Have people actually achieved anything using these? Even if
   a petition website does send confirmation emails, what's stopping me from using trash addresses?
   The signers' email addresses are not displayed anyway so president@rmit.edu.vn won't be too
-  different from spammemaybelolwhut0042@nerdyweekly.com now, will it? If you're an official
-  co-leader of something official who wants to do something official about it, maybe try a more, I
-  don't know, official channel?
+  different from lol0042@spam.me now, will it? If you're an official co-leader of something
+  official who wants to do something official about it, maybe try a more, I don't know, official
+  channel?
 
 - The number of signers keep going up steadily, but slowly. Maybe our friendly neighborhood
-  petition mass signer is doing it all by hand instead of a script? If it's the former... let's say
-  I do admire the dedication.
+  signerman is doing it all by hand instead of a script? If it's the former... let's say I do
+  admire the dedication.
 
 - Is it normal for a student council to be this full of drama?
 
