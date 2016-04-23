@@ -63,6 +63,13 @@ MENUITEMS = (
 )
 
 PLUGIN_PATH = '/home/nhanb/open-source/pelican-plugins'
+PLUGINS = ['minify']
+
+MINIFY = {
+    'remove_comments': False,
+    'remove_all_empty_space': True,
+    'remove_optional_attribute_quotes': False
+}
 
 FEED_DOMAIN = SITEURL
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
