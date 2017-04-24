@@ -82,7 +82,7 @@ GITHUB_USERNAME = 'nhanb'
 
 MOTHERFUCKING_DEFAULT_THUMB = 'images/nhan.jpg'
 MOTHERFUCKING_GREETINGS = '''
-Why hello there, fellow source viewer. Here's a dragon for no reason:
+Why hello there, source viewer. Here's a dragon for no particular reason:
 
        ^                       ^
        |\   \        /        /|
@@ -110,7 +110,4 @@ Why hello there, fellow source viewer. Here's a dragon for no reason:
   VVV  V        VVV  V
 
 (ripped off from http://www.retrojunkie.com/asciiart/myth/dragons.htm)
-
-Wanna yell at me for wasting your precious bytes? dragons at nerdyweekly.com is
-the email address you're looking for :)
 '''

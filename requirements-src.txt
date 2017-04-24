@@ -1,0 +1,7 @@
+pelican
+pelican-minify
+markdown
+typogrify
+
+flake8
+ghp-import
