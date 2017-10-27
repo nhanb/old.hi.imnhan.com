@@ -76,8 +76,6 @@ FEED_ALL_ATOM = 'feeds/all.atom.xml'
 FEED_ATOM = 'feeds/atom.xml'
 CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 
-GITHUB_USERNAME = 'nhanb'
-
 # ========= Theme-specific settings follow =============
 
 MOTHERFUCKING_DEFAULT_THUMB = 'images/nhan.jpg'
