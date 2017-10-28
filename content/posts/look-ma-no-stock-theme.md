@@ -1,10 +1,16 @@
 Title: Look ma, no stock theme!
 Date: 2015-06-05 13:54
 
+
+_**October 2017 Update**: Now that I like high contrast more, I just updated the theme to a
+black/white/red palette with a [high-quality serif font][8] instead. Thanks [Mr. Butterick][9]!_
+
+<hr>
+
 I just redesigned my blog.
 
 To be totally honest, the previous design was not mine at all. I've always been using
-[pelican-octopress-them][1], which is a Pelican port of the default theme for Octopress. It's not
+[pelican-octopress-theme][1], which is a Pelican port of the default theme for Octopress. It's not
 that I have anything to complain about that theme: it was clean, readable and easy on the eyes. I
 just want my site to look unique. Content is king, sure, but it wouldn't hurt to stand out from the
 crowd once in a while.
@@ -30,7 +36,8 @@ minimum:
 
 ![](/images/mofo_01_loads.png)
 
-I guess I can do nothing about the font files though. Oh well, at least it looks awesome.
+I guess there's nothing I can do about the font files though, since I need to make sure my
+Vietnamese posts are rendered in a font that supports it. Oh well, at least it looks awesome.
 
 ## Content is king
 
@@ -54,8 +61,8 @@ in that guide:
 
 You can find the source code to my theme [on GitHub][7]. I don't recommend using it as-is though,
 since I haven't implemented many required templates (authors, tags, categories, etc.) because I
-don't use them. There's also the hardcoded footer. But honestly, the main reason is I just want my
-site to stay unique :P
+don't use them. There's also the hardcoded content in footer and probably a few more places. Maybe
+someday I'll stop being lazy and fix all that. *Maybe*.
 
 [1]: https://github.com/duilio/pelican-octopress-theme/
 [2]: https://developers.google.com/fonts/docs/getting_started#Effects
@@ -64,3 +71,5 @@ site to stay unique :P
 [5]: http://bettermotherfuckingwebsite.com/
 [6]: http://www.kaikkonendesign.fi/typography/
 [7]: https://github.com/nhanb/motherfucking-pelican-theme
+[8]: https://github.com/adobe-fonts/source-serif-pro
+[9]: https://practicaltypography.com/

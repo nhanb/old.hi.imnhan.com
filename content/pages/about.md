@@ -5,11 +5,11 @@ Thumb: images/nhan.jpg
 
 ![My face](/images/nhan.jpg)
 
-My name is **Bùi Thành Nhân**. I'm a Vietnamese web developer with a keen interest in DevOps.
+My name is **Bùi Thành Nhân**. I'm a Vietnamese software developer with a keen interest in DevOps.
 
-When I'm not working, I tend to lurk around GitHub, go swimming, or try to [get decent at DDR][5].
-I also recently got into [fighting games][7]. Give me a shout if you're in Hồ Chí Minh City and
-would like some Street Fighter or Guilty Gear action! :)
+When I'm not working, I tend to lurk around GitHub, go swimming, or try to [literally gamify][5] my
+excercise plan (with questionable results). I also recently got into [fighting games][7].  Give me
+a shout if you're in Hồ Chí Minh City and would like some Street Fighter or Guilty Gear action!
 
 ## About this blog
 
@@ -17,16 +17,17 @@ My mind is a sad mess that cannot hold much important/interesting information af
 months or so. This blog is where I write down interesting things I discover. On occasional bad days
 I might throw all my ramblings here too, but hopefully those will be rare.
 
-This blog uses [Pelican][1] - a static site generator written in Python. The static files are
-hosted on Github Pages. All the markdown files can also be found on my [github repo][3]. The
-Pelican theme I wrote for this blog can be found [here][2].
+This blog is generated using [Pelican][1] and hosted on Github Pages. All the markdown files can
+also be found on my [github repo][3]. The Pelican theme I wrote for this blog can be found
+[here][2].
 
-I always appreciate feedback or further discussion on my posts, so feel free to point out if you
+I always appreciate feedback and further discussion on my posts, so feel free to point out if you
 think I said something stupid. :)
 
 ### What's with the domain name?
 
-I watched [Triumph of the Nerds][8] at a very impressionable age.
+I watched [Triumph of the Nerds][8] at a very impressionable age and _thought_ the word was cool.
+Now... you know what they say about unfortunate v1 naming decisions--they stick.
 
 ## Want to hire me?
 

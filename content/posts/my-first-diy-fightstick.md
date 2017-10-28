@@ -60,7 +60,7 @@ Japan so the shipping cost to Vietnam is much more reasonable than if I buy from
 bought a [Zero Delay PCB kit][zd] from ebay. This one even offers free shipping since it's from
 China. This kit offers easy solder-free wires too so it saved me from a lot of trouble (I still
 can't find where to quick-disconnect terminals to this date). I connected everything to my PC to
-test if things work as expected:
+test if things worked as expected:
 
 ![](/images/fightstick_26_electronics.jpg)
 

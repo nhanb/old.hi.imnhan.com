@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Bùi Thành Nhân'
 SITENAME = u'Nerdy Weekly'
-SITESUBTITLE = u'Thoughts on programming and other stuff that matters'
+SITESUBTITLE = u'Musings on the joy of computing... or lack thereof'
 SITEURL = ''
 
 THEME = u'./motherfucking-pelican-theme'
@@ -67,7 +67,7 @@ PLUGINS = ['minify']
 
 MINIFY = {
     'remove_comments': False,
-    'remove_all_empty_space': True,
+    'remove_all_empty_space': False,
     'remove_optional_attribute_quotes': False
 }
 

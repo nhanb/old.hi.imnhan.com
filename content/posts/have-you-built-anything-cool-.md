@@ -4,7 +4,7 @@ Date: 2014-01-25 10:37
 Category: misc
 Thumb: images/sealord.png
 
-So recently I went to a *networking event* - something I have never liked or been good at. I'm
+So recently I went to a *networking event*--something I have never liked or been good at. I'm
 not sure if I'm one of those introverts or if I'm just socially awkward, but the very idea of
 going around trying to converse with total strangers just to exchange business cards is not at all
 appealing to me. Anyway, that's another story. Right now I want to write about something a guy
@@ -14,15 +14,15 @@ from a non-tech company asked me:
 > \- [pause] Well, more or less...  
 > \- What do you mean by "more or less"? [...] Have you built anything at all?  
 
-Then I went on trying to explain what my recent side project - 
-[pytaku](https://pytaku-legacy.appspot.com) - does and why it is awesome for me. He seemed to be
+Then I went on trying to explain what my recent side project--
+[pytaku](https://pytaku-legacy.appspot.com)--does and why it is awesome for me. He seemed to be
 disinterested halfway through so I decided to shut up anyway.
 
 Sure, I have done stuff now and then, be it assignment work or something I decided to create
 for my own amusement. It is just funny how I have already stepped into to my final year without
 taking a proper look back at what I have done in these past 2 years, so I'm going to do just that.
 
-If you - Nicholas - are reading this and don't want all the nerdy stuff, here are my condensed
+If you--Nicholas--are reading this and don't want all the nerdy stuff, here are my condensed
 answers:
 
 ### Have you built anything?  
@@ -38,7 +38,7 @@ nothing I've done that you would find interesting.
 The rest of this post is aimed at the <del>nerdier</del> more tech-savvy audience. You have been
 warned ;)
 
-## First year - Welcome to the web, and the GUI programming disillusionment
+## First year--Welcome to the web, and the GUI programming disillusionment
 
 I had touched *web stuff* before in high school: a vBulletin forum that I created (unofficially)
 for students in my middle school. However, I only properly learned PHP and JS when I started the
@@ -129,7 +129,7 @@ an official Linux client for it. Shame on you, Google!
 Loads of exciting things were learned along the way: how URL handling works in webapp2 and in other
 web frameworks in general, proper templating (can't believe I ever wrote `<title><?php echo $title;
 ?></title>`... not cool!), OAuth2 (more than a few "Aha!" moments working with this little guy...),
-Google's Datastore and NoSQL in general, and of course, Twitter Bootstrap - saving clueless
+Google's Datastore and NoSQL in general, and of course, Twitter Bootstrap--saving clueless
 non-designer developers since its inception.
 
 And now, I'm rewriting it from scratch, this time trying out TDD, making use of

@@ -11,7 +11,7 @@ Um... I don't remember signing any petition recently (or ever, for that matter)?
 ## What happened?
 
 Apparently someone used my RMIT student email address to sign some petition for disbanding the
-university's Student Council. Said petition was apparently started by the Ms. Trần Ngọc Tuệ Mẫn -
+university's Student Council. Said petition was apparently started by some Ms. Trần Ngọc Tuệ Mẫn -
 Student Council's vice president. Well... yay for free speech, I guess? Anyway, my name was really
 among the signers list:
 
@@ -45,7 +45,7 @@ Hell, let's throw in some of my own random thoughts to make this more like a blo
 
 - The number of signers keep going up steadily, but slowly. Maybe our friendly neighborhood
   signerman is doing it all by hand instead of a script? If it's the former... let's say I do
-  admire the dedication.
+  admire the dedication <strike>and abhor the absolute stupidity</strike>.
 
 - Is it normal for a student council to be this full of drama?
 
