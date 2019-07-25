@@ -13,7 +13,7 @@ a shout if you're in Hồ Chí Minh City and would like some Street Fighter or G
 
 ## About this blog
 
-My mind is a sad mess that cannot hold much important/interesting information after a couple of
+My mind is a sad mess that cannot hold much information after a couple of
 months or so. This blog is where I write down interesting things I discover. On occasional bad days
 I might throw all my ramblings here too, but hopefully those will be rare.
 
@@ -24,22 +24,9 @@ also be found on my [github repo][3]. The Pelican theme I wrote for this blog ca
 I always appreciate feedback and further discussion on my posts, so feel free to point out if you
 think I said something stupid. :)
 
-### What's with the domain name?
-
-I watched [Triumph of the Nerds][8] at a very impressionable age and _thought_ the word was cool.
-Now... you know what they say about unfortunate v1 naming decisions--they stick.
-
-## Want to hire me?
-
-I try to keep [my résumé][4] as concise and up-to-date (and pretty) as possible, but if you're into
-full-blown CVs, [here it is][6].
-
 
 [1]: http://getpelican.com
 [2]: https://github.com/nhanb/motherfucking-pelican-theme
-[3]: https://github.com/nhanb/blog
-[4]: http://resume.nerdyweekly.com
+[3]: https://github.com/nhanb/imnhan.com
 [5]: http://www.stepmania.com/
-[6]: http://nerdyweekly.com/cv
 [7]: http://www.sirlin.net/ptw
-[8]: https://en.wikipedia.org/wiki/Triumph_of_the_Nerds

@@ -1,28 +1,29 @@
 # My blog
 
-This is the source code for http://www.nerdyweekly.com using
+This is the source code for https://hi.imnhan.com using
 [Pelican](http://github.com/getpelican/pelican)
 
 # Dev environment
 
-This repo targets Pelican 3.7 on python3. Initial setup on Ubuntu with virtualenvwrapper looks
-something like this:
+This repo targets Pelican 3.7 on python3. Initial setup on Arch Linux with
+`pyenv-virtualenv` and `poetry` looks something like this:
 
-```bash
-mkvirtualenv -p `which python3` pelican
-pip install --upgrade pip
-pip install -r requirements.txt
+```sh
+pyenv install 3.7.4
+pyenv virtualenv 3.7.4 imnhan.com
+pyenv activate imnhan.com
+poetry install
 ```
 
 Then use:
 
 - `make devserver` / `make stopserver` for local dev at port 8000
-- `make github` to publish to www.nerdyweekly.com
+- `make github` to publish to hi.imnhan.com
 
 Alternatively, if you find the `make dev/stopserver` workflow clumsy, manually run `pelican -r` and
 simple python http server to keep everything in the foreground:
 
-```bash
+```sh
 pelican -r content  # in 1 terminal
 cd output && python3 -m http.server 8000  # in another terminal
 ```
@@ -35,7 +36,7 @@ All code and content within this repository is licensed under the terms of the M
 ```
 The MIT License (MIT)
 
-Copyright (c) 2013-2015 Bui Thanh Nhan
+Copyright (c) 2013-2019 Bui Thanh Nhan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
