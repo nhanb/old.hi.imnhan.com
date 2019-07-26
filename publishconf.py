@@ -18,4 +18,3 @@ DELETE_OUTPUT_DIRECTORY = True
 # Following items are often useful when publishing
 
 DISQUS_SITENAME = "nerdyweekly"
-GOOGLE_ANALYTICS = "UA-40876322-1"
