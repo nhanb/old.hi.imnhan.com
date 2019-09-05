@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from datetime import date
 
 AUTHOR = "Bùi Thành Nhân"
 SITENAME = "Hi, I'm Nhân"
@@ -102,4 +103,11 @@ Why hello there, source viewer. Here's a dragon for no particular reason:
   VVV  V        VVV  V
 
 (ripped off from http://www.retrojunkie.com/asciiart/myth/dragons.htm)
+"""
+
+CURRENT_YEAR = date.today().year
+
+FOOTER_TEXT = """
+Built with &#9829; and lots of
+<a target="_blank" rel="noopener" href="https://caudatfarm.com/">Cầu Đất coffee</a>.
 """
