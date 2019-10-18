@@ -35,10 +35,10 @@ ARTICLE_LANG_URL = "posts/{slug}-{lang}/"
 ARTICLE_LANG_SAVE_AS = "posts/{slug}-{lang}/index.html"
 
 PAGE_PATHS = ["pages"]
-PAGE_URL = "pages/{slug}/"
-PAGE_SAVE_AS = "pages/{slug}/index.html"
-PAGE_LANG_URL = "pages/{slug}-{lang}/"
-PAGE_LANG_SAVE_AS = "pages/{slug}-{lang}/index.html"
+PAGE_URL = "{slug}/"
+PAGE_SAVE_AS = "{slug}/index.html"
+PAGE_LANG_URL = "{slug}-{lang}/"
+PAGE_LANG_SAVE_AS = "{slug}-{lang}/index.html"
 
 AUTHOR_URL = "author/{slug}/"
 AUTHOR_SAVE_AS = "author/{slug}/index.html"

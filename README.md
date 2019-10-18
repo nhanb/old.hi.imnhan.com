@@ -9,8 +9,8 @@ This repo targets Pelican 3.7 on python3. Initial setup on Arch Linux with
 `pyenv-virtualenv` and `poetry` looks something like this:
 
 ```sh
-pyenv install 3.7.4
-pyenv virtualenv 3.7.4 imnhan.com
+pyenv install 3.7.5
+pyenv virtualenv 3.7.5 imnhan.com
 pyenv activate imnhan.com
 poetry install
 ```
