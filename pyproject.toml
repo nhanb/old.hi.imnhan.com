@@ -2,7 +2,7 @@
 name = "imnhan.com"
 version = "0.1.0"
 description = ""
-authors = ["nhanb <nhan@nerdyweekly.com>"]
+authors = ["nhanb <hi@imnhan.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -10,10 +10,6 @@ pelican = "^4.1"
 markdown = "^3.1"
 typogrify = "^2.0"
 pelican-minify = "^0.9.0"
-
-# temporary workaround for
-# https://github.com/sdispater/poetry/issues/1194#issuecomment-514974670
-docutils = "=0.15"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"

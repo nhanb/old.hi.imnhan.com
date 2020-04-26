@@ -5,12 +5,12 @@ This is the source code for https://hi.imnhan.com using
 
 # Dev environment
 
-This repo targets Pelican 3.7 on python3. Initial setup on Arch Linux with
+This repo targets python 3. Initial setup on Arch Linux with
 `pyenv-virtualenv` and `poetry` looks something like this:
 
 ```sh
-pyenv install 3.7.5
-pyenv virtualenv 3.7.5 imnhan.com
+pyenv install 3.8.2
+pyenv virtualenv 3.8.2 imnhan.com
 pyenv activate imnhan.com
 poetry install
 ```
