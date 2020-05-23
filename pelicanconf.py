@@ -108,6 +108,6 @@ Why hello there, source viewer. Here's a dragon for no particular reason:
 CURRENT_YEAR = date.today().year
 
 FOOTER_TEXT = """
-Built with &#9829; and lots of
-<a target="_blank" rel="noopener" href="https://caudatfarm.com/">Cầu Đất coffee</a>.
+Built with &#9829; and probably too much
+<a target="_blank" rel="noopener" href="https://trungnguyenlegend.com/g7/">G7 X2</a>.
 """
