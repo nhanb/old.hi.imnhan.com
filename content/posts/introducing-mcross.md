@@ -24,8 +24,6 @@ browser. _Naturally_, I [wrote one][12]:
 
 ![McRoss Browser screenshot](/images/mcross_01_screenshot.png)
 
-Or check out a [demo video](https://sr.ht/~nhanb/mcross/).
-
 At this stage it can browse plaintext and gemini content, but not binary yet.
 It also doesn't verify TLS certificates, because turns out [in the gemini
 world][11] it's preferable for browser to use self-signed certs and expect
@@ -61,18 +59,18 @@ don't even have breathing room between them:
 
 ![Castor links](/images/mcross_02_castor.png)
 
-Another admittedly petty issue I have is that it's GTK, and I'm using KDE
-Plasma which although has a compatibility layer that tries to render GTK widget
-as close to KDE counterparts as possible, the result is still... subpar.
+Another admittedly petty issue I have is that it's GTK while I'm using KDE
+Plasma, and although KDE has a compatibility layer that tries to render GTK
+widgets as close to KDE counterparts as possible, the result is still...
+subpar.
 
 McRoss on the other hand uses the tk gui toolkit, and as of tk 8.6, it
 automatically gives you the native look and feel on Windows and Mac OS (well,
 not automatically but it takes trivial work anyway). Linux however doesn't have
 such a thing, but the bundled `clam` theme looks pleasing enough for me. Yes, I
-do think a retro/classic looking theme fares better than the gtk-on-kde look,
-and its simple scrollbar looks and _works_ way better than those
-nigh-unclickable abominations that KDE and GTK call their "modern scrollbar",
-fight me.
+do think a retro looking theme fares better than the gtk-on-kde look, and its
+simple scrollbar looks and _works_ way better than those nigh-unclickable
+abominations that KDE and GTK call their "modern scrollbar", fight me.
 
 Another explicit design decision in McRoss is that while custom styling is
 applied to special lines (heading, list, code block...), their textual content
@@ -97,26 +95,27 @@ improve the situation with "frozen" executables some time down the line.
 
 # Closing thoughts
 
-To me the whole gemini ecosystem represents the long-lost positive naivety, not
+To me the whole gemini ecosystem represents the long-lost naive optimism, not
 necessarily of the early web, but of my younger self when I first hopped on the
 relatively early iteration of the web. It was not even as far as the "good old
 gopher/bbs days" those boomers keep ranting about - it was the days of early
 MMORPGs, of crappy Yahoo! 360 blogs riced up with copy-pasted html/css all over
-the place, of Vietnamese warez forums powered by pirated vBulletin running on
-shady free shared CPanel hosts, of monthly Drupal/Joomla SQL injection
-zero-days. It was truly the wild wild web, insanely accessible, insanely
-unsafe, and insanely fun. It was the web where a young clueless highschool me
-could find fun random stuff everyday, put fun random stuff out there for
-everyone to see, no matter how shitty and unsecure they are, because it didn't
-matter if I get pwn'd: my life back then wasn't that much dependent on the web.
+the place, of numerous Vietnamese warez forums powered by pirated vBulletin
+running on shady free shared CPanel hosts, of monthly Drupal/Joomla SQL
+injection zero-days. It was truly the wild wild web, insanely accessible,
+insanely unsafe, and insanely fun. It was the web where a young clueless
+teenage me could find fun random stuff everyday, put fun random stuff out
+there for everyone to see, no matter how shitty and unsecure they are, because
+it didn't matter if I get pwn'd: my life back then wasn't that much dependent
+on the web.
 
 Can I get all that back? I think not. The web, or more broadly, the internet
-grew up, just like anything where there's enough profit to be made. I'm not
-saying it's a bad thing (hell, I make a living out of building webstuff), but
-it is undeniably a sad thing. Gemini may be a spark that begins a push back
-against unjustified complexity, or it may end up being just another niche tech
-curiosity. I'm leaning towards the latter but hey at least with McRoss it's a
-halfway usable tech curiosity.
+grew up (to be a nasty adult, but an adult nevertheless), just like anything
+where there's enough profit to be made. I'm not saying it's a bad thing (hell,
+I make a living out of building webstuff), but it is undeniably a sad thing.
+Gemini may be a spark that begins a push back against unjustified complexity,
+or it may end up being just another niche tech curiosity. I'm leaning towards
+the latter but hey at least with McRoss it's a halfway usable tech curiosity.
 
 [1]: https://gemini.circumlunar.space/
 [2]: https://lobste.rs/s/79pu7o/gemini_protocol_inbetween_gopher_web
