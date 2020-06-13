@@ -73,7 +73,7 @@ CATEGORY_FEED_ATOM = "feeds/{slug}.atom.xml"
 
 # ========= Theme-specific settings follow =============
 
-MOTHERFUCKING_DEFAULT_THUMB = "images/nhan.jpg"
+MOTHERFUCKING_DEFAULT_THUMB = "images/keyboard-warrior.jpg"
 MOTHERFUCKING_GREETINGS = """
 Why hello there, source viewer. Here's a dragon for no particular reason:
 

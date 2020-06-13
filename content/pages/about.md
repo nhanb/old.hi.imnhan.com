@@ -1,9 +1,9 @@
 Title: About
-Thumb: images/nhan.jpg
+Thumb: images/keyboard-warrior.jpg
 
 ## About me
 
-![My face](/images/nhan.jpg)
+![literally me](/images/keyboard-warrior.jpg)
 
 Hi, I'm Nhân. I make web<strike>shit</strike>stuff for a living.
 
