@@ -5,12 +5,13 @@ Thumb: images/keyboard-warrior.jpg
 I've written some open source software in my free time.
 In some cases I even maintain them! Shocking, I know.
 
-## McRoss
 
-[McRoss](https://sr.ht/~nhanb/mcross) is a minimal and usable
-[gemini://](https://gemini.circumlunar.space/) browser written in python and
-tkinter, meaning it Just Works (tm) on any self-respecting desktop OS: Linux,
-Windows, Mac OS, and maybe the BSDs? Never tried one of those.
+## Pytaku
+
+[**Pytaku**][1] is a web-based manga reader that's designed to be as
+self-host-friendly as possible. It's an experiment to see how far I can get
+with a simpler toolset: basically just flask and sqlite (will most likely add
+mithril js into the mix soon). Still figuring stuff out as I go.
 
 
 ## ORTS
@@ -27,6 +28,14 @@ a surge in github stars. It is currently my most starred repo, which gives me
 mixed feelings.
 
 
+## McRoss
+
+[McRoss](https://sr.ht/~nhanb/mcross) is a minimal and usable
+[gemini://](https://gemini.circumlunar.space/) browser written in python and
+tkinter, meaning it Just Works (tm) on any self-respecting desktop OS.
+Eventually Pytaku took most of my interest and time so it's shelved for now.
+
+
 ## Caophim
 
 [Caophim][5] is my take on imageboard software and also my excuse to try
@@ -38,17 +47,7 @@ straw that broke the camel's back though, was [this gem right here][12] that
 remains unfixed to this day.
 
 
-## Unmaintained projects
-
-[**Pytaku**][1] was an online "manga aggregator aggregator": it let me follow new
-manga scanlation releases on multiple sites. Eventually the limits of Google
-App Engine's free offering prompted me to do a rewrite which resulted in
-endless yak-shaving and analysis paralysis. Then life happened, _then_
-[tachiyomi][2] happened and I lost the actual need for the project.
-
-
-[1]: https://hi.imnhan.com/posts/introducing-pytaku-the-only-online-manga-reader-youll-ever-need/
-[2]: https://tachiyomi.org/
+[1]: https://git.sr.ht/~nhanb/pytaku
 [3]: https://github.com/nhanb/com.nerdyweekly.animated
 [4]: https://www.reddit.com/r/unixporn/comments/9sd5uy/kde_plasma_blur_gif_pixel_art_wallpaper_look/
 [5]: https://github.com/nhanb/caophim
