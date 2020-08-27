@@ -6,7 +6,7 @@ SITENAME = "Hi, I'm Nhân"
 SITESUBTITLE = "and this is my humble corner on the interwebs."
 SITEURL = ""
 
-THEME = "./motherfucking-pelican-theme"
+THEME = "./nhanb-theme"
 
 TIMEZONE = "Asia/Ho_Chi_Minh"
 
@@ -25,7 +25,6 @@ EXTRA_PATH_METADATA = {
     "extra/favicon.ico": {"path": "favicon.ico"},
     "extra/favicon.png": {"path": "favicon.png"},
     "extra/404.html": {"path": "404.html"},
-    "extra/google3f40dbd543a603fa.html": {"path": "google3f40dbd543a603fa.html"},
 }
 
 ARTICLE_PATHS = ["posts"]

@@ -1,0 +1,16 @@
+<ul class="navbar" id="left-navbar">
+    {% for title, link in MENUITEMS %}
+        <li><a href="{{ link }}">{{ title }}</a></li>
+    {% endfor %}
+
+    {% for page in pages if not page.hidden %}
+        <li><a href="{{ SITEURL }}/{{ page.url }}">{{ page.title }}</a></li>
+    {% endfor %}
+</ul>
+
+<ul class="navbar" id="right-navbar">
+    <li>
+        <a href="{{SITE_URL}}/feeds/atom.xml">Feed</a>
+    </li>
+
+</ul>

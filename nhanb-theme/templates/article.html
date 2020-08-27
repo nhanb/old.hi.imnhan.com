@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title|striptags }} | {{ SITENAME }} {% endblock %}
+
+{% block header_extras %}
+
+  <link rel="stylesheet" href="/theme/css/article.css">
+  <meta property="og:title" content="{{ article.title|striptags }}" />
+  <meta property="og:description" content="{{ article.content|striptags|truncate(255) }}" />
+
+  {% if article.thumb %}
+    <meta property="og:image" content="{{ SITEURL }}/{{ article.thumb }}" />
+  {% elif MOTHERFUCKING_DEFAULT_THUMB %}
+    <meta property="og:image" content="{{ SITEURL }}/{{ MOTHERFUCKING_DEFAULT_THUMB }}" />
+  {% endif %}
+
+  {% endblock %}
+
+{% block content %}
+
+<div class="article-content">
+    <article>
+        <h1 class="article-title">
+            {{ article.title|striptags }}
+        </h1>
+
+        <time datetime="{{ article.date }}">
+          {{ article.date|strftime('%B %d, %Y') }}
+        </time>
+
+        {{ article.content }}
+    </article>
+</div>
+
+{% if DISQUS_SITENAME %}
+
+<hr id="hr-comment">
+
+<h2>Comments</h2>
+
+<div id="disqus_thread">
+    <button id="showCommentBtn">Show comments via Disqus</button>
+    <noscript><br>(enable JavaScript first though)</noscript>
+</div>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    // These need to be defined in the outermost scope, apparently.
+    var disqus_shortname = '{{ DISQUS_SITENAME }}';
+    var disqus_identifier = '/{{ article.url }}';
+    var disqus_url = '{{ SITEURL }}/{{ article.url }}';
+    var disqus_title = '{{ article.title|striptags }}';
+
+    document.querySelector('#showCommentBtn').addEventListener('click', function (event) {
+        // Immediate visual feedback is always good:
+        event.target.disabled = true;
+        event.target.innerHTML = 'Loading comments...';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    });
+</script>
+
+{% endif %}
+
+{% endblock %}

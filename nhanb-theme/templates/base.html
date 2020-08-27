@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{{ SITENAME }} - {{ SITESUBTITLE }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/theme/fonts/fonts.css">
+    <link rel="stylesheet" href="/theme/css/zenburn.css">
+    <link rel="stylesheet" href="/theme/css/main.css">
+    {% block header_extras %}{% endblock %}
+
+    {% include '_includes/google_analytics.html' %}
+</head>
+
+<!--
+{{ MOTHERFUCKING_GREETINGS }}
+-->
+
+<body>
+
+    <div id="main">
+
+        <header role="banner">{% include '_includes/header.html' %}</header>
+        <hr>
+        <nav role="navigation">{% include '_includes/navbar.html' %}</nav>
+        <hr id="hr-nav">
+
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+
+        <hr id="hr-footer">
+        <footer>{% include '_includes/footer.html' %}</footer>
+    </div>
+
+</body>
+</html>

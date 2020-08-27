@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}{{ page.title }} | {{ SITENAME }} {% endblock %}
+
+{% block header_extras %}
+  <meta property="og:title" content="{{ page.title|striptags }}" />
+  <meta property="og:description" content="{{ page.content|striptags|truncate(255) }}" />
+  {% if page.thumb %}
+    <meta property="og:image" content="{{ SITEURL }}/{{ page.thumb }}" />
+  {% elif MOTHERFUCKING_DEFAULT_THUMB %}
+    <meta property="og:image" content="{{ SITEURL }}/{{ MOTHERFUCKING_DEFAULT_THUMB }}" />
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div>
+  <article role="article">
+    {{ page.content }}
+  </article>
+</div>
+{% endblock %}
