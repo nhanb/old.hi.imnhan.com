@@ -8,7 +8,7 @@ In some cases I even maintain them! Shocking, I know.
 
 ## Pytaku
 
-[**Pytaku**][1] is a web-based manga reader that's designed to be as
+[Pytaku][1] is a web-based manga reader that's designed to be as
 self-host-friendly as possible. It's an experiment to see how far I can get
 with a simpler toolset: basically just flask and sqlite (will most likely add
 mithril js into the mix soon). Still figuring stuff out as I go.

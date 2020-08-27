@@ -115,7 +115,7 @@ where there's enough profit to be made. I'm not saying it's a bad thing (hell,
 I make a living out of building webstuff), but it is undeniably a sad thing.
 Gemini may be a spark that begins a push back against unjustified complexity,
 or it may end up being just another niche tech curiosity. I'm leaning towards
-the latter, but in the meantime, I'll keep peaking at the geminiverse with my
+the latter, but in the meantime, I'll keep peeking at the geminiverse with my
 comfy trusty browser.
 
 [1]: https://gemini.circumlunar.space/
