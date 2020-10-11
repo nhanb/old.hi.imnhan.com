@@ -1,13 +1,9 @@
 Title: About
 Thumb: images/keyboard-warrior.jpg
 
-## About me
-
-![literally me](/images/keyboard-warrior.jpg)
-
 Hi, I'm Nhân. I make web<strike>shit</strike>stuff for a living.
 
-## About this blog
+![literally me](/images/keyboard-warrior.jpg)
 
 My mind is a sad mess that cannot hold much information after a couple of
 months or so. This blog is where I write down interesting things I discover.

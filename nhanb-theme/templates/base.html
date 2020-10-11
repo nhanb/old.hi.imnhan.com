@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>{% block title %}{{ SITENAME }} - {{ SITESUBTITLE }}{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/theme/fonts/fonts.css">
-    <link rel="stylesheet" href="/theme/css/zenburn.css">
-    <link rel="stylesheet" href="/theme/css/main.css">
-    {% block header_extras %}{% endblock %}
-
-    {% include '_includes/google_analytics.html' %}
+  <meta charset="utf-8">
+  <title>{% block title %}{{ SITENAME }} - {{ SITESUBTITLE }}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/theme/css/zenburn.css">
+  <link rel="stylesheet" href="/theme/css/main.css">
+  {% block header_extras %}{% endblock %}
 </head>
 
 <!--
@@ -17,21 +14,40 @@
 -->
 
 <body>
+  <div id="main">
 
-    <div id="main">
+    <header role="banner">
+      <h1 id="site-name"><a href="/">{{ SITENAME }}</a></h1>
+      <p id="site-subtitle">{{ SITESUBTITLE}}</p>
+    </header>
 
-        <header role="banner">{% include '_includes/header.html' %}</header>
-        <hr>
-        <nav role="navigation">{% include '_includes/navbar.html' %}</nav>
-        <hr id="hr-nav">
+    <nav role="navigation">
+      <ul class="navbar" id="left-navbar">
+        {% for title, link in MENUITEMS %}
+          <li><a href="{{ link }}">{{ title }}</a></li>
+        {% endfor %}
+        {% for page in pages if not page.hidden %}
+          <li><a href="{{ SITEURL }}/{{ page.url }}">{{ page.title }}</a></li>
+        {% endfor %}
+      </ul>
+      <ul class="navbar" id="right-navbar">
+        <li><a href="{{SITE_URL}}/feeds/atom.xml">Feed</a></li>
+      </ul>
 
-        <div id="content">
-            {% block content %}{% endblock %}
-        </div>
+    <div class="clearfix">
 
-        <hr id="hr-footer">
-        <footer>{% include '_includes/footer.html' %}</footer>
+    </nav>
+
+    <div id="content">
+        {% block content %}{% endblock %}
     </div>
 
+    <footer>
+      &copy; 2013–{{ CURRENT_YEAR }}
+      {{ AUTHOR }}
+      <br>
+      {{ FOOTER_TEXT }}
+    </footer>
+  </div>
 </body>
 </html>

@@ -11,23 +11,22 @@
 
 {% block content %}
 
-<div class="blog-index">
-    {% if articles %}
-    <ul class="article-list">
-        {% for article in articles_page.object_list %}
-        <li>
-            <h1 class="article-title">
-                <a class="article" href="{{ SITEURL }}/{{ article.url }}">
-                    {{ article.title|striptags }}
-                </a>
-            </h1>
-            <time datetime="{{ article.date }}">
-              {{ article.date|strftime('%B %d, %Y') }}
-            </time>
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-</div>
+{% if articles %}
+
+<p>All of my writings, newest first:</p>
+
+<ul class="article-list">
+  {% for article in articles_page.object_list %}
+  <li>
+    <a class="article" href="{{ SITEURL }}/{{ article.url }}">
+      {{ article.title|striptags }}
+    </a>
+    <time datetime="{{ article.date }}">
+      {{ article.date|strftime('%B %d, %Y') }}
+    </time>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
 
 {% endblock %}
