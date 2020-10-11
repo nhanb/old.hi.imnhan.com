@@ -1,8 +1,13 @@
 Title: Look ma, no stock theme!
 Date: 2015-06-05 13:54
 
+_**2020 Update**: I bit the bullet and removed all web fonts, relying on the
+browser's configured sans-serif/monospace fonts instead. It's probably fine,
+since even stock fonts seem to cover Vietnamese glyphs well these days.
+Otherwise, people who care enough to be bothered by fallback fonts are likely
+to know how to configure their browser with proper fonts anyway._
 
-_**October 2017 Update**: Now that I like high contrast more, I just updated the theme to a
+_**2017 Update**: Now that I like high contrast more, I just updated the theme to a
 black/white/red palette with a [high-quality serif font][8] instead. Thanks [Mr. Butterick][9]!_
 
 <hr>
@@ -26,7 +31,7 @@ whatever reason, some people now think it's cool to include Bootstrap/Foundation
 or to include that new shiny parallax library to ruin scrolling for everybody. Oh, and don't forget
 the marvellous invention that is ["infinite scrolling"][3]:
 
-![](http://imgs.xkcd.com/comics/infinite_scrolling.png)
+![](https://imgs.xkcd.com/comics/infinite_scrolling.png)
 
 In fact, the main motivation of my new theme is [this satire page][4] on the sad state of the web
 we're in today.
