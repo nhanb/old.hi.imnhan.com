@@ -34,6 +34,6 @@ Specs:
 
 Services:
 
-- [] Syncthing
+- [x] Syncthing
 - [] Some RSS reader
 - [] Some bookmarking system that does full text search.
