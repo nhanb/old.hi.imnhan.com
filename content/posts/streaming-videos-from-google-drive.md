@@ -1,4 +1,4 @@
-Title: Streaming videos from Google Drive - 2nd attempt
+Title: Streaming videos from Google Drive - a second attempt
 Date: 2020-06-10 08:25
 Category: side projects
 
