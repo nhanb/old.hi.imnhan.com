@@ -128,7 +128,7 @@ Also both of those required setting up each client device. Not ideal.
 
 ### Update June 10, 2020
 
-The sequel is out: [Streaming videos from Google Drive - 2nd attempt][8]
+The sequel is out: [Streaming videos from Google Drive - a second attempt][8]
 
 [1]: https://kipalog.com/posts/Cac-web-phim-da-giam-99-99--chi-phi-bang-google-drive-nhu-the-nao
 [2]: https://help.netflix.com/en/node/23742
@@ -137,4 +137,4 @@ The sequel is out: [Streaming videos from Google Drive - 2nd attempt][8]
 [5]: https://github.com/nhanb/gflick
 [6]: https://github.com/nhanb/mpv-gdrive
 [7]: https://github.com/nhanb/drivein
-[8]: /posts/streaming-videos-from-google-drive-2nd-attempt/
+[8]: /posts/streaming-videos-from-google-drive-a-second-attempt/
