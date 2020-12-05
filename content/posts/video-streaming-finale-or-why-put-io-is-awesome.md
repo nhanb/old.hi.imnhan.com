@@ -18,7 +18,7 @@ It streams.
 
 It has a web-based video player that lets me pick subtitles.
 
-In cases when the subtitles aren't recognized, or I want to switch between
+In cases when the subtitles aren't recognized, or when I want to switch between
 audio tracks, I can always drag-n-drop the original file's streaming URL from
 the browser straight to an mpv launcher like this:
 
