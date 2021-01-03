@@ -29,7 +29,7 @@ the browser straight to an mpv launcher like this:
 
 It also has a open source third-party [Android app][1] that lets me browse and
 stream via mpv-android. As icing on the cake, this app supports casting to
-Chromecast-enabled TVs - everything This Works (tm).
+Chromecast-enabled TVs - everything Just Works (tm).
 
 The above is only possible because put.io exposes a powerful, well-documented
 API for everyone to play with.
