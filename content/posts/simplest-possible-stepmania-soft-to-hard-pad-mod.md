@@ -78,3 +78,11 @@ Between this and working through [the comet
 book](https://pages.cs.wisc.edu/~remzi/OSTEP/), I think I'll keep myself
 entertained enough during Saigon's potential second COVID-19 lockdown.
 I'd prefer it didn't happen though.
+
+P/s here it is in action:
+
+<video controls>
+  <source src="https://junk.imnhan.com/softpadmod.mp4" type="video/mp4">
+</video>
+
+(man I wonder if we'll ever get a Melty Blood 2)
