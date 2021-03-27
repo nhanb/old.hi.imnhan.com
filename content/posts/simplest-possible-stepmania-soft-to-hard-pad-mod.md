@@ -85,4 +85,5 @@ P/s here it is in action:
   <source src="https://junk.imnhan.com/softpadmod.mp4" type="video/mp4">
 </video>
 
-(man I wonder if we'll ever get a Melty Blood 2)
+<strike>(man I wonder if we'll ever get a Melty Blood 2)</strike>  
+Hot damn they're actually [doing it](https://meltyblood.typelumina.com/en/)!
