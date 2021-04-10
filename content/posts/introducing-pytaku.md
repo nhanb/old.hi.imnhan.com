@@ -4,6 +4,11 @@ Category: side projects
 Tags: pytaku
 Thumb: images/pytaku_01_chapter_progress.png
 
+> **Heads up from 2021!** This post describes a previous incarnation of Pytaku
+> which is no longer alive.  The new Pytaku is a slightly different thing which
+> is being (relatively) actively developed [on
+> sourcehut](https://sr.ht/~nhanb/pytaku/).
+
 [Pytaku][pytaku] is an online manga reader that scrapes data from multiple Vietnamese and English
 manga sites, giving you one single place to keep track of your reading progress and watch for new
 chapters with ease. Here are some of the features implemented so far:
@@ -36,8 +41,8 @@ chapters for the series you love.
 ## English, Vietnamese and support for other languages
 
 Pytaku comes in English by default and configurable to be in Vietnamese. If you want to translate
-it to your own language, feel free to download the [English language file][4] and start translating
-on that, then send it to me to install.
+it to your own language, feel free to follow the example from the [English language file][4] and
+send me a pull request.
 
 ![Vietnamese interface][img3]
 
@@ -58,10 +63,10 @@ chat room][3].
 
 [Click here][pytaku] to go to the app. Have fun! :)
 
-[1]: https://github.com/nhanb/pytaku
-[2]: https://github.com/nhanb/pytaku/blob/master/README.markdown
+[1]: https://github.com/nhanb/pytaku-old-gae/
+[2]: https://github.com/nhanb/pytaku-old-gae/blob/master/README.markdown
 [3]: https://gitter.im/nhanb/pytaku
-[4]: https://github.com/nhanb/pytaku/blob/master/frontend/languages/en.yaml
+[4]: https://github.com/nhanb/pytaku-old-gae/blob/master/frontend/languages/en.yaml
 [img1]: /images/pytaku_01_chapter_progress.png
 [img2]: /images/pytaku_02_bookmarked_series.png
 [img3]: /images/pytaku_03_vietnamese.png
