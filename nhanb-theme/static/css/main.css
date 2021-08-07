@@ -71,9 +71,14 @@ blockquote {
   padding-left: 7px;
   margin-left: 2rem;
   margin-right: 0;
+  /* prevent long links from breaking out of the blockquote: */
+  overflow-wrap: break-word;
 }
 blockquote > * {
   margin: 0;
+}
+blockquote > p + p {
+  margin-top: 0.5rem;
 }
 
 time {
