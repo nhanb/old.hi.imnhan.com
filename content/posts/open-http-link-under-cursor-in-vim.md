@@ -68,6 +68,58 @@ By the way, if you looked at my script and got spooked by the idea of executing
 a shell command composed from arbitrary, potentially unsafe input (i.e. text
 file content), don't worry: that's what [`shellescape()`][2] is for.
 
+## But why stop there?
+
+We're using Jira at work (I know, don't ask), and we have a convention to
+include the Jira ticket in all top-level git commit messages like this (French
+optional):
+
+```
+[SRE-123456] Finally fix the goddamn pipeline
+```
+
+That's no URL, but the jira ticket ID pattern is pretty simple, so I simply
+altered the regexp a bit like this:
+
+```vimscript
+function! OpenJira()
+  let l:jira_id = toupper(matchstr(expand("<cWORD>"), '\c\(id2\|sre\|csi\)-[0-9]\+'))
+  if l:jira_id != ""
+    let l:command = "!xdg-open https://my-company.atlassian.net/browse/".l:jira_id
+    echo l:command
+    silent exec l:command
+  else
+    echo "No Jira ticket found under cursor."
+  endif
+endfunction
+nnoremap gj :call OpenJira()<cr>
+```
+
+Some interesting points:
+
+- `ID2/SRE/CSI` are the prefixes that I know of. No idea if there are any
+  other. Would be trivial to add later anyway.
+- Because the pattern of l:jira_id is very simple, I don't even need to
+  shellescape() this one.
+- I didn't even bother to refactor common stuff between the OpenURL() and
+  OpenJira().
+
+On a more big-picture note, I can afford to make seemingly sloppy decisions
+precisely because this serves only myself, and my specific use cases are
+usually narrow. It's not very general, but it works, and works precisely the
+way I want it. This is one of the reasons I've always prefered simple tooling
+that I can build upon, rather than following the prescribed workflows of more
+full-fledged IDEs.
+
+I'm not bashing IDEs, and I'm in no way promoting vim or [rolling your own
+emacs](https://github.com/DigitalMars/med). I'm firmly in the "use whatever
+you're comfortable with" camp. I think the whole idea of editor/IDE wars is
+juvenile, dumb and counterproductive (all software sucks in some way anyway,
+fight me). Showing nifty tricks you can do with your tools, inspiring others to
+either check them out or implement those on their own tools, just like how Mr.
+Bright has done with his little comment, is a much better use of everyone's
+time. I think.
+
 [1]: https://github.com/tpope/vim-fugitive/blob/2dc08dfe354ed5400f5cdb3d5009dcd4024aac8a/doc/fugitive.txt#L213
 [2]: https://learnvimscriptthehardway.stevelosh.com/chapters/32.html#escaping-shell-command-arguments
 [3]: https://stackoverflow.com/questions/9458294/open-url-under-cursor-in-vim-with-browser
