@@ -22,7 +22,9 @@ Hidden: True
 - Human-friend distribution e.g. nuitka, pyoxidizer (pyinstaller is pretty meh)
 - Bonus: pluggable templates
 
-## Manhoa
+## Discord bot that launches CSGO/etc. server on demand
 
-Still fuzzy. May want to ditch the familiar Django stack and try using vibe.d.
-Who knows?
+Eyeing Linode's 4GB RAM tier at $0.03/hr. But in general it should work on any
+cloud VPS that supports (almost) instant VM launch via API, and snapshots.
+
+- Easy on/off/status commands via Discord bot maybe
