@@ -39,12 +39,12 @@ Eventually Pytaku took most of my interest and time so it's shelved for now.
 ## Caophim
 
 [Caophim][5] is my take on imageboard software and also my excuse to try
-[Nim][6]. There's a usable live instance at [caophim.net][7]. It's nowhere near
-my goals but to be honest I got tired of [running][8] [into][9] [nim's][10]
-[bugs][11], in the compiler, the standard library, the flagship module that's
-supposed to supersede a module in the standard library... you name it. The
-straw that broke the camel's back though, was [this gem right here][12] that
-remains unfixed to this day.
+[Nim][6]. There's a usable live instance at [caophim.imnhan.com][7]. It's
+nowhere near my goals but to be honest I got tired of [running][8] [into][9]
+[nim's][10] [bugs][11], in the compiler, the standard library, the flagship
+module that's supposed to supersede a module in the standard library... you
+name it. The straw that broke the camel's back though, was [this gem right
+here][12] that remains unfixed to this day.
 
 
 [1]: https://git.sr.ht/~nhanb/pytaku
@@ -52,7 +52,7 @@ remains unfixed to this day.
 [4]: https://www.reddit.com/r/unixporn/comments/9sd5uy/kde_plasma_blur_gif_pixel_art_wallpaper_look/
 [5]: https://github.com/nhanb/caophim
 [6]: https://nim-lang.org/
-[7]: https://caophim.net/
+[7]: https://caophim.imnhan.com/
 [8]: https://github.com/nim-lang/Nim/issues/13531
 [9]: https://github.com/nim-lang/Nim/issues/13986
 [10]: https://github.com/pragmagic/karax/issues/143
