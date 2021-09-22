@@ -8,6 +8,9 @@ mpv-android installed:
 
 <video controls>
   <source src="https://junk.imnhan.com/gflick-phone-demo.mp4" type="video/mp4">
+  <a href="https://junk.imnhan.com/gflick-phone-demo.mp4">
+    Video: https://junk.imnhan.com/gflick-phone-demo.mp4
+  </a>
 </video>
 
 The longer version follows.

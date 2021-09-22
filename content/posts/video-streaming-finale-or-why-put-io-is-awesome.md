@@ -24,6 +24,7 @@ the browser straight to an mpv launcher like this:
 
 <video controls>
   <source src="/images/put.io_01_mpv.mp4" type="video/mp4">
+  <a href="/images/put.io_01_mpv.mp4">Video: /images/put.io_01_mpv.mp4</a>
 </video>
 
 

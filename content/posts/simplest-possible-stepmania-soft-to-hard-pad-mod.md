@@ -83,6 +83,9 @@ P/s here it is in action:
 
 <video controls>
   <source src="https://junk.imnhan.com/softpadmod.mp4" type="video/mp4">
+  <a href="https://junk.imnhan.com/softpadmod.mp4">
+    Video: https://junk.imnhan.com/softpadmod.mp4
+  </a>
 </video>
 
 <strike>(man I wonder if we'll ever get a Melty Blood 2)</strike>  
