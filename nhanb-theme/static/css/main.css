@@ -1,7 +1,7 @@
 html {
   --bg-color: cornsilk;
   --fg-color: black;
-  --link-color: brown;
+  --link-color: black;
   --hr-border: 2px solid var(--link-color);
 
   font-size: 100%;
@@ -17,11 +17,17 @@ body {
 }
 
 a {
-  text-decoration: none;
   color: var(--link-color);
+  text-decoration-skip-ink: none;
 }
 a:hover {
-  text-decoration: underline;
+  background-color: var(--link-color);
+  color: var(--bg-color);
+  text-decoration: none;
+}
+header a,
+nav a {
+  text-decoration: none;
 }
 
 figure,
@@ -66,7 +72,7 @@ figcaption {
 blockquote {
   background-color: blanchedalmond;
   border: 2px solid burlywood;
-  border-left: 5px solid burlywood;
+  border-left: 1rem solid burlywood;
   padding: 5px;
   padding-left: 7px;
   margin-left: 2rem;
@@ -106,9 +112,11 @@ code {
 
 p code,
 li code {
-  padding: 0.2rem 0.2rem 0.1rem 0.2rem;
-  border-radius: 0.2rem;
-  border: 1px solid lightgray;
+  background-color: ivory;
+}
+a:hover code {
+  background-color: var(--link-color);
+  color: var(--bg-color);
 }
 
 pre {
@@ -118,6 +126,18 @@ pre {
 }
 pre code {
   font-size: 0.9rem;
+}
+
+/* Pygments tweaks */
+.highlight {
+  background-color: ivory;
+  border: 1px solid #ccc;
+}
+/* When using fenced blockquote without language name, pygments outputs `err`
+ * class for some reason
+ */
+.highlight .err {
+  border: none;
 }
 
 /* site-specific stuff follows */
