@@ -18,3 +18,13 @@
   display: block;
   margin-top: 0.1rem;
 }
+
+@media (min-width: 760px) {
+  .article:hover::before {
+    position: absolute;
+    margin-left: -1.2rem;
+    color: black;
+    content: "➜";
+    line-height: 1.1rem;
+  }
+}
