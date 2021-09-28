@@ -109,11 +109,12 @@ hr {
 
 code {
   font-family: monospace;
+  font-size: 1rem;
 }
 
 p code,
 li code {
-  background-color: ivory;
+  background-color: blanchedalmond;
 }
 a:hover code {
   background-color: var(--link-color);
