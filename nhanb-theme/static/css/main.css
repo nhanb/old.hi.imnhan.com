@@ -46,6 +46,10 @@ video {
    */
 }
 
+sup {
+  line-height: 1rem; /* prevents it from pushing up the line */
+}
+
 p {
   line-height: 1.4rem;
   margin: 1.1rem 0;
@@ -109,12 +113,14 @@ hr {
 
 code {
   font-family: monospace;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 p code,
 li code {
   background-color: blanchedalmond;
+  border: 1px solid #aaa;
+  padding: 0 3px;
 }
 a:hover code {
   background-color: var(--link-color);
@@ -125,9 +131,6 @@ pre {
   padding: 0.5rem;
   overflow-x: auto;
   font-family: monospace;
-}
-pre code {
-  font-size: 0.9rem;
 }
 
 /* Pygments tweaks */
