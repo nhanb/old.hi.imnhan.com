@@ -101,15 +101,20 @@ how this isn't an issue if you're running on GCP or AWS because they have
 another layer of firewall that locks down every port by default that you can
 setup on their totally usable web console or infrastructure-as-code it in your
 cloudformations or your terraformses or, actually, do you have a moment to talk
-about our lord and savior Cthulhubernetes-
+about our lord and savior Cthulhubernetes--
 
 But I digress.
 
 I guess what I was trying to say is, throwing abstractions over complex
 procedures is simply shifting the costs elsewhere. Shipping your software in a
-Dockerfile is file, but making your distribution so simple that people can
+Dockerfile is fine, but making your distribution so simple that people can
 easily write a couple of lines of Dockerfile for it by themselves is more
-valuable.
+valuable. Simple distribution is simple to deploy regardless of whether you're
+using docker, packer, ansible, pyinfra, podman, nomad, k8s, k3s, an
+impenetrable shell script some dude wrote 2 years ago who just left the company
+last month... or any combination of the above. The point is **you shouldn't be
+forced to use more heavyweight solutions just because the software is a pain in
+the butt to setup manually**.
 
 And other people _have_ been trying to make python application distribution
 simpler:
