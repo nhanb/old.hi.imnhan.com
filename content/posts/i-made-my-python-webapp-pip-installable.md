@@ -1,5 +1,6 @@
-Title: I made my python webapp pip-installable
+Title: I made my python webapp installable via pip
 Date: 2021-10-02 19:49
+Slug: i-made-my-python-webapp-pip-installable
 
 Running `pip3 install pytaku` now gives you all the tools you need [^1] to
 deploy [pytaku][3] - a hobby webapp of mine - on a fresh Debian 11 server:
