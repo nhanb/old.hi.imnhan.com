@@ -47,9 +47,14 @@
       {{ AUTHOR }}
       <br>
       {{ FOOTER_TEXT }}
-      <p style="color: beige; font-size: .7rem; margin: 0;">
-        Bored? Try entering the Konami code (PC only).
+      <p
+        class="easter-egg"
+        style="display: none; font-size: .7em; margin: 0; color: var(--bg-color2);">
+        Bored? Try entering the Konami code from your keyboard.
       </p>
+      <script>
+        document.querySelector('.easter-egg').style.display = 'block';
+      </script>
     </footer>
   </div>
 
