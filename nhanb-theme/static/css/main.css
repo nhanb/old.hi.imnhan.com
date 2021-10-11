@@ -56,11 +56,12 @@ sup {
 
 p {
   line-height: 1.4rem;
-  margin: 1.1rem 0;
+  margin: 1.5rem 0;
 }
 
 li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  line-height: 1.4rem;
 }
 
 iframe {
