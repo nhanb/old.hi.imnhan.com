@@ -122,7 +122,6 @@ code {
 
 p code,
 li code {
-  border: 1px solid #aaa;
   padding: 0 3px;
 }
 a:hover code {

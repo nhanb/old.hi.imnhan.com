@@ -1,9 +1,9 @@
 Title: Opening http link under the cursor in vim
 Date: 2021-08-07 11:37
 
-Internet's wise old chatty uncle [Walter Bright](https://www.walterbright.com/)
-recently [commented](https://news.ycombinator.com/item?id=28090272) on Hacker
-News:
+Mr. [Walter Bright](https://www.walterbright.com/), creator of the D
+programming language, recently
+[commented](https://news.ycombinator.com/item?id=28090272) on Hacker News:
 
 > [...]
 >
@@ -23,8 +23,8 @@ News:
 I've never had any issue with opening links from vim: I have `<leader>y` set up
 in Visual mode to yank stuff into the system-wide clipboard which I can then
 paste into the browser. However, ever since I mapped `<leader>gh` to trigger
-[`:GBrowse`][1] that opens a browser tab instantly, the old "select > copy >
-switch to browser > Ctrl+T > Ctrl+V" flow started to feel... prehistoric. Mr.
+[`:GBrowse`][1] that opens a browser tab instantly, the old "select, copy,
+alt-tab to browser, ctrl+t, ctrl+v" flow started to feel... prehistoric. Mr.
 Bright's comment gave me the final nudge to actually go ahead and set it up.
 
 The good folks from the [developer encyclopedia][3] suggested `gx` but for some
@@ -94,6 +94,8 @@ function! OpenJira()
 endfunction
 nnoremap gj :call OpenJira()<cr>
 ```
+
+Voila! Now I can press `gj` to open any atlassian ticket from just its ID.
 
 Some interesting points:
 
