@@ -1,13 +1,11 @@
 html {
   --bg-color: cornsilk;
-  --bg-color2: palegoldenrod;
   --fg-color: black;
   --link-color: black;
   --hr-border: 2px solid var(--link-color);
 
   font-size: 100%;
-  background-color: var(--bg-color2);
-  background: linear-gradient(var(--bg-color), var(--bg-color2));
+  background-color: var(--bg-color);
   /* make sure background color covers the whole vertical space: */
   min-height: 100%;
   color: var(--fg-color);
@@ -15,9 +13,13 @@ html {
   overflow-y: scroll;
   font-family: sans-serif;
 }
-body {
+* {
   margin: 0;
   padding: 0;
+}
+
+button {
+  padding: 0.2rem;
 }
 
 a {
@@ -106,6 +108,13 @@ ul {
   padding-left: 2rem;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  margin: 1.5rem 0;
+}
+
 hr {
   border: 0;
   border-top: 1px solid black;
@@ -150,9 +159,9 @@ pre {
 /* site-specific stuff follows */
 
 #main {
-  max-width: 700px;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 0 0.5rem;
+  padding: 0 0.6rem;
 }
 
 nav {
@@ -179,6 +188,7 @@ footer a {
 
 #site-name {
   font-size: 1.5rem;
+  margin-top: 0.5rem;
   margin-bottom: 0;
 }
 
