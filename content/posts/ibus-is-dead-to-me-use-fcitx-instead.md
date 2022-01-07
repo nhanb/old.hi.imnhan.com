@@ -4,6 +4,31 @@ Date: 2015-01-29 20:41
 Category: tutorials
 lang: vi
 
+**Cập nhật tháng 1/2021:** hiện tại mình dùng fcitx5 trên Arch + KDE, [cài đặt
+và config](https://wiki.archlinux.org/title/Fcitx5) không thể đơn giản hơn:
+
+```sh
+sudo pacman -S fcitx5 fcitx5-qt fcitx5-gtk fcitx5-unikey kcm-fcitx5
+```
+
+Sau đó thêm đoạn này vào /etc/environment:
+
+```
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+```
+
+Vào System Settings > Regional Settings > Input Method > Add Input Method,
+chọn Unikey, tùy chỉnh tùy ý.
+
+Fcitx5 khắc phục được lỗi crash renderer khi dùng facebook messenger trên
+Firefox, và gõ được trên Telegram 🤷.
+
+Còn dưới đây là bài viết cũ:
+
+---
+
 Sáng ra Netrunner bảo có vài chục cái update, mình chủ quan `dist-upgrade -y` rồi để đó không màng
 đến nữa. Nửa tiếng sau, ibus không thèm chơi với firefox!  :|
 
