@@ -16,12 +16,12 @@
 <body>
   <div id="main">
 
-    <header role="banner">
+    <header>
       <h1 id="site-name"><a href="/">{{ SITENAME }}</a></h1>
       <h2 id="site-subtitle">{{ SITESUBTITLE}}</h2>
     </header>
 
-    <nav role="navigation">
+    <nav>
       <ul class="navbar" id="left-navbar">
         {% for title, link in MENUITEMS %}
           <li><a href="{{ link }}">{{ title }}</a></li>
@@ -34,7 +34,7 @@
         <li><a href="{{SITE_URL}}/feeds/atom.xml">Feed</a></li>
       </ul>
 
-    <div class="clearfix">
+      <div class="clearfix"></div>
 
     </nav>
 
