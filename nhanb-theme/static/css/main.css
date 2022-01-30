@@ -43,6 +43,12 @@ video {
   max-width: 100%;
 }
 
+article {
+  /* prevent long URLs from causing a horizontal scroll on mobile */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
 video {
   /* On netsurf browser, a border for <video> tag will enclose all its
    * following siblings, which is probably a bug.
@@ -159,7 +165,7 @@ pre {
 /* site-specific stuff follows */
 
 #main {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 0.6rem;
 }
