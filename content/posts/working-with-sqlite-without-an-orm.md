@@ -138,7 +138,7 @@ details, but I had actually tripped on a failure mode, which I then realized
 was already nicely warned against in the docs. RTMF is actually fine advice for
 projects that have good documentation, who would have thought?
 
-## Recommended "sane" defaults
+## Recommended sane defaults
 
 SQLite comes with some default settings that may be surprising for people
 coming from e.g. Postgres. Here are some tweaks that worked better for me.
@@ -156,6 +156,26 @@ landed recently in the form of [STRICT Tables][13].
 crash immediately instead of waiting for the blocking query to finish, no
 matter how short the wait is.
 
+## A quick note on SQL injection
+
+_(or how to move on from the late 90s)_
+
+You don't need a full blown ORM to protect yourself against SQL injections. In
+fact, SQLite (and any sane RDBMS really) has built-in support for it called
+parameterized queries. The python documentation also [covers this][17], but the
+tl;dr is:
+
+```python
+# Never compose your query with string interpolation like this:
+cursor.execute(f"SELECT foo FROM bar WHERE stuff = '{user_input}';")
+
+# Use the parameter substitution API instead:
+cursor.execute('SELECT foo FROM bar WHERE stuff = ?;', (user_input,))
+```
+
+Congratulations! You now have better security than [Vietnam's "leading"
+cybersecurity firm][16].
+
 [1]: https://news.ycombinator.com/item?id=23510382
 [2]: https://sr.ht/~nhanb/pytaku/
 [3]: https://code.djangoproject.com/ticket/21961
@@ -171,3 +191,5 @@ matter how short the wait is.
 [13]: https://www.sqlite.org/stricttables.html
 [14]: https://www.sqlite.org/c3ref/busy_timeout.html
 [15]: https://www.sqlite.org/lang_altertable.html#otheralter
+[16]: https://vnhacker.blogspot.com/2021/08/bkav-bi-hack-nhu-nao.html
+[17]: https://docs.python.org/3/library/sqlite3.html
