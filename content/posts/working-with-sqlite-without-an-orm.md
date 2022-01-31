@@ -1,8 +1,11 @@
 Title: Working with SQLite in Python without an ORM or migration framework
 Date: 2022-01-30 14:11
-Summary: |
-    Some notes on handling migrations, linking the latest SQLite, and sane
-    driver defaults.
+Summary: Some notes on handling migrations, linking the latest SQLite,
+         and sane driver defaults.
+Thumb: images/byte_databases.jpg
+
+![byte-magazine-databases](/images/byte_databases.jpg "")
+_[(seriously though, BYTE covers are the best)][18]_
 
 
 I learned about SQLite's user_version pragma some time ago from a comment on
@@ -193,3 +196,4 @@ cybersecurity firm][16].
 [15]: https://www.sqlite.org/lang_altertable.html#otheralter
 [16]: https://vnhacker.blogspot.com/2021/08/bkav-bi-hack-nhu-nao.html
 [17]: https://docs.python.org/3/library/sqlite3.html
+[18]: https://archive.org/details/byte-magazine

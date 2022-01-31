@@ -9,7 +9,7 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:creator" content="@nhanbt" />
   <meta property="og:title" content="{{ article.title|striptags }}" />
-  <meta property="og:description" content="{{ article.content|striptags|truncate(255) }}" />
+  <meta property="og:description" content="{{ (article.summary or article.content) |striptags|truncate(255) }}" />
 
   {% if article.thumb %}
     <meta property="og:image" content="{{ SITEURL }}/{{ article.thumb }}" />
