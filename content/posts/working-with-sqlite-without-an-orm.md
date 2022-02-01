@@ -16,12 +16,12 @@ went something [like this][1]:
 > We use this right now to roll our own migrators and it's light years
 > better than how migrators work for Entity Framework, et. al.
 >
-> [https://www.sqlite.org/pragma.html#pragma_user_version]()
+> <https://www.sqlite.org/pragma.html#pragma_user_version>
 
-It made a lot of sense, and as I've become more and more [disillusioned][3]
-with Django's ORM (and similar "kitchen sink" web frameworks in general), I
-decided to try it out on [Pytaku][2] as a learning experience. Things went
-okay, all things considered. Here I'll outline some of my findings.
+I'd wanted to try working without an ORM for a while, and this comment gave me
+the final missing piece: a straightforward approach to SQL migrations that I
+can trivially implement. Obviously, I had to try it out on my latest [pet
+project][2]. Here I'll outline some of my findings.
 
 ## APSW as the driver
 
@@ -95,7 +95,7 @@ CREATE TABLE user (
 [...]
 ```
 
-Now to address the elephant in the room: SQLite has... _limited_ ALTER TABLE
+Now to address the elephant in the room: SQLite has... limited ALTER TABLE
 capabilities. The upside is it's [well-documented][10]. What this means in
 practice is that sometimes an otherwise simple `ALTER TABLE` in other RDBMS-es
 will require more manual gymnastics in SQLite: you'll need to create a new
@@ -138,7 +138,7 @@ had to do was copy the existing table definition from the aforementioned
 latest_schema.sql file, tweak it to my desired state, then do the table
 switcheroo. Again, the specific ordering of steps is important. I won't go into
 details, but I had actually tripped on a failure mode, which I then realized
-was already nicely warned against in the docs. RTMF is actually fine advice for
+was already nicely warned against in the docs. RTFM is actually fine advice for
 projects that have good documentation, who would have thought?
 
 ## Recommended sane defaults
@@ -165,7 +165,7 @@ _(or how to move on from the late 90s)_
 
 You don't need a full blown ORM to protect yourself against SQL injections. In
 fact, SQLite (and any sane RDBMS really) has built-in support for it called
-parameterized queries. The python documentation also [covers this][17], but the
+parameterized queries. Python's sqlite3 documentation also covers this, but the
 tl;dr is:
 
 ```python
@@ -176,12 +176,11 @@ cursor.execute(f"SELECT foo FROM bar WHERE stuff = '{user_input}';")
 cursor.execute('SELECT foo FROM bar WHERE stuff = ?;', (user_input,))
 ```
 
-Congratulations! You now have better security than [Vietnam's "leading"
+Congratulations! You now have better security hygiene than [Vietnam's "leading"
 cybersecurity firm][16].
 
 [1]: https://news.ycombinator.com/item?id=23510382
 [2]: https://sr.ht/~nhanb/pytaku/
-[3]: https://code.djangoproject.com/ticket/21961
 [4]: https://rogerbinns.github.io/apsw/download.html#i-really-want-to-use-pip
 [5]: https://rogerbinns.github.io/apsw/
 [6]: https://www.python.org/dev/peps/pep-0249/
@@ -195,5 +194,4 @@ cybersecurity firm][16].
 [14]: https://www.sqlite.org/c3ref/busy_timeout.html
 [15]: https://www.sqlite.org/lang_altertable.html#otheralter
 [16]: https://vnhacker.blogspot.com/2021/08/bkav-bi-hack-nhu-nao.html
-[17]: https://docs.python.org/3/library/sqlite3.html
 [18]: https://archive.org/details/byte-magazine
