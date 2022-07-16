@@ -5,18 +5,6 @@ This is the source code for https://hi.imnhan.com using
 
 # Dev environment
 
-This repo targets python 3. Initial setup on Arch Linux with
-`pyenv-virtualenv` and `poetry` looks something like this:
-
-```sh
-pyenv install 3.8.2
-pyenv virtualenv 3.8.2 imnhan.com
-pyenv activate imnhan.com
-poetry install
-```
-
-Then use:
-
 - `make devserver` / `make stopserver` for local dev at port 8000
 - `make github` to publish to hi.imnhan.com
 
@@ -36,7 +24,7 @@ All code and content within this repository is licensed under the terms of the M
 ```
 The MIT License (MIT)
 
-Copyright (c) 2013-2020 Bùi Thành Nhân
+Copyright (c) 2013-2022 Bùi Thành Nhân
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

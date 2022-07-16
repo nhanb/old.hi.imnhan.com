@@ -109,5 +109,5 @@ CURRENT_YEAR = date.today().year
 
 FOOTER_TEXT = """
 Built with &#9829; and probably too much
-<a target="_blank" rel="noopener" href="https://www.thecoffeehouse.com/product/ca-phe-peak-flavor-huong-thom-dinh-cao-350g">Coffee House</a>.
+<a target="_blank" rel="noopener" href="https://www.alambe.vn/products/ca-phe-rang-xay-alambe-sai-gon">cà phê sữa đá</a>.
 """

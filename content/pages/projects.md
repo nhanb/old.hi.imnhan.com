@@ -5,13 +5,20 @@ Thumb: images/keyboard-warrior.jpg
 I've written some open source software in my free time.
 In some cases I even maintain them! Shocking, I know.
 
+## Shark
+
+[Shark][13] is a simple "desktop pet". It's my first foray into cross-platform
+desktop application development, also my first Go project that actually did
+anything fun.
+
 
 ## Pytaku
 
 [Pytaku][1] is a web-based manga reader that's designed to be as
 self-host-friendly as possible. It's an experiment to see how far I can get
-with a simpler toolset: basically just flask and sqlite (will most likely add
-mithril js into the mix soon). Still figuring stuff out as I go.
+with a simpler toolset: basically just flask, sqlite and mithril js for the
+frontend. There are still some rough spots but that's enough for my daily use,
+so it's currently in maintenance mode.
 
 
 ## ORTS
@@ -33,7 +40,10 @@ mixed feelings.
 [McRoss](https://sr.ht/~nhanb/mcross) is a minimal and usable
 [gemini://](https://gemini.circumlunar.space/) browser written in python and
 tkinter, meaning it Just Works (tm) on any self-respecting desktop OS.
-Eventually Pytaku took most of my interest and time so it's shelved for now.
+Fast forward a couple of years and there's still no interesting content there
+(that I can find anyway). Also given the fact that there's a very good [web
+proxy](https://portal.mozz.us/gemini/mozz.us/) now, McRoss is pretty much
+shelved.
 
 
 ## Caophim
@@ -58,3 +68,4 @@ here][12] that remains unfixed to this day.
 [10]: https://github.com/pragmagic/karax/issues/143
 [11]: https://github.com/pragmagic/karax/issues/142
 [12]: https://github.com/nim-lang/Nim/issues/13923
+[13]: https://github.com/nhanb/shark/
