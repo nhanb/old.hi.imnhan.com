@@ -16,15 +16,18 @@ anything fun.
 
 [Pytaku][1] is a web-based manga reader that's designed to be as
 self-host-friendly as possible. It's an experiment to see how far I can get
-with a simpler toolset: basically just flask, sqlite and mithril js for the
-frontend. There are still some rough spots but that's enough for my daily use,
+with a simpler toolset: basically just flask, sqlite and mithril.js for the
+frontend. There are still many rough spots but that's enough for my daily use,
 so it's currently in maintenance mode.
 
 
 ## ORTS
 
 [ORTS](https://github.com/nhanb/orts/) is a GUI for operating scoreboards on
-fighting game streams.
+fighting game streams. It's served its purpose beaufifully during
+[our](https://www.facebook.com/SaigonFGC/) local tournaments and several
+[Saigon Cups](https://sgc19.saigonfgc.com/en/)... until a certain pandemic
+happened.
 
 
 ## An animated wallpaper for KDE Plasma
@@ -40,10 +43,10 @@ mixed feelings.
 [McRoss](https://sr.ht/~nhanb/mcross) is a minimal and usable
 [gemini://](https://gemini.circumlunar.space/) browser written in python and
 tkinter, meaning it Just Works (tm) on any self-respecting desktop OS.
-Fast forward a couple of years and there's still no interesting content there
-(that I can find anyway). Also given the fact that there's a very good [web
-proxy](https://portal.mozz.us/gemini/mozz.us/) now, McRoss is pretty much
-shelved.
+Fast forward a couple of years and there's still no interesting content on the
+gemini-verse (that I can find anyway). Also given the fact that there's a very
+good [web proxy](https://portal.mozz.us/gemini/mozz.us/) now, McRoss is pretty
+much shelved.
 
 
 ## Caophim
