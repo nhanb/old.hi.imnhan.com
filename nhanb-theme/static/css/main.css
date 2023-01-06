@@ -88,8 +88,7 @@ figcaption {
 }
 
 blockquote {
-  background-color: blanchedalmond;
-  border: 1px solid burlywood;
+  border-left: 1px solid black;
   padding: 5px;
   padding-left: 7px;
   margin-left: 2rem;
@@ -152,8 +151,8 @@ pre {
 
 /* Pygments tweaks */
 .highlight {
-  background-color: ivory;
-  border: 1px solid #ccc;
+  background-color: transparent;
+  border: 1px solid black;
 }
 /* When using fenced blockquote without language name, pygments outputs `err`
  * class for some reason

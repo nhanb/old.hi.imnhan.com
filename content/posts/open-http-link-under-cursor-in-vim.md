@@ -109,7 +109,7 @@ Some interesting points:
 On a more big-picture note, I can afford to make seemingly sloppy decisions
 precisely because this serves only myself, and my specific use cases are
 usually narrow. It's not very general, but it works, and works precisely the
-way I want it. This is one of the reasons I've always prefered simple tooling
+way I want it. This is one of the reasons I've always preferred simple tooling
 that I can build upon, rather than following the prescribed workflows of more
 full-fledged IDEs.
 
