@@ -12,7 +12,7 @@ I learned about SQLite's user_version pragma some time ago from a comment on
 Hacker News (as one does). Not sure which comment it was specifically, but it
 went something [like this][1]:
 
-> [...] One thing you can look into using is the SQLite user_version pragma.
+> One thing you can look into using is the SQLite user_version pragma.
 > We use this right now to roll our own migrators and it's light years
 > better than how migrators work for Entity Framework, et. al.
 >
@@ -64,7 +64,7 @@ With [<100 lines][7] of python, I ended up with a migrator that:
 
 - Finds migration files in the form of `./migrations/mXXXX.sql`
 - Uses `user_version` pragma to figure out what migrations are pending
-- Is forward-only -- I did say that this is minimally viable didn't I ;)
+- Is forward-only—I did say that this is minimally viable didn't I ;)
 
 Coming from Django, I missed a definitive place to see the latest definition of
 the whole db (which, in Django, is the models file). That's why I set up the

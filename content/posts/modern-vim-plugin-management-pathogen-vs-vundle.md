@@ -1,5 +1,5 @@
 date: 2013-05-13 12:00
-title: Modern vim plugin management - Pathogen vs Vundle
+title: Modern vim plugin management: Pathogen vs Vundle
 slug: modern-vim-plugin-management-pathogen-vs-vundle
 lang: en
 category: tutorials

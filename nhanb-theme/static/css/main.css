@@ -1,17 +1,21 @@
 html {
-  --bg-color: cornsilk;
+  --bg-color: white;
   --fg-color: black;
   --link-color: black;
   --hr-border: 2px solid var(--link-color);
 
-  font-size: 100%;
   background-color: var(--bg-color);
   /* make sure background color covers the whole vertical space: */
   min-height: 100%;
   color: var(--fg-color);
   /* always show vertical scrollbar to avoid content shifting: */
   overflow-y: scroll;
-  font-family: sans-serif;
+
+  font-size: 20px;
+  font-family: "Source Sans Pro", sans-serif;
+}
+code, pre {
+  font-family: "Ubuntu Mono";
 }
 * {
   margin: 0;
@@ -79,7 +83,7 @@ iframe {
 figure {
   margin: 0;
   padding: 0;
-  border: 1px solid black;
+  border: 2px solid black;
   display: inline-block;
   font-style: italic;
 }
@@ -88,7 +92,7 @@ figcaption {
 }
 
 blockquote {
-  border-left: 1px solid black;
+  border-left: 2px solid black;
   padding: 5px;
   padding-left: 7px;
   margin-left: 2rem;
@@ -122,16 +126,11 @@ h4 {
 
 hr {
   border: 0;
-  border-top: 1px solid black;
+  border-top: 2px solid black;
 }
 
 .clearfix {
   clear: both;
-}
-
-code {
-  font-family: monospace;
-  font-size: 0.9rem;
 }
 
 p code,
@@ -146,13 +145,13 @@ a:hover code {
 pre {
   padding: 0.5rem;
   overflow-x: auto;
-  font-family: monospace;
+  font-size: 0.9rem;
 }
 
 /* Pygments tweaks */
 .highlight {
   background-color: transparent;
-  border: 1px solid black;
+  border: 2px solid black;
 }
 /* When using fenced blockquote without language name, pygments outputs `err`
  * class for some reason
@@ -164,7 +163,7 @@ pre {
 /* site-specific stuff follows */
 
 #main {
-  max-width: 800px;
+  max-width: 650px;
   margin: 0 auto;
   padding: 0 0.6rem;
 }

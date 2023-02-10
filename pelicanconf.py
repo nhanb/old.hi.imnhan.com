@@ -3,7 +3,7 @@ from datetime import date
 
 AUTHOR = "Bùi Thành Nhân"
 SITENAME = "Hi, I'm Nhân"
-SITESUBTITLE = "and this is my humble corner on the interwebs."
+SITESUBTITLE = "and this is my humble corner on the intertubes."
 SITEURL = ""
 
 THEME = "./nhanb-theme"

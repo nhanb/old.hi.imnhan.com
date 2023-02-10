@@ -5,13 +5,6 @@ Mr. [Walter Bright](https://www.walterbright.com/), creator of the D
 programming language, recently
 [commented](https://news.ycombinator.com/item?id=28090272) on Hacker News:
 
-> [...]
->
-> Ever since the Intel CPU spec went online, I started doing this with the code
-> generator - providing links to the man page for the instruction being used:
->
-> <https://github.com/dlang/dmd/blob/master/src/dmd/cparse.d#L591>
->
 > And for bug fixes, reference the issue which often gives a detailed
 > explanation for why the code is a certain way:
 >

@@ -1,4 +1,4 @@
-Title: Introducing McRoss - a minimal gemini browser
+Title: Introducing McRoss—a minimal gemini browser
 Date: 2020-05-29 09:44
 Category: side projects
 

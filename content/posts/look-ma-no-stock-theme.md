@@ -1,17 +1,31 @@
 Title: Look ma, no stock theme!
 Date: 2015-06-05 13:54
 
-> **2020 Update**: I bit the bullet and removed all web fonts, relying on the
-> browser's configured sans-serif/monospace fonts instead. It's probably fine,
-> since even stock fonts seem to cover Vietnamese glyphs well these days.
-> Otherwise, people who care enough to be bothered by fallback fonts are likely
-> to know how to configure their browser with proper fonts anyway.
+**2023 Update**: I just realized that em dashes in certain default sans-serif
+fonts look terrible (no space around the dash), so I now explicitly use Source
+Sans Pro and Ubuntu Mono. Using specific fonts allow me to fine-tune my
+typography again (e.g. making code block text a bit smaller).
 
-<span></span>
+The extra http load is not that bad: each woff2 font variant averages at 50KB,
+and is only loaded if a page's content actually calls for it. A particularly
+[bad case][10] loads 6 variants, clocking in at ~300KB. I can live with that.
 
-> **2017 Update**: Now that I like high contrast more, I just updated the
-> theme to a black/white/red palette with a [high-quality serif font][8]
-> instead. Thanks [Mr. Butterick][9]!
+I also took this chance to go full black-on-white, which I think looks way
+crisper than black-on-cornsilk.
+
+**2020 Update**: I bit the bullet and removed all web fonts, relying on the
+browser's configured sans-serif/monospace fonts instead. It's probably fine,
+since even stock fonts seem to cover Vietnamese glyphs well these days.
+Otherwise, people who care enough to be bothered by fallback fonts are likely
+to know how to configure their browser with proper fonts anyway.
+
+**2017 Update**: Now that I like high contrast more, I just updated the
+theme to a black/white/red palette with a [high-quality serif font][8]
+instead. Thanks [Mr. Butterick][9]!
+
+The original post follows.
+
+---
 
 I just redesigned my blog.
 
@@ -79,3 +93,4 @@ someday I'll stop being lazy and fix all that. *Maybe*.
 [7]: https://github.com/nhanb/motherfucking-pelican-theme
 [8]: https://github.com/adobe-fonts/source-serif-pro
 [9]: https://practicaltypography.com/
+[10]: http://localhost:8000/posts/working-with-sqlite-in-python-without-an-orm-or-migration-framework/

@@ -1,4 +1,4 @@
-Title: Why I use Linux - Automation
+Title: Why I use Linux: Automation
 Date: 2013-06-07 08:02
 Category: tutorials
 Tags: python, linux
