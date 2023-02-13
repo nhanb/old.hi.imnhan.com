@@ -26,6 +26,16 @@ button {
   padding: 0.2rem;
 }
 
+a.headerlink {
+    margin-left: 0.5rem;
+    text-decoration: none;
+    visibility: hidden;
+}
+
+*:hover > a.headerlink {
+    visibility: visible;
+}
+
 a {
   color: var(--link-color);
   text-decoration-skip-ink: none;
