@@ -63,9 +63,9 @@ service or docker container to build your stuff in.
 
 See also:
 
-- [cgo is not Go][11]—a more exhaustive argument for staying in pure
+- [cgo is not Go][11]: a more exhaustive argument for staying in pure
   Go-land.
-- [Statically compile Go programs][16]—a deep dive into static Go compilation
+- [Statically compile Go programs][16]: a deep dive into static Go compilation
   and its quirks, complete with examples on how to statically link against
   SQLite with musl libc, if you must.
 
@@ -208,7 +208,7 @@ the scene. With my web service listening at localhost:8000, it literally takes
 2 lines of config to:
 
 - Serve HTTPS at port 443, with a valid cert provided by Let's Encrypt, using
-  reasonable default cryptographic settings—I just ran my site through the
+  reasonable default cryptographic settings---I just ran my site through the
   [ssllabs.com test][18] and it handily scored an A.
 - Serve HTTP at port 80 that simply redirects to the HTTPS port
 

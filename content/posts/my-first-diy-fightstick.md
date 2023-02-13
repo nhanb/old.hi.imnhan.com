@@ -1,4 +1,4 @@
-Title: My first DIY fightstick—Part 1
+Title: My first DIY fightstick: Part 1
 Slug: my-first-diy-fightstick-part-1
 Date: 2015-12-08 12:50
 Thumb: images/fightstick_17_top_panel.jpg

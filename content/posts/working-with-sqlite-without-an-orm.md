@@ -64,7 +64,7 @@ With [<100 lines][7] of python, I ended up with a migrator that:
 
 - Finds migration files in the form of `./migrations/mXXXX.sql`
 - Uses `user_version` pragma to figure out what migrations are pending
-- Is forward-only—I did say that this is minimally viable didn't I ;)
+- Is forward-only---I did say that this is minimally viable didn't I ;)
 
 Coming from Django, I missed a definitive place to see the latest definition of
 the whole db (which, in Django, is the models file). That's why I set up the
