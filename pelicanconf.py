@@ -19,7 +19,7 @@ MARKDOWN = {
         "markdown.extensions.extra": {},
         "markdown.extensions.meta": {},
         "smarty": {},
-        "toc": {"permalink": "$"},
+        "toc": {"permalink": "#"},
     },
     "output_format": "html5",
 }
