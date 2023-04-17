@@ -72,6 +72,11 @@ p {
   line-height: 1.4rem;
   margin: 1.5rem 0;
 }
+p + ul,
+p + ol {
+  /* make sure 1st list item doesn't look too separated from preceding <p> */
+  margin-top: -0.5rem;
+}
 
 li {
   margin-bottom: 0.6rem;
@@ -192,6 +197,19 @@ nav {
 nav ul {
   margin: 0;
   padding: 0.5rem 0;
+}
+
+.footnote ol {
+  /* Hack to make sure the list's marker doesn't get out of view.
+   * Couldn't use `list-style-position: inside` because the marker will be
+   * pushed to another line.
+   */
+  margin-left: 2rem;
+}
+.footnote hr::after {
+  content: "Footnotes:";
+  color: var(--fg-color);
+  font-size: 1.3rem;
 }
 
 footer {
