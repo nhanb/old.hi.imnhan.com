@@ -5,12 +5,12 @@ Category: consoom
 Thumb: images/voxel_battery.jpg
 
 
-**TL;DR:** bright crisp screen, acceptable keyboard, thin & light build, buggy
-touchpad on both ChromeOS and Linux, almost usable on MrChromebox UEFI + Arch
-Linux except for the fact that sound crashes most of the time. It's absolutely
-not worth the sticker price at [$1,099.99][1] (lol). Maybe consider buying if
-you can find it at a heavy discount and the Linux sound issue has been fixed
-somehow.
+**TL;DR:** bright crisp screen, acceptable keyboard, thin & light build, random
+touchpad lag on both ChromeOS and Linux, almost usable on MrChromebox UEFI +
+Arch Linux except for the fact that internal speakers crash most of the time
+(wired headphones work fine though). It's absolutely not worth the sticker
+price at [$1,099.99][1] (lol). Maybe consider buying if you can find it at a
+heavy discount and the speakers issue has been fixed somehow.
 
 ## Context
 
@@ -115,9 +115,11 @@ devices). After some desperate googling I found
 configs lifted straight from ChromeOS upstream. Sure enough, the device showed
 up:
 
-![default-profile-get](/images/voxel_audio_device.png)
+![default-profile-get](/images/voxel_audio_device.png "")
 
-And it would actually play sound... for a while until it crashes.
+And it would actually play sound... for a while until it crashes. I later found
+out that wired headphones work just fine, so only using internal speakers is
+problematic.
 
 I collected logs and tried googling but nothing comes up that matches my case.
 Asking in the eupnea discord server yielded an uncertain response:
@@ -136,6 +138,24 @@ screen and Linux compatibility, at just a slight decrease in performance.
 
 But hey, I would have never known any of this if I hadn't tried, right?
 
+## Aside: Chromebook keyboard quirks on KDE
+
+The most glaring issue is the absence of the `windows` key (aka `super`,
+`hyper`, or `meta`). It's not a huge problem for me: I always make `capslock`
+act as a `ctrl` key, so I can turn the original `ctrl` into `windows` instead:
+
+![changed-modifier-keys](/images/voxel_keys_mod.jpg)
+
+Another problem is that the F1-12 keys are not usable: they are [mapped to
+function keys][10] in MrChromebox UEFI firmware, and there's no modifier to use
+them as F-keys either. That means no F11 to toggle fullscreen, no Alt-F4, no F9
+to toggle drop-down terminal, etc. Fortunately such global shortcuts can be
+configured trivially from KDE's system preferences. On the other hand,
+application-specific features that are hardwired to use F-keys are simply
+unreachable: `htop` is one such example.
+
+![htop-fkeys-unusable](/images/voxel_keys_f.png)
+
 [1]: https://www.acer.com/us-en/chromebooks/acer-chromebook-enterprise-spin-713-cp713-3w/pdp/NX.AHAAA.006
 [2]: https://git.sr.ht/~nhanb/neodots
 [3]: https://wiki.archlinux.org/title/Chrome_OS_devices/Crostini
@@ -145,3 +165,4 @@ But hey, I would have never known any of this if I hadn't tried, right?
 [7]: https://wiki.mrchromebox.tech/Firmware_Write_Protect#Hardware_Write_Protection
 [8]: /images/voxel_chromebook_cp7133w.pdf
 [9]: https://mrchromebox.tech/#fwscript
+[10]: https://github.com/MrChromebox/firmware/issues/349

@@ -49,6 +49,10 @@ video {
   border: 2px solid black;
 }
 
+img[title] {
+  border: none;
+}
+
 article {
   /* prevent long URLs from causing a horizontal scroll on mobile */
   overflow-wrap: break-word;

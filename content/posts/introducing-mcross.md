@@ -21,7 +21,7 @@ and the overly privacy-concious" demographic, so I naturally want to see what
 cool stuff people on the gemini-verse are up to. Therefore, I need a gemini
 browser. _Naturally_, I [wrote one][12]:
 
-![McRoss Browser screenshot](/images/mcross_01_screenshot.png)
+![McRoss Browser screenshot](/images/mcross_01_screenshot.png "")
 
 At this stage it can browse plaintext and gemini content, but not binary yet.
 It also doesn't verify TLS certificates, because turns out [in the gemini

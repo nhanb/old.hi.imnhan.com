@@ -4,7 +4,7 @@ Summary: Some notes on handling migrations, linking the latest SQLite,
          and sane driver defaults.
 Thumb: images/byte_databases.jpg
 
-![byte-magazine-databases](/images/byte_databases.jpg "")
+![byte-magazine-databases](/images/byte_databases.jpg)
 _[(seriously though, BYTE covers are the best)][18]_
 
 
