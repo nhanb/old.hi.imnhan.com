@@ -118,8 +118,8 @@ up:
 ![default-profile-get](/images/voxel_audio_device.png "")
 
 And it would actually play sound... for a while until it crashes. I later found
-out that wired headphones work just fine, so only using internal speakers is
-problematic.
+out that wired headphones and HDMI audio work just fine, so only using internal
+speakers is problematic.
 
 I collected logs and tried googling but nothing comes up that matches my case.
 Asking in the eupnea discord server yielded an uncertain response:
