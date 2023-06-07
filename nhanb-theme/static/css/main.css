@@ -92,11 +92,18 @@ iframe {
 }
 
 blockquote {
-  border-left: 2px solid black;
   padding-left: 7px;
   margin: 1.5rem 0 1.5rem 2rem;
+  quotes: "\201C""\201D";
   /* prevent long links from breaking out of the blockquote: */
   overflow-wrap: break-word;
+}
+blockquote::before {
+  position: absolute;
+  margin-left: -0.5em;
+  margin-top: -0.25em;
+  font-size: 3em;
+  content: open-quote;
 }
 blockquote > * {
   margin: 0;
