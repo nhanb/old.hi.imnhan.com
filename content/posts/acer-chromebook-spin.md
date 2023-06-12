@@ -4,6 +4,11 @@ Slug: acer-chromebook-spin
 Category: consoom
 Thumb: images/voxel_battery.jpg
 
+**June 2023 update**: I [learned][11] that using pulseaudio instead of
+pipewire works around the audio issue. The following is the original article.
+
+---
+
 
 **TL;DR:** bright crisp screen, acceptable keyboard, thin & light build, random
 touchpad lag on both ChromeOS and Linux, almost usable on MrChromebox UEFI +
@@ -166,3 +171,4 @@ unreachable: `htop` is one such example.
 [8]: /images/voxel_chromebook_cp7133w.pdf
 [9]: https://mrchromebox.tech/#fwscript
 [10]: https://github.com/MrChromebox/firmware/issues/349
+[11]: https://github.com/WeirdTreeThing/chromebook-linux-audio/issues/2#issuecomment-1578962117
