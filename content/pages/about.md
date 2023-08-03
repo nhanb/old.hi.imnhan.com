@@ -1,7 +1,7 @@
 Title: About
 Thumb: images/keyboard-warrior.jpg
 
-Hi, I'm Nhân. I make web<strike>shit</strike>stuff for a living.
+Hi, I'm Nhân. I make webstuff for a living.
 
 ![literally me](/images/keyboard-warrior.jpg)
 
@@ -21,4 +21,3 @@ view or write comments. I think that's a reasonable compromise.
 [1]: http://getpelican.com
 [2]: https://github.com/nhanb/imnhan.com
 [3]: https://disqus.com/
-[4]: https://support.google.com/chrome/answer/96810

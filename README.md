@@ -24,7 +24,7 @@ All code and content within this repository is licensed under the terms of the M
 ```
 The MIT License (MIT)
 
-Copyright (c) 2013-2022 Bùi Thành Nhân
+Copyright (c) 2013-2023 Bùi Thành Nhân
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
