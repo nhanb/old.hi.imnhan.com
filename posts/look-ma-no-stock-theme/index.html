@@ -1,0 +1,54 @@
+<!DOCTYPE html><html> <head><meta charset="utf-8"><title>Look ma, no stock theme! | Hi, I'm Nhân</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/theme/css/font.css"><link rel="stylesheet" href="/theme/css/pygment.css"><link rel="stylesheet" href="/theme/css/main.css"><link rel="stylesheet" href="/theme/css/article.css"><meta name="twitter:card" content="summary"><meta name="twitter:creator" content="@nhanbt"><meta property="og:title" content="Look ma, no stock theme!"><meta property="og:description" content="2023 Update: I just realized that em dashes in certain default sans-serif fonts look terrible (no space around the dash), so I now explicitly use Source Sans Pro and Ubuntu Mono. Using specific fonts allow me to fine-tune my typography again (e.g...."><meta property="og:image" content="../../images/keyboard-warrior.jpg"></head> <!--
+
+Why hello there, source viewer. Here's a dragon for no particular reason:
+
+       ^                       ^
+       |\   \        /        /|
+      /  \  |\__  __/|       /  \_
+     / /\ \ \ _ \/ _ /      /    \_
+    / / /\ \ {*}\/{*}      /  / \ \_
+    | | | \ \( (00) )     /  // |\ \_
+    | | | |\ \(V""V)\    /  / | || \|
+    | | | | \ |^--^| \  /  / || || ||
+   / / /  | |( WWWW__ \/  /| || || ||
+  | | | | | |  \______\  / / || || ||
+  | | | / | | )|______\ ) | / | || ||
+  / / /  / /  /______/   /| \ \ || ||
+ / / /  / /  /\_____/  |/ /__\ \ \ \ \_
+ | | | / /  /\______/    \   \__| \ \ \_
+ | | | | | |\______ __    \_    \__|_| \_
+ | | ,___ /\______ _  _     \_       \  |
+ | |/    /\_____  /    \      \__     \ |    /\_
+ |/ |   |\______ |      |        \___  \ |__/  \_
+ v  |   |\______ |      |            \___/     |
+    |   |\______ |      |                    __/
+     \   \________\_    _\               ____/
+   __/   /\_____ __/   /   )\_,      _____/
+  /  ___/  \____/  ___/___)    \______/
+  VVV  V        VVV  V
+
+(ripped off from http://www.retrojunkie.com/asciiart/myth/dragons.htm)
+
+--> <body> <div id="main"> <header> <h1 id="site-name"><a href="/">Hi, I'm Nhân</a></h1> <h2 id="site-subtitle">and this is my humble corner on the intertubes.</h2> </header> <nav> <ul class="navbar" id="left-navbar"> <li><a href="/">Blog</a></li> <li><a href="../../about/">About</a></li> <li><a href="../../projects/">Projects</a></li> </ul> <ul class="navbar" id="right-navbar"> <li><a href="https://cv.imnhan.com">CV</a></li> <li><a href="/feeds/atom.xml">Feed</a></li> </ul> <div class="clearfix"></div> </nav> <div id="content"> <div class="article-content"> <article> <h1 class="article-title"> Look ma, no stock theme! </h1> <time datetime="2015-06-05 13:54:00+07:00"> June 05, 2015 </time> <p><strong>2023 Update</strong>: I just realized that em dashes in certain default sans-serif fonts look terrible (no space around the dash), so I now explicitly use Source Sans Pro and Ubuntu Mono. Using specific fonts allow me to fine-tune my typography again (e.g. making code block text a bit&nbsp;smaller).</p> <p>The extra http load is not that bad: each woff2 font variant averages at <span class="caps">50KB</span>, and is only loaded if a page&rsquo;s content actually calls for it. A particularly <a href="http://localhost:8000/posts/working-with-sqlite-in-python-without-an-orm-or-migration-framework/">bad case</a> loads 6 variants, clocking in at ~<span class="caps">300KB</span>. I can live with&nbsp;that.</p> <p>I also took this chance to go full black-on-white, which I think looks way crisper than&nbsp;black-on-cornsilk.</p> <p><strong>2020 Update</strong>: I bit the bullet and removed all web fonts, relying on the browser&rsquo;s configured sans-serif/monospace fonts instead. It&rsquo;s probably fine, since even stock fonts seem to cover Vietnamese glyphs well these days. Otherwise, people who care enough to be bothered by fallback fonts are likely to know how to configure their browser with proper fonts&nbsp;anyway.</p> <p><strong>2017 Update</strong>: Now that I like high contrast more, I just updated the theme to a black/white/red palette with a <a href="https://github.com/adobe-fonts/source-serif-pro">high-quality serif font</a> instead. Thanks <a href="https://practicaltypography.com/">Mr. Butterick</a>!</p> <p>The original post&nbsp;follows.</p> <hr> <p>I just redesigned my&nbsp;blog.</p> <p>To be totally honest, the previous design was not mine at all. I&rsquo;ve always been using <a href="https://github.com/duilio/pelican-octopress-theme/">pelican-octopress-theme</a>, which is a Pelican port of the default theme for Octopress. It&rsquo;s not that I have anything to complain about that theme: it was clean, readable and easy on the eyes. I just want my site to look unique. Content is king, sure, but it wouldn&rsquo;t hurt to stand out from the crowd once in a&nbsp;while.</p> <p>I&rsquo;m not a professional designer, but everything turned out quite well if I could say so. In this post I&rsquo;ll explain my design goals and how I (hopefully) achieved&nbsp;them.</p> <h2 id="clean-and-lightweight">Clean and lightweight<a class="headerlink" href="#clean-and-lightweight" title="Permanent link">#</a></h2> <p>The web is messy. I&rsquo;m not talking blinking-marquee-fire-animated-header messy (thank god we&rsquo;re done with that&hellip; <a href="https://developers.google.com/fonts/docs/getting_started#Effects">or are we?</a>). I&rsquo;m talking megabytes-of-useless-javascript-and-css messy. For whatever reason, some people now think it&rsquo;s cool to include Bootstrap/Foundation to every project, or to include that new shiny parallax library to ruin scrolling for everybody. Oh, and don&rsquo;t forget the marvellous invention that is <a href="https://xkcd.com/1309/">&ldquo;infinite scrolling&rdquo;</a>:</p> <p><img alt src="https://imgs.xkcd.com/comics/infinite_scrolling.png"></p> <p>In fact, the main motivation of my new theme is <a href="http://motherfuckingwebsite.com/">this satire page</a> on the sad state of the web we&rsquo;re in&nbsp;today.</p> <p>That&rsquo;s why I decided to do no fancy cosmetic <span class="caps">JS</span> and try to keep my use of static assets to a&nbsp;minimum:</p> <p><img alt src="/images/mofo_01_loads.png"></p> <p>I guess there&rsquo;s nothing I can do about the font files though, since I need to make sure my Vietnamese posts are rendered in a font that supports it. Oh well, at least it looks&nbsp;awesome.</p> <h2 id="content-is-king">Content is king<a class="headerlink" href="#content-is-king" title="Permanent link">#</a></h2> <p>No more distracting sidebar with &ldquo;latest news&rdquo;, &ldquo;related posts&rdquo;, etc. with thumbnails popping up all over the place, just a good old article body from start to&nbsp;finish.</p> <h2 id="easy-on-the-eye">Easy on the eye<a class="headerlink" href="#easy-on-the-eye" title="Permanent link">#</a></h2> <p>While <a href="http://bettermotherfuckingwebsite.com/">bettermotherfuckingwebsite</a> does a good job at demonstrating how far you can go with a few simple <span class="caps">CSS</span> rules (hint: very far), I found Tommi Kaikkonen&rsquo;s <a href="http://www.kaikkonendesign.fi/typography/">Interactive Guide to Blog Typography</a> much more comprehensive and informative. I implemented many of the ideas found in that&nbsp;guide:</p> <ul> <li>Big body&nbsp;font</li> <li>Constrained line width to aid&nbsp;reading</li> <li>Generous line height, liberal whitespace to help with visual&nbsp;hierarchy</li> <li>Lower background-foreground contrast. I also find the slightly yellow-ish background somewhat&nbsp;soothing.</li> </ul> <h2 id="thats-it">That&rsquo;s it!<a class="headerlink" href="#thats-it" title="Permanent link">#</a></h2> <p>You can find the source code to my theme <a href="https://github.com/nhanb/motherfucking-pelican-theme">on GitHub</a>. I don&rsquo;t recommend using it as-is though, since I haven&rsquo;t implemented many required templates (authors, tags, categories, etc.) because I don&rsquo;t use them. There&rsquo;s also the hardcoded content in footer and probably a few more places. Maybe someday I&rsquo;ll stop being lazy and fix all that. <em>Maybe</em>.</p> </article> </div> <h2 id="comments">Comments</h2> <div id="disqus_thread"> <button id="showCommentBtn">Show comments via Disqus</button> <noscript><br>(enable JavaScript first though)</noscript> </div> <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    // These need to be defined in the outermost scope, apparently.
+    var disqus_shortname = 'nerdyweekly';
+    var disqus_identifier = '/posts/look-ma-no-stock-theme/';
+    var disqus_url = '../../posts/look-ma-no-stock-theme/';
+    var disqus_title = 'Look ma, no stock theme!';
+
+    document.querySelector('#showCommentBtn').addEventListener('click', function (event) {
+        // Immediate visual feedback is always good:
+        event.target.disabled = true;
+        event.target.innerHTML = 'Loading comments...';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    });
+</script> </div> <footer> &copy; 2013–2023 Bùi Thành Nhân <br> Built with &#9829; and probably too much <a target="_blank" rel="noopener" href="https://www.alambe.vn/products/ca-phe-rang-xay-alambe-sai-gon">cà phê sữa đá</a>. <p class="easter-egg" style="display: none; font-size: .7em; margin: 0; color: var(--bg-color);"> Bored? Try entering the Konami code from your keyboard. </p> <script>
+        document.querySelector('.easter-egg').style.display = 'block';
+      </script> </footer> </div> <script src="/theme/konami.js"></script> </body> </html>

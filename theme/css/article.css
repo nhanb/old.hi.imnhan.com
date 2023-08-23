@@ -1,0 +1,9 @@
+.article-title {
+  line-height: 1.1em;
+  margin-bottom: 0.2em;
+}
+
+#comments {
+  border-top: 2px solid var(--link-color);
+  padding-top: 0.7rem;
+}

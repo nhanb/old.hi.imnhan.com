@@ -1,0 +1,58 @@
+<!DOCTYPE html><html> <head><meta charset="utf-8"><title>Dẹp ibus-unikey đi, dùng fcitx-unikey nhé! | Hi, I'm Nhân</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/theme/css/font.css"><link rel="stylesheet" href="/theme/css/pygment.css"><link rel="stylesheet" href="/theme/css/main.css"><link rel="stylesheet" href="/theme/css/article.css"><meta name="twitter:card" content="summary"><meta name="twitter:creator" content="@nhanbt"><meta property="og:title" content="Dẹp ibus-unikey đi, dùng fcitx-unikey nhé!"><meta property="og:description" content="Cập nhật tháng 1/2021: hiện tại mình dùng fcitx5 trên Arch + KDE, cài đặt và config không thể đơn giản hơn: sudo pacman -S fcitx5 fcitx5-qt fcitx5-gtk fcitx5-unikey kcm-fcitx5 Sau đó thêm đoạn này vào /etc/environment: GTK_IM_MODULE=fcitx..."><meta property="og:image" content="../../images/keyboard-warrior.jpg"></head> <!--
+
+Why hello there, source viewer. Here's a dragon for no particular reason:
+
+       ^                       ^
+       |\   \        /        /|
+      /  \  |\__  __/|       /  \_
+     / /\ \ \ _ \/ _ /      /    \_
+    / / /\ \ {*}\/{*}      /  / \ \_
+    | | | \ \( (00) )     /  // |\ \_
+    | | | |\ \(V""V)\    /  / | || \|
+    | | | | \ |^--^| \  /  / || || ||
+   / / /  | |( WWWW__ \/  /| || || ||
+  | | | | | |  \______\  / / || || ||
+  | | | / | | )|______\ ) | / | || ||
+  / / /  / /  /______/   /| \ \ || ||
+ / / /  / /  /\_____/  |/ /__\ \ \ \ \_
+ | | | / /  /\______/    \   \__| \ \ \_
+ | | | | | |\______ __    \_    \__|_| \_
+ | | ,___ /\______ _  _     \_       \  |
+ | |/    /\_____  /    \      \__     \ |    /\_
+ |/ |   |\______ |      |        \___  \ |__/  \_
+ v  |   |\______ |      |            \___/     |
+    |   |\______ |      |                    __/
+     \   \________\_    _\               ____/
+   __/   /\_____ __/   /   )\_,      _____/
+  /  ___/  \____/  ___/___)    \______/
+  VVV  V        VVV  V
+
+(ripped off from http://www.retrojunkie.com/asciiart/myth/dragons.htm)
+
+--> <body> <div id="main"> <header> <h1 id="site-name"><a href="/">Hi, I'm Nhân</a></h1> <h2 id="site-subtitle">and this is my humble corner on the intertubes.</h2> </header> <nav> <ul class="navbar" id="left-navbar"> <li><a href="/">Blog</a></li> <li><a href="../../about/">About</a></li> <li><a href="../../projects/">Projects</a></li> </ul> <ul class="navbar" id="right-navbar"> <li><a href="https://cv.imnhan.com">CV</a></li> <li><a href="/feeds/atom.xml">Feed</a></li> </ul> <div class="clearfix"></div> </nav> <div id="content"> <div class="article-content"> <article> <h1 class="article-title"> Dẹp ibus-unikey đi, dùng fcitx-unikey nhé! </h1> <time datetime="2015-01-29 20:41:00+07:00"> January 29, 2015 </time> <p><strong>Cập nhật tháng 1/2021:</strong> hiện tại mình dùng fcitx5 trên Arch + <span class="caps">KDE</span>, <a href="https://wiki.archlinux.org/title/Fcitx5">cài đặt và config</a> không thể đơn giản&nbsp;hơn:</p> <div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>fcitx5<span class="w"> </span>fcitx5-qt<span class="w"> </span>fcitx5-gtk<span class="w"> </span>fcitx5-unikey<span class="w"> </span>kcm-fcitx5
+</code></pre></div> <p>Sau đó thêm đoạn này vào&nbsp;/etc/environment:</p> <div class="highlight"><pre><span></span><code><span class="n">GTK_IM_MODULE</span><span class="o">=</span><span class="n">fcitx</span>
+<span class="n">QT_IM_MODULE</span><span class="o">=</span><span class="n">fcitx</span>
+<span class="n">XMODIFIERS</span><span class="o">=</span><span class="nv">@im</span><span class="o">=</span><span class="n">fcitx</span>
+</code></pre></div> <p>Vào System Settings &gt; Regional Settings &gt; Input Method &gt; Add Input Method, chọn Unikey, tùy chỉnh tùy&nbsp;ý.</p> <p>Fcitx5 khắc phục được lỗi crash renderer khi dùng facebook messenger trên Firefox, và gõ được trên Telegram&nbsp;🤷.</p> <p>Còn dưới đây là bài viết&nbsp;cũ:</p> <hr> <p>Sáng ra Netrunner bảo có vài chục cái update, mình chủ quan <code>dist-upgrade -y</code> rồi để đó không màng đến nữa. Nửa tiếng sau, ibus không thèm chơi với firefox!&nbsp;:|</p> <p>Chuyện gõ tiếng Việt trên linux thì muôn đời trần ai rồi, mình không muốn bàn thêm nữa. Ngô &ldquo;Chin&rdquo; - một trong những người phát triển chính của <a href="http://ibus-bogo.readthedocs.org/">ibus-bogo</a> - đã viết một bài blog rất hay về tình trạng gõ tiếng Việt hiện nay trên linux nói chung, ai quan tâm có thể tham khảo thêm <a href="http://ngochin.com/2014/07/31/uoc-mo-bo-go-kieu-unikey/">ở đây</a>.</p> <h2 id="fcitx-unikey">fcitx-unikey<a class="headerlink" href="#fcitx-unikey" title="Permanent link">#</a></h2> <p>Lọ mọ trên trang github của bogo, mình vô tình phát hiện ra <a href="https://github.com/BoGoEngine/fcitx-bogo">fcitx-bogo</a>: dự án này thực chất cũng dùng bogo-engine nhưng chạy với <a href="https://github.com/fcitx/fcitx">fcitx</a> chứ không phải ibus như bình thường. Rất tiếc là khi mình cài đặt và chạy thử fcitx-bogo thì nó luôn crash fcitx trước khi xử lý ra được chữ tiếng Việt nào.&nbsp;:P</p> <p>Dạo một vòng quanh trang github của fcitx, mình thấy dự án này vẫn được phát triển đều đặn chứ không bị cảnh đem con bỏ chợ như ibus, và thứ làm mình ngạc nhiên và mừng nhất chính là một repo với cái tên rất hứa hẹn: <a href="https://github.com/fcitx/fcitx-unikey">fcitx-unikey</a>.</p> <p>Cách compile và cài đặt đã được nêu rõ trên <span class="caps">README</span> nên mình sẽ không nói lại ở đây nữa. Một vài nhận xét sau khi dùng thử trên Netrunner 14 (em họ của&nbsp;Kubuntu):</p> <ul> <li>Không hiện popup vô duyên khi chuyển method như&nbsp;ibus.</li> <li>Không bật method tiếng Việt vô tội vạ như ibus. Trước đây khi dùng ibus, mặc dù đã tắt tính năng &ldquo;Share same input method among all applications&rdquo;, method tiếng Việt vẫn được kích hoạt mặc định trong các system dialog của <span class="caps">KDE</span>, rất khó chịu (bực nhất là nó bật preedit trên ô điền password nên mỗi khi khóa máy rồi login lại là password hiện lên hết). Fcitx không bị như vậy, vì method mặc định luôn là tiếng&nbsp;Anh.</li> </ul> <p>Một điểm trừ là khi dùng trên skype, phần text đang trong preedit bị hiển thị trong một ô riêng chứ không chỉ là text bị gạch dưới như trong những chương trình khác. (xem hình&nbsp;dưới)</p> <p><img alt src="/images/fcitx-skype.png"></p> <h2 id="vim-fcitx">vim-fcitx<a class="headerlink" href="#vim-fcitx" title="Permanent link">#</a></h2> <p>Những ai đã thử gõ tiếng Việt trên vim chắc chắn đều biết: không tài nào dùng normal mode khi preedit đang bật được. Ngày xưa khi dùng ibus mình có thử viết <a href="https://github.com/nhanb/vim-bogo">một plugin</a> để bật tiếng Việt khi vào insert mode và trở lại tiếng Anh khi ra normal mode, nhưng cuối cùng không dùng vì preedit trong insert mode làm hư <code>inoremap jj &lt;esc&gt;</code>.</p> <p>Plugin <a href="https://github.com/nhanb/vim-bogo">vim-fcitx</a> hoạt động tương tự như trên, và vấn đề map jj nêu trên có thể được giải quyết bằng cách sửa mã nguồn của&nbsp;fcitx-unikey.</p> <p>Mình gõ tiếng Việt kiểu <span class="caps">VNI</span> nên bộ gõ chắc chắn không bao giờ xử lý ký tự <code>j</code> =&gt; có thể thêm ký tự <code>j</code> vào danh sách WordBreakSyms trong <strong>src/unikey-im.cpp</strong>. (<a href="https://github.com/nhanb/fcitx-unikey/commit/d976a64f560510125bfddf02bd892d42bc94e5b5">xem tại đây</a>)</p> <p>Sau đó chỉ cần compile lại fcitx-unikey là&nbsp;xong!</p> </article> </div> <h2 id="comments">Comments</h2> <div id="disqus_thread"> <button id="showCommentBtn">Show comments via Disqus</button> <noscript><br>(enable JavaScript first though)</noscript> </div> <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    // These need to be defined in the outermost scope, apparently.
+    var disqus_shortname = 'nerdyweekly';
+    var disqus_identifier = '/posts/ibus-is-dead-to-me-use-fcitx-instead-vi/';
+    var disqus_url = '../../posts/ibus-is-dead-to-me-use-fcitx-instead-vi/';
+    var disqus_title = 'Dẹp ibus-unikey đi, dùng fcitx-unikey nhé!';
+
+    document.querySelector('#showCommentBtn').addEventListener('click', function (event) {
+        // Immediate visual feedback is always good:
+        event.target.disabled = true;
+        event.target.innerHTML = 'Loading comments...';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    });
+</script> </div> <footer> &copy; 2013–2023 Bùi Thành Nhân <br> Built with &#9829; and probably too much <a target="_blank" rel="noopener" href="https://www.alambe.vn/products/ca-phe-rang-xay-alambe-sai-gon">cà phê sữa đá</a>. <p class="easter-egg" style="display: none; font-size: .7em; margin: 0; color: var(--bg-color);"> Bored? Try entering the Konami code from your keyboard. </p> <script>
+        document.querySelector('.easter-egg').style.display = 'block';
+      </script> </footer> </div> <script src="/theme/konami.js"></script> </body> </html>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Hi, I'm Nhân - consoom</title><link href="https://old.hi.imnhan.com/" rel="alternate"></link><link href="feeds/consoom.atom.xml" rel="self"></link><id>https://old.hi.imnhan.com/</id><updated>2023-04-22T15:55:00+07:00</updated><subtitle>and this is my humble corner on the intertubes.</subtitle><entry><title>Acer Chromebook Spin 713 “Voxel”: an adequate Crostini device, a buggy Linux laptop</title><link href="https://old.hi.imnhan.com/posts/acer-chromebook-spin/" rel="alternate"></link><published>2023-04-22T15:55:00+07:00</published><updated>2023-04-22T15:55:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2023-04-22:/posts/acer-chromebook-spin/</id><summary type="html">&lt;p&gt;&lt;strong&gt;June 2023 update&lt;/strong&gt;: I &lt;a href="https://github.com/WeirdTreeThing/chromebook-linux-audio/issues/2#issuecomment-1578962117"&gt;learned&lt;/a&gt; that using pulseaudio instead of
+pipewire works around the audio issue. The following is the original&amp;nbsp;article.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;&lt;span class="caps"&gt;TL&lt;/span&gt;;&lt;span class="caps"&gt;DR&lt;/span&gt;:&lt;/strong&gt; bright crisp screen, acceptable keyboard, thin &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; light build, random
+touchpad lag on both ChromeOS and Linux, almost usable on MrChromebox &lt;span class="caps"&gt;UEFI&lt;/span&gt; +
+Arch Linux except for the …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;June 2023 update&lt;/strong&gt;: I &lt;a href="https://github.com/WeirdTreeThing/chromebook-linux-audio/issues/2#issuecomment-1578962117"&gt;learned&lt;/a&gt; that using pulseaudio instead of
+pipewire works around the audio issue. The following is the original&amp;nbsp;article.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;&lt;span class="caps"&gt;TL&lt;/span&gt;;&lt;span class="caps"&gt;DR&lt;/span&gt;:&lt;/strong&gt; bright crisp screen, acceptable keyboard, thin &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; light build, random
+touchpad lag on both ChromeOS and Linux, almost usable on MrChromebox &lt;span class="caps"&gt;UEFI&lt;/span&gt; +
+Arch Linux except for the fact that internal speakers crash most of the time
+(wired headphones work fine though). It&amp;rsquo;s absolutely not worth the sticker
+price at &lt;a href="https://www.acer.com/us-en/chromebooks/acer-chromebook-enterprise-spin-713-cp713-3w/pdp/NX.AHAAA.006"&gt;$1,099.99&lt;/a&gt; (lol). Maybe consider buying if you can find it at a
+heavy discount and the speakers issue has been fixed&amp;nbsp;somehow.&lt;/p&gt;
+&lt;h2 id="context"&gt;Context&lt;a class="headerlink" href="#context" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Around 2022 I was looking for a replacement for my T530&amp;mdash;something lighter
+with a better screen&amp;mdash;and saw a listing for a used Acer Chromebook Spin 713-3W
+at only 10mil &lt;span class="caps"&gt;VND&lt;/span&gt; ($425, give or take). A recently released HiDPI laptop with
+an i5-1135G7 at 425 freedom dollars? And I get to play with ChromeOS/Crostini
+on a not-pathetically-weak x86 device? Sign me right up, I thought. The plan
+was to run ChromeOS/Android apps for &lt;span class="caps"&gt;GUI&lt;/span&gt; stuff, and install my usual tmux+vim
+based development &lt;a href="https://git.sr.ht/~nhanb/neodots"&gt;environment&lt;/a&gt; on&amp;nbsp;Crostini.&lt;/p&gt;
+&lt;h2 id="the-hardware"&gt;The hardware&lt;a class="headerlink" href="#the-hardware" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Specs: i5-1135G7 (Tiger Lake), Xe graphics, &lt;span class="caps"&gt;8GB&lt;/span&gt; &lt;span class="caps"&gt;RAM&lt;/span&gt;, &lt;span class="caps"&gt;256GB&lt;/span&gt; &lt;span class="caps"&gt;SSD&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;Keyboard:&amp;nbsp;acceptable&lt;/li&gt;
+&lt;li&gt;Screen: 2256x1504 (3:2) at 13.5&amp;rdquo; (200dpi). Subjectively speaking, it&amp;rsquo;s
+  bright, colorful and delivers crisp text&amp;mdash;I have nothing but praise&amp;nbsp;here.&lt;/li&gt;
+&lt;li&gt;Speakers: worse and quieter than my Samsung Tab S8&amp;nbsp;tablet&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here it is sandwiched between a Samsung Tab S8 and a Thinkpad&amp;nbsp;T530:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="size" src="/images/voxel_size.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="thickness" src="/images/voxel_thickness.jpg"&gt;&lt;/p&gt;
+&lt;h2 id="chromeoscrostini"&gt;ChromeOS/Crostini&lt;a class="headerlink" href="#chromeoscrostini" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I&amp;rsquo;d just like to interject for a moment. What you&amp;rsquo;re referring to as Linux,
+is in fact, &lt;span class="caps"&gt;CHROME&lt;/span&gt;/Linux, or as I&amp;rsquo;ve recently taken to calling it, &lt;span class="caps"&gt;CHROME&lt;/span&gt;
+plus Linux. Linux is not an operating system unto itself, but rather another
+free component of a fully functioning &lt;span class="caps"&gt;CHROME&lt;/span&gt; system made useful by the &lt;span class="caps"&gt;CHROME&lt;/span&gt;
+v8, css utililties, and other vital system components comprising a full &lt;span class="caps"&gt;OS&lt;/span&gt; as
+defined by the &lt;span class="caps"&gt;W3C&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&amp;ndash; &lt;a href="https://orib.dev/interject.html"&gt;some weird internet&amp;nbsp;person&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;As advertised, the laptop could run ChromeOS apps, Android apps, and Linux apps
+via containers. By default I got a Debian container, but since I needed
+up-to-date software for development, I set up an Arch container instead. &lt;a href="https://wiki.archlinux.org/title/Chrome_OS_devices/Crostini"&gt;The
+process&lt;/a&gt; itself was straightforward&amp;nbsp;enough.&lt;/p&gt;
+&lt;p&gt;Zoom for Android worked as expected, and to my surprise, Tailscale for Android
+managed to wrangle traffic correctly for programs running inside Crostini too!
+The only hiccup was that Magic &lt;span class="caps"&gt;DNS&lt;/span&gt; didn&amp;rsquo;t work, so I needed to put the
+hostname-&lt;span class="caps"&gt;IP&lt;/span&gt; pairs into /etc/hosts manually. I also had to change the temp dir
+from /tmp to ~/tmp for &lt;a href="https://go.dev/"&gt;Go&lt;/a&gt; tools to work, because Crostini programs weren&amp;rsquo;t
+allowed to exec files inside /tmp. Once I&amp;rsquo;d worked out those kinks, I could
+open up a terminal and start working as if I were on one of my Arch PCs. Hell,
+even docker/docker-compose Just Worked™ inside the&amp;nbsp;container.&lt;/p&gt;
+&lt;p&gt;But then came the&amp;nbsp;papercuts.&lt;/p&gt;
+&lt;p&gt;The touchpad would randomly lag, as in, dragging still
+worked but there was a noticeable delay between my dragging and seeing the
+cursor actually moving. The problem would just go away as randomly as it&amp;nbsp;happened.&lt;/p&gt;
+&lt;p&gt;Back when I used an actual Linux machine, I was used to having 10 virtual
+desktops, numbered from 1 to 10, with Alt-n mapped to &amp;ldquo;jump to desktop #n&amp;rdquo;, and
+Windows-n mapped to &amp;ldquo;move window to desktop #n&amp;rdquo; (the &lt;code&gt;0&lt;/code&gt; key maps to
+desktop #10, naturally). While ChromeOS has a &amp;ldquo;workspaces&amp;rdquo; feature, there&amp;rsquo;s no
+way to navigate and juggle windows between them precisely and instantly.
+&lt;em&gt;Instantly&lt;/em&gt; is an important keyword here: many tasks, while doable, suffered
+from gratuitous animations and tedious step-by-step navigation. This reminded
+me of when I tried to use a Macbook professionally: things kinda worked, but
+the experience would always be intrinsically&amp;nbsp;worse.&lt;/p&gt;
+&lt;p&gt;While Linux &lt;span class="caps"&gt;GUI&lt;/span&gt; programs were automagically put on the ChromeOS applications
+list as first class citizens, certain quality-of-life features didn&amp;rsquo;t work. For
+example, on &lt;span class="caps"&gt;KDE&lt;/span&gt; I used to be able to drag a video streaming link from the
+browser onto &lt;span class="caps"&gt;MPV&lt;/span&gt;&amp;rsquo;s taskbar icon &lt;a href="/images/put.io_01_mpv.mp4"&gt;to play it&lt;/a&gt;. This no longer worked on&amp;nbsp;ChromeOS.&lt;/p&gt;
+&lt;p&gt;So I jumped&amp;nbsp;ship.&lt;/p&gt;
+&lt;h2 id="real-arch-linux-on-mrchromebox-uefi"&gt;Real Arch Linux on MrChromebox &lt;span class="caps"&gt;UEFI&lt;/span&gt;&lt;a class="headerlink" href="#real-arch-linux-on-mrchromebox-uefi" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Installing &lt;em&gt;real&lt;/em&gt; Linux on this device requires installing the MrChromebox
+custom &lt;span class="caps"&gt;UEFI&lt;/span&gt; firmware, which in turn requires disabling the firmware write
+protection. Fortunately, for this device all I needed to do was opening up the
+laptop and &lt;a href="https://wiki.mrchromebox.tech/Firmware_Write_Protect#Hardware_Write_Protection"&gt;disconnecting the battery&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="internals" src="/images/voxel_internals.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="battery-connector" src="/images/voxel_battery.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;If you need more detailed instructions, here&amp;rsquo;s the &lt;a href="/images/voxel_chromebook_cp7133w.pdf"&gt;official manual&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Then go &lt;a href="https://mrchromebox.tech/#fwscript"&gt;here&lt;/a&gt; for instructions on how to download and run the MrChromebox
+utility script. In my case, I also needed to enable developer mode to get
+access to the chrosh&amp;nbsp;shell.&lt;/p&gt;
+&lt;p&gt;After this I got a normal &lt;span class="caps"&gt;UEFI&lt;/span&gt; boot menu so I could pop in an Arch installer
+&lt;span class="caps"&gt;USB&lt;/span&gt; drive and carried out the installation as&amp;nbsp;usual.&lt;/p&gt;
+&lt;p&gt;I managed to install &lt;span class="caps"&gt;KDE&lt;/span&gt; plasma and everything worked except for audio: the
+usual &amp;ldquo;default&amp;rdquo; audio profile wouldn&amp;rsquo;t show up, even after I installed the
+necessary packages: &lt;code&gt;sof-firmware&lt;/code&gt; (sound firmware for recent Intel
+generations) and &lt;code&gt;alsa-ucm-conf&lt;/code&gt; (so-called topologies for these newer
+devices). After some desperate googling I found
+&lt;a href="https://github.com/eupnea-linux/audio-scripts"&gt;https://github.com/eupnea-linux/audio-scripts&lt;/a&gt; which installed some missing
+configs lifted straight from ChromeOS upstream. Sure enough, the device showed&amp;nbsp;up:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="default-profile-get" src="/images/voxel_audio_device.png" title=""&gt;&lt;/p&gt;
+&lt;p&gt;And it would actually play sound&amp;hellip; for a while until it crashes. I later found
+out that wired headphones and &lt;span class="caps"&gt;HDMI&lt;/span&gt; audio work just fine, so only using internal
+speakers is&amp;nbsp;problematic.&lt;/p&gt;
+&lt;p&gt;I collected logs and tried googling but nothing comes up that matches my case.
+Asking in the eupnea discord server yielded an uncertain&amp;nbsp;response:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;looks like yet again intel broke&amp;nbsp;something&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Oh, and the random touchpad delay issue was still there, so I&amp;rsquo;m starting to
+think the touchpad hardware itself is&amp;nbsp;problematic.&lt;/p&gt;
+&lt;p&gt;And that&amp;rsquo;s where I&amp;rsquo;m at. I&amp;rsquo;ll probably gather more logs and submit an issue to
+the &lt;span class="caps"&gt;SOF&lt;/span&gt; project. For now, consider this a warning: the laptop as of now is
+probably not worth buying. Hell, in Vietnam you can get a second hand X1 Carbon
+6th gen with an i7-8650U and &lt;span class="caps"&gt;16GB&lt;/span&gt; of &lt;span class="caps"&gt;RAM&lt;/span&gt; for $460 right now from
+&lt;a href="https://chotot.com"&gt;https://chotot.com&lt;/a&gt;; that&amp;rsquo;s a guaranteed best-in-class keyboard, decent
+screen and Linux compatibility, at just a slight decrease in&amp;nbsp;performance.&lt;/p&gt;
+&lt;p&gt;But hey, I would have never known any of this if I hadn&amp;rsquo;t tried,&amp;nbsp;right?&lt;/p&gt;
+&lt;h2 id="aside-chromebook-keyboard-quirks-on-kde"&gt;Aside: Chromebook keyboard quirks on &lt;span class="caps"&gt;KDE&lt;/span&gt;&lt;a class="headerlink" href="#aside-chromebook-keyboard-quirks-on-kde" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The most glaring issue is the absence of the &lt;code&gt;windows&lt;/code&gt; key (aka &lt;code&gt;super&lt;/code&gt;,
+&lt;code&gt;hyper&lt;/code&gt;, or &lt;code&gt;meta&lt;/code&gt;). It&amp;rsquo;s not a huge problem for me: I always make &lt;code&gt;capslock&lt;/code&gt;
+act as a &lt;code&gt;ctrl&lt;/code&gt; key, so I can turn the original &lt;code&gt;ctrl&lt;/code&gt; into &lt;code&gt;windows&lt;/code&gt; instead:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="changed-modifier-keys" src="/images/voxel_keys_mod.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Another problem is that the F1-12 keys are not usable: they are &lt;a href="https://github.com/MrChromebox/firmware/issues/349"&gt;mapped to
+function keys&lt;/a&gt; in MrChromebox &lt;span class="caps"&gt;UEFI&lt;/span&gt; firmware, and there&amp;rsquo;s no modifier to use
+them as F-keys either. That means no F11 to toggle fullscreen, no Alt-F4, no F9
+to toggle drop-down terminal, etc. Fortunately such global shortcuts can be
+configured trivially from &lt;span class="caps"&gt;KDE&lt;/span&gt;&amp;rsquo;s system preferences. On the other hand,
+application-specific features that are hardwired to use F-keys are simply
+unreachable: &lt;code&gt;htop&lt;/code&gt; is one such&amp;nbsp;example.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="htop-fkeys-unusable" src="/images/voxel_keys_f.png"&gt;&lt;/p&gt;</content><category term="consoom"></category></entry></feed>

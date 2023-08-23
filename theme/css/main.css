@@ -1,0 +1,264 @@
+html {
+  --bg-color: white;
+  --fg-color: black;
+  --link-color: black;
+  --hr-border: 2px solid var(--link-color);
+
+  background-color: var(--bg-color);
+  /* make sure background color covers the whole vertical space: */
+  min-height: 100%;
+  color: var(--fg-color);
+  /* always show vertical scrollbar to avoid content shifting: */
+  overflow-y: scroll;
+
+  font-family: "Source Sans Pro", sans-serif;
+  /* Source Sans Pro looks smaller than most fonts, so let's compensate: */
+  font-size: 1.125em;
+}
+code,
+pre {
+  font-family: "Ubuntu Mono";
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  padding: 0.2rem;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration-skip-ink: none;
+}
+a:hover {
+  background-color: var(--link-color);
+  color: var(--bg-color);
+  text-decoration: none;
+}
+header a,
+nav a {
+  text-decoration: none;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+  border: 2px solid black;
+}
+
+img[title] {
+  border: none;
+}
+
+article {
+  /* prevent long URLs from causing a horizontal scroll on mobile */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+video {
+  /* On netsurf browser, a border for <video> tag will enclose all its
+   * following siblings, which is probably a bug.
+   * Therefore, no video border for now :(
+  border: 1px solid black;
+  box-sizing: border-box;
+   */
+}
+
+sup {
+  line-height: 1rem; /* prevents it from pushing up the line */
+}
+
+p {
+  line-height: 1.4rem;
+  margin: 1.5rem 0;
+}
+p + ul,
+p + ol {
+  /* make sure 1st list item doesn't look too separated from preceding <p> */
+  margin-top: -0.5rem;
+}
+
+li {
+  margin-bottom: 0.6rem;
+  line-height: 1.4rem;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+blockquote {
+  padding-left: 7px;
+  margin: 1.5rem 0 1.5rem 2rem;
+  quotes: "\201C""\201D";
+  /* prevent long links from breaking out of the blockquote: */
+  overflow-wrap: break-word;
+}
+blockquote::before {
+  position: absolute;
+  margin-left: -0.5em;
+  margin-top: -0.25em;
+  font-size: 3em;
+  content: open-quote;
+}
+blockquote > * {
+  margin: 0;
+}
+blockquote > p + p {
+  margin-top: 0.5rem;
+}
+
+time {
+  white-space: nowrap;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+ul {
+  padding-left: 2rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 1.5rem 0;
+}
+
+hr {
+  border: 0;
+  border-top: 2px solid black;
+}
+
+.clearfix {
+  clear: both;
+}
+
+p code,
+li code {
+  padding: 0 3px;
+}
+a:hover code {
+  background-color: var(--link-color);
+  color: var(--bg-color);
+}
+
+pre {
+  padding: 0.5rem;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+/* Python markdown's "toc" extension creates an <a class="headerlink"> inside
+ * each heading. The following styling makes the anchor only visible on hover
+ * and highlights the currently targeted heading.
+ */
+a.headerlink {
+  margin-left: 0.5rem;
+  text-decoration: none;
+  visibility: hidden;
+}
+:hover > a.headerlink {
+  visibility: visible;
+}
+h1:target,
+h2:target,
+h3:target,
+h4:target {
+  background-color: moccasin;
+  margin-left: -1rem;
+  padding-left: 1rem;
+}
+:target > a.headerlink:hover {
+  color: moccasin;
+}
+
+/* Pygments tweaks */
+.highlight {
+  background-color: transparent;
+  border: 2px solid black;
+  margin: 1.5rem 0;
+}
+/* When using fenced blockquote without language name, pygments outputs `err`
+ * class for some reason
+ */
+.highlight .err {
+  border: none;
+}
+
+/* site-specific stuff follows */
+
+#main {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 0.6rem;
+}
+
+nav {
+  border: var(--hr-border);
+  border-left: 0;
+  border-right: 0;
+  margin: 0.8rem auto 1rem auto;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.footnote ol {
+  /* Hack to make sure the list's marker doesn't get out of view.
+   * Couldn't use `list-style-position: inside` because the marker will be
+   * pushed to another line.
+   */
+  margin-left: 2rem;
+}
+.footnote hr::after {
+  content: "Footnotes:";
+  color: var(--fg-color);
+  font-size: 1.3rem;
+}
+
+footer {
+  margin-top: 1.5rem;
+  border-top: var(--hr-border);
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+footer a {
+  white-space: nowrap;
+}
+
+#site-name {
+  font-size: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  font-weight: normal;
+}
+
+#site-subtitle {
+  font-size: 1rem;
+  font-weight: normal;
+  margin: 0;
+}
+
+.navbar > li {
+  display: inline;
+  list-style-type: none;
+}
+#left-navbar {
+  float: left;
+}
+#left-navbar li {
+  margin-right: 1rem;
+}
+#right-navbar {
+  float: right;
+}
+#right-navbar li {
+  margin-left: 1rem;
+}

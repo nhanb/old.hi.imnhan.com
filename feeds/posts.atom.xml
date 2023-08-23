@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Hi, I'm Nhân - posts</title><link href="https://old.hi.imnhan.com/" rel="alternate"></link><link href="feeds/posts.atom.xml" rel="self"></link><id>https://old.hi.imnhan.com/</id><updated>2023-02-12T14:24:00+07:00</updated><subtitle>and this is my humble corner on the intertubes.</subtitle><entry><title>Go, Postgres, Caddy, systemd: a simple, highly portable, Docker-free web stack</title><link href="https://old.hi.imnhan.com/posts/go-postgres-caddy-systemd-stack/" rel="alternate"></link><published>2023-02-12T14:24:00+07:00</published><updated>2023-02-12T14:24:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2023-02-12:/posts/go-postgres-caddy-systemd-stack/</id><summary type="html">&lt;p&gt;I&amp;rsquo;ve &lt;a href="/posts/i-made-my-python-webapp-pip-installable/"&gt;mentioned&lt;/a&gt; before that I&amp;rsquo;m not a fan of Docker as a deployment
+strategy. In that same post I briefly mentioned that Go could simplify
+deployment compared to Python. Today I&amp;rsquo;ll &lt;em&gt;go&lt;/em&gt; (haha get it?) into detail,
+warts and all, how I recently set up a publicly …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I&amp;rsquo;ve &lt;a href="/posts/i-made-my-python-webapp-pip-installable/"&gt;mentioned&lt;/a&gt; before that I&amp;rsquo;m not a fan of Docker as a deployment
+strategy. In that same post I briefly mentioned that Go could simplify
+deployment compared to Python. Today I&amp;rsquo;ll &lt;em&gt;go&lt;/em&gt; (haha get it?) into detail,
+warts and all, how I recently set up a publicly accessible Go web service,
+backed by a Postgres database, fronted by Caddy which does &lt;span class="caps"&gt;TLS&lt;/span&gt; termination &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt;
+automatic Let&amp;rsquo;s Encrypt cert renewal, supervised &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; isolated by&amp;nbsp;systemd.&lt;/p&gt;
+&lt;h2 id="go"&gt;Go&lt;a class="headerlink" href="#go" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;If you&amp;rsquo;re new to Go like me, you may find it helpful to skim the book &lt;a href="https://lets-go.alexedwards.net/"&gt;Let&amp;rsquo;s
+Go&lt;/a&gt; by Alex Edwards. It demonstrates helpful patterns so you can quickly put
+together a web service with little more than the Go standard library. However,
+it&amp;rsquo;s cumbersome to define routes using only &lt;code&gt;net/http&lt;/code&gt;, so I recommend using
+the very minimal &lt;a href="https://www.alexedwards.net/blog/introducing-flow"&gt;flow&lt;/a&gt; routing library written by the same author: it
+offers a cleaner &lt;span class="caps"&gt;API&lt;/span&gt; while having very little code itself. Heck, you should
+probably vendor it and later customize whichever way you&amp;nbsp;want.&lt;/p&gt;
+&lt;p&gt;As for the PostgreSQL driver, I chose &lt;a href="https://github.com/lib/pq"&gt;github.com/lib/pq&lt;/a&gt; simply because
+it&amp;rsquo;s a pure Go library that implements the standard &lt;code&gt;database/sql&lt;/code&gt; interface.
+I preferred to learn the most common &lt;span class="caps"&gt;API&lt;/span&gt; before branching into more
+special-purpose stuff. It quickly became tedious and error-prone to write all
+that boilerplate for reading data into Go structs though. I heard good things
+about &lt;a href="https://sqlc.dev/"&gt;sqlc&lt;/a&gt;, which generates Go code from &lt;span class="caps"&gt;SQL&lt;/span&gt; queries. I&amp;rsquo;ll most likely try
+that&amp;nbsp;next.&lt;/p&gt;
+&lt;p&gt;Sticking to pure Go code brings 2 big benefits: &lt;strong&gt;independence from glibc&lt;/strong&gt; and
+&lt;strong&gt;effortless cross-compilation&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Not depending on glibc means our compiled executable for, say, Linux, will run,
+not only on any Linux distro regardless of its glibc version, but also on
+distros that use alternative libc implementations e.g. musl. Coming from
+Python, it&amp;rsquo;s incredibly liberating to no longer have to find an ancient distro
+with the oldest possible glibc to build my executables on (most Python projects
+that do anything useful use C extensions, sadly). It&amp;rsquo;s not without caveat
+though: some of Go&amp;rsquo;s own standard libraries, namely &lt;code&gt;net&lt;/code&gt; and &lt;code&gt;os/user&lt;/code&gt;, use cgo
+by default. We can set &lt;code&gt;CGO_ENABLED=0&lt;/code&gt; to avoid that, which tells the Go
+compiler to use their alternative pure Go implementations, but those are not as
+full-featured. If your code or dependency requires those, make sure to check if
+they work correctly with the pure Go version. The easiet way to confirm that
+your compiled executable is truly static is using either &lt;code&gt;ldd&lt;/code&gt; or &lt;code&gt;file&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$&lt;span class="w"&gt; &lt;/span&gt;ldd&lt;span class="w"&gt; &lt;/span&gt;mybinary
+&lt;span class="c1"&gt;#        not a dynamic executable&lt;/span&gt;
+
+$&lt;span class="w"&gt; &lt;/span&gt;file&lt;span class="w"&gt; &lt;/span&gt;mybinary&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;tr&lt;span class="w"&gt; &lt;/span&gt;,&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\n&amp;#39;&lt;/span&gt;
+&lt;span class="c1"&gt;# mybinary: ELF 64-bit LSB executable&lt;/span&gt;
+&lt;span class="c1"&gt;#  x86-64&lt;/span&gt;
+&lt;span class="c1"&gt;#  version 1 (SYSV)&lt;/span&gt;
+&lt;span class="c1"&gt;#  statically linked&lt;/span&gt;
+&lt;span class="c1"&gt;#  Go BuildID=[...]&lt;/span&gt;
+&lt;span class="c1"&gt;#  with debug_info&lt;/span&gt;
+&lt;span class="c1"&gt;#  not stripped&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Cross-compilation is self-explanatory: out of the box, you can compile to any
+architecture/&lt;span class="caps"&gt;OS&lt;/span&gt; combination that Go supports. No more looking for the right &lt;span class="caps"&gt;CI&lt;/span&gt;
+service or docker container to build your stuff&amp;nbsp;in.&lt;/p&gt;
+&lt;p&gt;See&amp;nbsp;also:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://dave.cheney.net/2016/01/18/cgo-is-not-go"&gt;cgo is not Go&lt;/a&gt;: a more exhaustive argument for staying in pure&amp;nbsp;Go-land.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.arp242.net/static-go.html"&gt;Statically compile Go programs&lt;/a&gt;: a deep dive into static Go compilation
+  and its quirks, complete with examples on how to statically link against
+  SQLite with musl libc, if you&amp;nbsp;must.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="postgres"&gt;Postgres&lt;a class="headerlink" href="#postgres" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;While SQLite is a fine choice for small-to-medium sites, it does have its own
+quirks: so-called &lt;a href="https://www.sqlite.org/flextypegood.html"&gt;flexible type checking&lt;/a&gt; and &lt;a href="https://www.sqlite.org/lang_altertable.html#making_other_kinds_of_table_schema_changes"&gt;limited &lt;span class="caps"&gt;ALTER&lt;/span&gt; &lt;span class="caps"&gt;TABLE&lt;/span&gt;
+capabilities&lt;/a&gt; are my two pet&amp;nbsp;peeves.&lt;/p&gt;
+&lt;p&gt;Postgres has none of those quirks, but causes extra operational complexity, not
+only for deployment, but also for development: you now need to erect a Postgres
+server with the right db/user/password combination for each&amp;nbsp;project.&lt;/p&gt;
+&lt;p&gt;From the local development perspective, this is actually one of the few cases
+where Docker rightfully shines: whip up a tiny docker-compose.yml, hit that
+&lt;code&gt;docker-compose up&lt;/code&gt; command, and you&amp;rsquo;ve got yourself a nicely isolated,
+delightfully disposable postgres server with your desired user/password/db
+combination, exposed at the exact port you&amp;nbsp;want:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# docker-compose.yml&lt;/span&gt;
+&lt;span class="nt"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;3.9&amp;#39;&lt;/span&gt;
+&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;db&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;postgres:15&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;ports&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;127.0.0.1:5432:5432&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="nt"&gt;POSTGRES_USER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;example&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="nt"&gt;POSTGRES_PASSWORD&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;example&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="nt"&gt;POSTGRES_DB&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;example&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Since a developer&amp;rsquo;s computer is typically not lacking in resources, we can get
+away with docker&amp;rsquo;s storage overhead, and, in MacOS&amp;rsquo;s case, &lt;span class="caps"&gt;VM&lt;/span&gt;&amp;nbsp;overhead.&lt;/p&gt;
+&lt;p&gt;But what if we want to stick to our anti-docker guns? Good news: it&amp;rsquo;s still
+possible to have &lt;a href="https://jamey.thesharps.us/2019/05/29/per-project-postgres/"&gt;Per-project Postgres&lt;/a&gt; instances. Here&amp;rsquo;s the&amp;nbsp;gist:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;cd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;my-project
+mkdir&lt;span class="w"&gt; &lt;/span&gt;.pgres&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;# postgres data dir&lt;/span&gt;
+
+&lt;span class="c1"&gt;# These envars tell postgres cli tools to:&lt;/span&gt;
+&lt;span class="c1"&gt;# a) put data files in .pgres&lt;/span&gt;
+&lt;span class="c1"&gt;# b) connect to server via a socket inside .pgres&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;PGDATA&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$PWD&lt;/span&gt;&lt;span class="s2"&gt;/.pgres&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;PGHOST&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$PWD&lt;/span&gt;&lt;span class="s2"&gt;/.pgres&amp;quot;&lt;/span&gt;
+
+initdb&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;# populate .pgres/&lt;/span&gt;
+
+&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;listen_addresses = &amp;#39;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&amp;gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;.pgres/postgresql.conf
+&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;unix_socket_directories = &amp;#39;&lt;/span&gt;&lt;span class="nv"&gt;$PGHOST&lt;/span&gt;&lt;span class="s2"&gt;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&amp;gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;.pgres/postgresql.conf
+
+&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;CREATE DATABASE &lt;/span&gt;&lt;span class="nv"&gt;$USER&lt;/span&gt;&lt;span class="s2"&gt;;&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;postgres&lt;span class="w"&gt; &lt;/span&gt;--single&lt;span class="w"&gt; &lt;/span&gt;-E&lt;span class="w"&gt; &lt;/span&gt;postgres
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;(I also made a &lt;a href="https://github.com/nhanb/neodots/blob/f79713b4e79c5da4fa92f75b1537b73b4c114d03/fish/scripts/standalone-postgres"&gt;python script&lt;/a&gt; to automate this&amp;nbsp;process)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Now whenever you develop on this project, just cd into the project dir, make
+sure $&lt;span class="caps"&gt;PGDATA&lt;/span&gt; and $&lt;span class="caps"&gt;PGHOST&lt;/span&gt; point to the correct dir, then run &lt;code&gt;postgres&lt;/code&gt;. You can
+save those environment variables into a &lt;code&gt;setenv.sh&lt;/code&gt; script to source every
+time, or use tools like &lt;a href="https://direnv.net/"&gt;direnv&lt;/a&gt; to automatically set them on cd. When you
+no longer need it, cleaning up is as simple as removing the .pgres&amp;nbsp;dir.&lt;/p&gt;
+&lt;p&gt;On the server side, if you&amp;rsquo;re on, say, Debian, the Postgres developers maintain
+an &lt;a href="https://www.postgresql.org/download/linux/debian/"&gt;Apt repo&lt;/a&gt; that provides any currently supported version of Postgres, so
+you can always use the latest and greatest &lt;span class="caps"&gt;DB&lt;/span&gt; while still enjoying the
+stability of Debian. Just follow the instructions to add the repo, install your
+preferred postgres version, then enable &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; start the postgresql service using
+&lt;code&gt;systemctl&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;You&amp;rsquo;ll then need to follow the distro&amp;rsquo;s &lt;a href="https://wiki.debian.org/PostgreSql"&gt;convention&lt;/a&gt; to create a &lt;span class="caps"&gt;DB&lt;/span&gt; with
+its dedicated username/password combination. Here&amp;rsquo;s how I set up&amp;nbsp;mine:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$&lt;span class="w"&gt; &lt;/span&gt;su&lt;span class="w"&gt; &lt;/span&gt;-&lt;span class="w"&gt; &lt;/span&gt;postgres
+&lt;span class="o"&gt;(&lt;/span&gt;as&lt;span class="w"&gt; &lt;/span&gt;postgres&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;$&lt;span class="w"&gt; &lt;/span&gt;createuser&lt;span class="w"&gt; &lt;/span&gt;--pwprompt&lt;span class="w"&gt; &lt;/span&gt;mypguser
+&lt;span class="o"&gt;(&lt;/span&gt;as&lt;span class="w"&gt; &lt;/span&gt;postgres&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;$&lt;span class="w"&gt; &lt;/span&gt;createdb&lt;span class="w"&gt; &lt;/span&gt;-O&lt;span class="w"&gt; &lt;/span&gt;mypguser&lt;span class="w"&gt; &lt;/span&gt;mypgdatabase
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I didn&amp;rsquo;t bother to create a dedicated &lt;span class="caps"&gt;OS&lt;/span&gt; user, because I&amp;rsquo;ll later use systemd&amp;rsquo;s
+DynamicUser feature to run my service on its own dynamically created user
+anyway. This brings us&amp;nbsp;to&amp;hellip;&lt;/p&gt;
+&lt;h2 id="systemd"&gt;systemd&lt;a class="headerlink" href="#systemd" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Inevitably you&amp;rsquo;ll need something to manage your service process: autostart on
+boot, report/restart when it goes down, piping logs to the right place, that
+sort of thing. People used to install things like &lt;a href="http://supervisord.org/"&gt;supervisord&lt;/a&gt; for that.
+(Docker Compose would kinda work too, but we&amp;rsquo;re trying to see if we can avoid
+gratuitous container usage here,&amp;nbsp;remember?)&lt;/p&gt;
+&lt;p&gt;Nowadays though, systemd is already pervasive in mainstream Linux distros, and
+comes tightly integrated with supporting services e.g. journald, so it makes
+little sense to use anything else for service&amp;nbsp;management.&lt;/p&gt;
+&lt;p&gt;To limit the blast radius if (when?) a service gets pwn&amp;rsquo;ed, it&amp;rsquo;s recommended to
+run each service as its own &lt;span class="caps"&gt;OS&lt;/span&gt; user that only has access to what it actually
+needs. In the past I used to create 1 system user to run each service as, but
+this time I realized I could use systemd&amp;rsquo;s &lt;a href="https://0pointer.net/blog/dynamic-users-with-systemd.html"&gt;DynamicUser&lt;/a&gt;&amp;nbsp;instead:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# /etc/systemd/system/myservice.service&lt;/span&gt;
+&lt;span class="k"&gt;[Service]&lt;/span&gt;
+&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/usr/local/bin/myservice&lt;/span&gt;
+&lt;span class="na"&gt;Environment&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;MYSERVICE_DB=postgres://db-user:db-password@localhost/db-name&lt;/span&gt;
+&lt;span class="na"&gt;Environment&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;MYSERVICE_ADDR=localhost:8000&lt;/span&gt;
+&lt;span class="na"&gt;DynamicUser&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;1&lt;/span&gt;
+&lt;span class="na"&gt;Restart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;always&lt;/span&gt;
+
+&lt;span class="k"&gt;[Install]&lt;/span&gt;
+&lt;span class="na"&gt;WantedBy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;multi-user.target&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It&amp;rsquo;s just a little less work compared to creating a system user with the
+correct restrictions and running the service under that user, but hey, less
+work is less work! Also that&amp;rsquo;s one fewer thing that I have to worry about
+messing&amp;nbsp;up.&lt;/p&gt;
+&lt;p&gt;You may have noticed the &lt;code&gt;ExecStart=/usr/local/bin/myservice&lt;/code&gt; line, which
+assumes my service&amp;rsquo;s executable is in /usr/local/bin/. Since my service is only
+1 binary with no support files, this, and postgres credentials (provided via
+the &lt;code&gt;MYSERVICE_DB&lt;/code&gt; envar), are all that&amp;rsquo;s needed to run the service. It also
+means for subsequent deployments, this will be my entire deployment&amp;nbsp;procedure:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# compile:&lt;/span&gt;
+&lt;span class="nv"&gt;CGO_ENABLED&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;go&lt;span class="w"&gt; &lt;/span&gt;build&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;dist/myservice
+&lt;span class="c1"&gt;# copy binary to server (scp works too):&lt;/span&gt;
+rsync&lt;span class="w"&gt; &lt;/span&gt;-av&lt;span class="w"&gt; &lt;/span&gt;dist/myservice&lt;span class="w"&gt; &lt;/span&gt;myserver:/usr/local/bin/myservice
+&lt;span class="c1"&gt;# restart service:&lt;/span&gt;
+ssh&lt;span class="w"&gt; &lt;/span&gt;myserver&lt;span class="w"&gt; &lt;/span&gt;systemctl&lt;span class="w"&gt; &lt;/span&gt;restart&lt;span class="w"&gt; &lt;/span&gt;myservice
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id="caddy"&gt;Caddy&lt;a class="headerlink" href="#caddy" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Nowadays I prefer &lt;a href="https://caddyserver.com/"&gt;Caddy&lt;/a&gt; as the &lt;span class="caps"&gt;TLS&lt;/span&gt;-terminating reverse proxy instead of
+nginx, since it transparently performs Let&amp;rsquo;s Encrypt&amp;rsquo;s &lt;span class="caps"&gt;ACME&lt;/span&gt; challenge behind
+the scene. With my web service listening at localhost:8000, it literally takes
+2 lines of config&amp;nbsp;to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Serve &lt;span class="caps"&gt;HTTPS&lt;/span&gt; at port 443, with a valid cert provided by Let&amp;rsquo;s Encrypt, using
+  reasonable default cryptographic settings&amp;mdash;I just ran my site through the
+  &lt;a href="https://www.ssllabs.com/ssltest/"&gt;ssllabs.com test&lt;/a&gt; and it handily scored an&amp;nbsp;A.&lt;/li&gt;
+&lt;li&gt;Serve &lt;span class="caps"&gt;HTTP&lt;/span&gt; at port 80 that simply redirects to the &lt;span class="caps"&gt;HTTPS&lt;/span&gt;&amp;nbsp;port&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# /etc/caddy/Caddyfile&lt;/span&gt;
+&lt;span class="k"&gt;my-domain.com&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="kn"&gt;reverse_proxy&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8000&lt;/span&gt;
+&lt;span class="err"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There are many interesting problems to solve when running a web service, and
+&lt;span class="caps"&gt;HTTPS&lt;/span&gt; cert bookkeeping is not one of them, so I&amp;rsquo;m more than happy to stop
+fiddling with certbot cron&amp;nbsp;jobs.&lt;/p&gt;
+&lt;h2 id="closing-remarks"&gt;Closing remarks&lt;a class="headerlink" href="#closing-remarks" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;For a proper production-grade service, there&amp;rsquo;s more to be done:
+personally I&amp;rsquo;m using &lt;code&gt;ufw&lt;/code&gt; to lock down everything except for the &lt;span class="caps"&gt;HTTP&lt;/span&gt;(S) ports
+and wireguard (I&amp;rsquo;m doing ssh over wireguard only too). Enabling unattended
+upgrades is also a good idea. But of course these depend heavily on each
+person&amp;rsquo;s requirements and&amp;nbsp;tastes.&lt;/p&gt;
+&lt;p&gt;Of course I&amp;rsquo;m not advocating for manual &amp;ldquo;pet&amp;rdquo; server maintenance everywhere.
+Nothing from this setup prevents you from doing proper automated provisioning,
+configuration management, so on and so forth. In fact, it is easier to e.g.
+write an ansible playbook for this setup, because it&amp;rsquo;s simpler: you don&amp;rsquo;t have
+to worry about setting up the correct python virtual environment, or making
+nginx and certbot play well with each other. Hell, you can dockerize parts of
+this setup, and your Dockerfiles will be simpler thanks to it. I&amp;rsquo;ve &lt;a href="/posts/i-made-my-python-webapp-pip-installable/"&gt;said it
+before&lt;/a&gt;, and I&amp;rsquo;ll say it&amp;nbsp;again:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Throwing abstractions over complex procedures is simply shifting the costs
+elsewhere. Shipping your software in a Dockerfile is fine, but making your
+distribution so simple that people can easily write a couple of lines of
+Dockerfile for it by themselves is more valuable. Simple distribution is
+simple to deploy regardless of whether you&amp;rsquo;re using docker, packer, ansible,
+pyinfra, podman, nomad, k8s, k3s, an impenetrable shell script some dude
+wrote 2 years ago who just left the company last month&amp;hellip; or any combination
+of the above. The point is &lt;strong&gt;you shouldn&amp;rsquo;t be forced to use more heavyweight
+solutions just because the software is a pain in the butt to setup
+manually&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Sooner or later we&amp;rsquo;ll all have to peek under the hood to diagnose problems, and
+the fewer moving pieces you have to learn and understand, the more grateful
+you&amp;rsquo;ll be to your predecessors (and, let&amp;rsquo;s be honest, the fewer profanities
+you&amp;rsquo;ll have to utter to&amp;nbsp;yourself).&lt;/p&gt;</content><category term="posts"></category></entry><entry><title>Working with SQLite in Python without an ORM or migration framework</title><link href="https://old.hi.imnhan.com/posts/working-with-sqlite-in-python-without-an-orm-or-migration-framework/" rel="alternate"></link><published>2022-01-30T14:11:00+07:00</published><updated>2022-01-30T14:11:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2022-01-30:/posts/working-with-sqlite-in-python-without-an-orm-or-migration-framework/</id><summary type="html">&lt;p&gt;Some notes on handling migrations, linking the latest SQLite,
+and sane driver&amp;nbsp;defaults.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;img alt="byte-magazine-databases" src="/images/byte_databases.jpg"&gt;
+&lt;em&gt;&lt;a href="https://archive.org/details/byte-magazine"&gt;(seriously though, &lt;span class="caps"&gt;BYTE&lt;/span&gt; covers are the&amp;nbsp;best)&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;I learned about SQLite&amp;rsquo;s user_version pragma some time ago from a comment on
+Hacker News (as one does). Not sure which comment it was specifically, but it
+went something &lt;a href="https://news.ycombinator.com/item?id=23510382"&gt;like this&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;One thing you can look into using is the SQLite user_version pragma.
+We use this right now to roll our own migrators and it&amp;rsquo;s light years
+better than how migrators work for Entity Framework, et.&amp;nbsp;al.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.sqlite.org/pragma.html#pragma_user_version"&gt;https://www.sqlite.org/pragma.html#pragma_user_version&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I&amp;rsquo;d wanted to try working without an &lt;span class="caps"&gt;ORM&lt;/span&gt; for a while, and this comment gave me
+the final missing piece: a straightforward approach to &lt;span class="caps"&gt;SQL&lt;/span&gt; migrations that I
+can trivially implement. Obviously, I had to try it out on my latest &lt;a href="https://sr.ht/~nhanb/pytaku/"&gt;pet
+project&lt;/a&gt;. Here I&amp;rsquo;ll outline some of my&amp;nbsp;findings.&lt;/p&gt;
+&lt;h2 id="apsw-as-the-driver"&gt;&lt;span class="caps"&gt;APSW&lt;/span&gt; as the driver&lt;a class="headerlink" href="#apsw-as-the-driver" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Using &lt;a href="https://rogerbinns.github.io/apsw/"&gt;apsw&lt;/a&gt; instead of the standard library&amp;rsquo;s sqlite3 package has a couple
+of&amp;nbsp;advantages:&lt;/p&gt;
+&lt;h3 id="its-easy-to-link-against-the-latest-sqlite3-version"&gt;It&amp;rsquo;s easy to link against the latest sqlite3 version&lt;a class="headerlink" href="#its-easy-to-link-against-the-latest-sqlite3-version" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;I originally ran pytaku on a cheap Vietnamese &lt;span class="caps"&gt;VPS&lt;/span&gt; provider, which only offered
+Ubuntu 12.04. This came with a relatively old sqlite3 version that lacked
+&lt;span class="caps"&gt;UPSERT&lt;/span&gt; support (probably among other things that I forgot). I guess it&amp;rsquo;s
+possible to compile a custom python version that links to a newer sqlite, but
+that would defeat the purpose of pytaku being an easy-to-deploy program. Apsw,
+on the other hand, provides a pip &lt;a href="https://rogerbinns.github.io/apsw/download.html#i-really-want-to-use-pip"&gt;one-liner&lt;/a&gt; that compiles and links to the
+latest sqlite. (still kinda bad, but it&amp;rsquo;s less bad than compiling custom&amp;nbsp;python)&lt;/p&gt;
+&lt;h3 id="it-has-the-same-defaults-as-upstream-sqlite"&gt;It has the same defaults as upstream sqlite&lt;a class="headerlink" href="#it-has-the-same-defaults-as-upstream-sqlite" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Python stdlib&amp;rsquo;s &lt;code&gt;sqlite3&lt;/code&gt; has a few default configurations that deviate from
+sqlite&amp;rsquo;s. A couple of things that actually bit me&amp;nbsp;are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;autocommit mode is off by&amp;nbsp;default&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;executescript()&lt;/code&gt; automatically issues a &lt;code&gt;COMMIT&lt;/code&gt; statement&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To be fair, both of them are written in the docs, and these custom defaults are
+probably to maintain consistency with &lt;a href="https://www.python.org/dev/peps/pep-0249/"&gt;&lt;span class="caps"&gt;PEP&lt;/span&gt; 249&lt;/a&gt;. Still, as I was learning
+sqlite, it&amp;rsquo;s frustrating to jump between sqlite docs and python docs to
+interpret the correct behavior at times. Apsw does none of those things: it&amp;rsquo;s
+simply an unopinionated, honest-to-god python binding to&amp;nbsp;sqlite.&lt;/p&gt;
+&lt;p&gt;To be completely honest though, in the long run it seems more reasonable to
+learn the pysqlite3 &lt;span class="caps"&gt;API&lt;/span&gt; so that I can avoid an extra dependency. I&amp;rsquo;m also now
+using Debian 11 which has a reasonably recent sqlite, so the compilation
+advantange is no longer that&amp;nbsp;great.&lt;/p&gt;
+&lt;h2 id="a-minimum-viable-db-migration-scheme"&gt;A minimum viable &lt;span class="caps"&gt;DB&lt;/span&gt; migration scheme&lt;a class="headerlink" href="#a-minimum-viable-db-migration-scheme" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;With &lt;a href="https://github.com/nhanb/pytaku/blob/65a6c08128ebbc2b7d33a6b043798c69ac7dfebe/src/pytaku/database/migrator.py"&gt;&amp;lt;100 lines&lt;/a&gt; of python, I ended up with a migrator&amp;nbsp;that:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Finds migration files in the form of &lt;code&gt;./migrations/mXXXX.sql&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Uses &lt;code&gt;user_version&lt;/code&gt; pragma to figure out what migrations are&amp;nbsp;pending&lt;/li&gt;
+&lt;li&gt;Is forward-only&amp;mdash;I did say that this is minimally viable didn&amp;rsquo;t I&amp;nbsp;;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Coming from Django, I missed a definitive place to see the latest definition of
+the whole db (which, in Django, is the models file). That&amp;rsquo;s why I set up the
+migrator to always write the latest db definition out to a file using
+&lt;a href="https://github.com/nhanb/pytaku/blob/65a6c08128ebbc2b7d33a6b043798c69ac7dfebe/src/pytaku/database/migrator.py#L44-L51"&gt;&lt;code&gt;sqlite3 &amp;lt;db_file&amp;gt; .schema &amp;gt; latest_schema.sql&lt;/code&gt;&lt;/a&gt;, and keep that file &lt;a href="https://github.com/nhanb/pytaku/blob/65a6c08128ebbc2b7d33a6b043798c69ac7dfebe/src/pytaku/database/migrations/latest_schema.sql"&gt;in
+version control&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;-- This file is auto-generated by the migration script&lt;/span&gt;
+&lt;span class="c1"&gt;-- for reference purposes only. DO NOT EDIT.&lt;/span&gt;
+&lt;span class="k"&gt;CREATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;TABLE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;cover_ext&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;chapters&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;alt_names&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;descriptions&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;updated_at&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;now&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;is_webtoon&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;boolean&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;not&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;null&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;false&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;descriptions_format&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;not&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;null&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;text&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="k"&gt;CREATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;TABLE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;user&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;integer&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;primary&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;created_at&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;now&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;[...]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now to address the elephant in the room: SQLite has&amp;hellip; limited &lt;span class="caps"&gt;ALTER&lt;/span&gt; &lt;span class="caps"&gt;TABLE&lt;/span&gt;
+capabilities. The upside is it&amp;rsquo;s &lt;a href="https://www.sqlite.org/lang_altertable.html"&gt;well-documented&lt;/a&gt;. What this means in
+practice is that sometimes an otherwise simple &lt;code&gt;ALTER TABLE&lt;/code&gt; in other &lt;span class="caps"&gt;RDBMS&lt;/span&gt;-es
+will require more manual gymnastics in SQLite: you&amp;rsquo;ll need to create a new
+table with the desired properties, copy existing data over to the new table,
+then drop the old table. There are subtle bear traps in the specific order of
+steps to take, but thankfully the docs, again, deliver: as long as you
+follow the &lt;a href="https://www.sqlite.org/lang_altertable.html#otheralter"&gt;12 steps&lt;/a&gt; correctly, you won&amp;rsquo;t mess up your data. It sounds
+intimidating but it&amp;rsquo;s not &lt;em&gt;that&lt;/em&gt; bad. Here&amp;rsquo;s a specific example from pytaku
+where I removed a &lt;span class="caps"&gt;FOREIGN&lt;/span&gt; &lt;span class="caps"&gt;KEY&lt;/span&gt;&amp;nbsp;constraint:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;-- Remove foreign key from &amp;quot;read&amp;quot; table pointing to &amp;quot;chapter&amp;quot;.&lt;/span&gt;
+&lt;span class="c1"&gt;-- So we can, say, mark all chapters of a title as read even if some of those&lt;/span&gt;
+&lt;span class="c1"&gt;-- chapters haven&amp;#39;t been created.&lt;/span&gt;
+
+&lt;span class="n"&gt;pragma&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;foreign_keys&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;off&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;-- to let us do anything at all&lt;/span&gt;
+&lt;span class="k"&gt;begin&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;transaction&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;create&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;table&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;new_read&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;user_id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;integer&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;not&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;null&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;not&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;null&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;title_id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;-- nullable to accomodate existing mangadex rows, urgh.&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;chapter_id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;not&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;null&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;updated_at&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;now&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;foreign&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;key&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;user_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;references&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;user&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;user_id&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;title_id&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;chapter_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="k"&gt;insert&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;into&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;new_read&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;select&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;from&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;read&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;drop&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;table&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;read&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;alter&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;table&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;new_read&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;rename&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;to&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;read&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="n"&gt;pragma&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;foreign_key_check&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;commit&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;pragma&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;foreign_keys&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;on&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Besides the boilerplaty dance with foreign_key pragmas and transactions, all I
+had to do was copy the existing table definition from the aforementioned
+latest_schema.sql file, tweak it to my desired state, then do the table
+switcheroo. Again, the specific ordering of steps is important. I won&amp;rsquo;t go into
+details, but I had actually tripped on a failure mode, which I then realized
+was already nicely warned against in the docs. &lt;span class="caps"&gt;RTFM&lt;/span&gt; is actually fine advice for
+projects that have good documentation, who would have&amp;nbsp;thought?&lt;/p&gt;
+&lt;h2 id="recommended-sane-defaults"&gt;Recommended sane defaults&lt;a class="headerlink" href="#recommended-sane-defaults" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;SQLite comes with some default settings that may be surprising for people
+coming from e.g. Postgres. Here are some tweaks that worked better for&amp;nbsp;me.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://sqlite.org/wal.html"&gt;Enable &lt;span class="caps"&gt;WAL&lt;/span&gt; mode&lt;/a&gt;. This allows for concurrent readers, which is usually
+what you want from a web&amp;nbsp;service.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.sqlite.org/pragma.html#pragma_foreign_keys"&gt;Enforce foreign key constraints&lt;/a&gt;. Yep, you read that right: SQLite
+doesn&amp;rsquo;t enforce foreign key constraints by default. This is just one of the
+various consequences of SQLite being veeeeery lax about what you store. Another
+potential surprise is column types not being enforced, whose alternative only
+landed recently in the form of &lt;a href="https://www.sqlite.org/stricttables.html"&gt;&lt;span class="caps"&gt;STRICT&lt;/span&gt; Tables&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.sqlite.org/c3ref/busy_timeout.html"&gt;Set a non-zero busytimeout&lt;/a&gt;. Otherwise if a query is blocked, it will
+crash immediately instead of waiting for the blocking query to finish, no
+matter how short the wait&amp;nbsp;is.&lt;/p&gt;
+&lt;h2 id="a-quick-note-on-sql-injection"&gt;A quick note on &lt;span class="caps"&gt;SQL&lt;/span&gt; injection&lt;a class="headerlink" href="#a-quick-note-on-sql-injection" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;(or how to move on from the late&amp;nbsp;90s)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;You don&amp;rsquo;t need a full blown &lt;span class="caps"&gt;ORM&lt;/span&gt; to protect yourself against &lt;span class="caps"&gt;SQL&lt;/span&gt; injections. In
+fact, SQLite (and any sane &lt;span class="caps"&gt;RDBMS&lt;/span&gt; really) has built-in support for it called
+parameterized queries. Python&amp;rsquo;s sqlite3 documentation also covers this, but the
+tl;dr&amp;nbsp;is:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# Never compose your query with string interpolation like this:&lt;/span&gt;
+&lt;span class="n"&gt;cursor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;SELECT foo FROM bar WHERE stuff = &amp;#39;&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;user_input&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#39;;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Use the parameter substitution API instead:&lt;/span&gt;
+&lt;span class="n"&gt;cursor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;SELECT foo FROM bar WHERE stuff = ?;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;user_input&lt;/span&gt;&lt;span class="p"&gt;,))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Congratulations! You now have better security hygiene than &lt;a href="https://vnhacker.blogspot.com/2021/08/bkav-bi-hack-nhu-nao.html"&gt;Vietnam&amp;rsquo;s &amp;ldquo;leading&amp;rdquo;
+cybersecurity firm&lt;/a&gt;.&lt;/p&gt;</content><category term="posts"></category></entry><entry><title>I made my python webapp installable via pip</title><link href="https://old.hi.imnhan.com/posts/i-made-my-python-webapp-pip-installable/" rel="alternate"></link><published>2021-10-02T19:49:00+07:00</published><updated>2021-10-02T19:49:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2021-10-02:/posts/i-made-my-python-webapp-pip-installable/</id><summary type="html">&lt;p&gt;Running &lt;code&gt;pip3 install pytaku&lt;/code&gt; now gives you all the tools you need &lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt; &lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt; to
+deploy &lt;a href="https://sr.ht/~nhanb/pytaku/"&gt;pytaku&lt;/a&gt; - a hobby webapp of mine - on a fresh Debian 11&amp;nbsp;server:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pytaku-generate-config&lt;span class="w"&gt; &lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;pytaku.conf.json&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="c1"&gt;# generate config file&lt;/span&gt;
+pytaku-migrate&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="c1"&gt;# generate initial sqlite3 db, or migrate to new version&lt;/span&gt;
+pytaku&lt;span class="w"&gt; &lt;/span&gt;-w&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;5&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="c1"&gt;# run main …&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Running &lt;code&gt;pip3 install pytaku&lt;/code&gt; now gives you all the tools you need &lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt; &lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt; to
+deploy &lt;a href="https://sr.ht/~nhanb/pytaku/"&gt;pytaku&lt;/a&gt; - a hobby webapp of mine - on a fresh Debian 11&amp;nbsp;server:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pytaku-generate-config&lt;span class="w"&gt; &lt;/span&gt;&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;pytaku.conf.json&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="c1"&gt;# generate config file&lt;/span&gt;
+pytaku-migrate&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="c1"&gt;# generate initial sqlite3 db, or migrate to new version&lt;/span&gt;
+pytaku&lt;span class="w"&gt; &lt;/span&gt;-w&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;5&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="c1"&gt;# run main webapp using gunicorn on localhost:8000&lt;/span&gt;
+pytaku-scheduler&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="c1"&gt;# daemon that executes scheduled background tasks&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Optionally, run this to copy all static assets to a designated dir so your&lt;/span&gt;
+&lt;span class="c1"&gt;# web server (nginx/caddy/etc.) can serve them directly instead of through&lt;/span&gt;
+&lt;span class="c1"&gt;# the less performant gunicorn:&lt;/span&gt;
+pytaku-collect-static&lt;span class="w"&gt; &lt;/span&gt;/var/www/pytaku
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So how does that work? Let&amp;rsquo;s break it&amp;nbsp;down.&lt;/p&gt;
+&lt;h2 id="the-pytaku-executables"&gt;The pytaku-* executables&lt;a class="headerlink" href="#the-pytaku-executables" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://python-poetry.org/"&gt;Poetry&lt;/a&gt; is awesome. Not only does it offer sane dependency management that
+plays well with the pyenv + virtualenv combo, but it also vastly simplifies
+building and publishing python libraries. Telling pip to install executables
+alongside my library is as simple as writing a few lines in my
+&lt;a href="https://git.sr.ht/~nhanb/pytaku/tree/ff20e51f8c178bf981d80aa3737bf31a1059a506/item/pyproject.toml#L15-21"&gt;pyproject.toml&lt;/a&gt;&amp;nbsp;file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;[tool.poetry.scripts]&lt;/span&gt;
+&lt;span class="n"&gt;pytaku&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;pytaku:serve&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;pytaku-dev&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;pytaku:dev&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;pytaku-migrate&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;pytaku:migrate&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;pytaku-generate-config&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;pytaku:generate_config&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;pytaku-scheduler&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;pytaku:scheduler&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;pytaku-collect-static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;pytaku:collect_static&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The left hand side indicates the executable file name, while the right hand
+side declares which function to call. In my example, &amp;ldquo;pytaku:serve&amp;rdquo; points to
+the serve() function inside&amp;nbsp;src/pytaku/__init__.py.&lt;/p&gt;
+&lt;p&gt;Now that we have easy access to &lt;span class="caps"&gt;CLI&lt;/span&gt; entry points, let&amp;rsquo;s quickly go over
+&lt;a href="https://git.sr.ht/~nhanb/pytaku/tree/ff20e51f8c178bf981d80aa3737bf31a1059a506/item/src/pytaku/__init__.py"&gt;how&lt;/a&gt; each command&amp;nbsp;works:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pytaku&lt;/code&gt; and &lt;code&gt;pytaku-dev&lt;/code&gt; simply exec gunicorn and flask respectively
+  behind the&amp;nbsp;scene.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pytaku-migrate&lt;/code&gt; runs my bespoke migrator script (which is extremely
+  primitive but hey it was a good learning&amp;nbsp;experience).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pytaku-generate-config&lt;/code&gt; uses &lt;a href="https://github.com/lincolnloop/goodconf"&gt;goodconf&lt;/a&gt; to generate a config template,
+  pre-filling as many values as it&amp;nbsp;can.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pytaku-scheduler&lt;/code&gt; is just a dead simple single-threaded scheduler that I
+  don&amp;rsquo;t recommend for any service that has more than a handful of&amp;nbsp;users.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pytaku-collect-static&lt;/code&gt; leverages importlib.resources.path to get the
+  package&amp;rsquo;s installation path. From there it copies the bundled static assets
+  to wherever you want your nginx to serve. It&amp;rsquo;s basically a simplified version
+  of Django&amp;rsquo;s collectstatic&amp;nbsp;command.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="but-why-bother"&gt;But why bother?&lt;a class="headerlink" href="#but-why-bother" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Lincoln Loop&amp;rsquo;s series of Django-related blog posts were my main inspiration.
+Central to this idea is &lt;a href="https://lincolnloop.com/blog/using-setuppy-your-django-project/"&gt;Using setup.py in Your (Django) Project&lt;/a&gt;, which
+explains both how and why you would want to make your python project
+pip-friendly. The &amp;ldquo;why&amp;rdquo; boils down to 2&amp;nbsp;points:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You don&amp;rsquo;t want to reinvent package management. Let pip handle the minute
+  details of packaging, distributing, versioning, etc. for&amp;nbsp;you.&lt;/li&gt;
+&lt;li&gt;You no longer need to run python from the source code&amp;rsquo;s path. In pytaku&amp;rsquo;s
+  case, the working dir now only stores the sqlite database file and the
+  json config file, i.e. purely data, completely separate from the source&amp;nbsp;code.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;More broadly, the idea of simple distributing/deployment is, in my opinion,
+often overlooked these days. Fiddly deployment procedures are largely why
+Docker flourished: our industry just collectively gave up on self-contained
+software distribution and decided to ship a whole rootfs for each application
+process instead. Okay, I may be overreacting here, but I think it&amp;rsquo;s at least
+fair to say that if every webdev shop standardized on shipping Go binaries
+statically compiled with musl libc, we&amp;rsquo;d probably reach out for Docker less
+often. When I showed pytaku to a colleague of mine, his first question was
+essentially &amp;ldquo;Dockerfile when?&amp;rdquo;. Sure, Docker is neat and solves real problems,
+but how about we strive to avoid, or at least minimize, those problems in the
+first place? Remember, while container evangelists love harping on about
+negligible &lt;span class="caps"&gt;CPU&lt;/span&gt; overhead, they tend to gloss over the storage&amp;nbsp;overhead:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$&lt;span class="w"&gt; &lt;/span&gt;docker&lt;span class="w"&gt; &lt;/span&gt;image&lt;span class="w"&gt; &lt;/span&gt;ls
+REPOSITORY&lt;span class="w"&gt;   &lt;/span&gt;TAG&lt;span class="w"&gt;        &lt;/span&gt;IMAGE&lt;span class="w"&gt; &lt;/span&gt;ID&lt;span class="w"&gt;       &lt;/span&gt;CREATED&lt;span class="w"&gt;       &lt;/span&gt;SIZE
+python&lt;span class="w"&gt;       &lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;-alpine&lt;span class="w"&gt;   &lt;/span&gt;bcf864391ba1&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;weeks&lt;span class="w"&gt; &lt;/span&gt;ago&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="m"&gt;45&lt;/span&gt;.1MB
+python&lt;span class="w"&gt;       &lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;-slim&lt;span class="w"&gt;     &lt;/span&gt;66f4843b721f&lt;span class="w"&gt;   &lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;weeks&lt;span class="w"&gt; &lt;/span&gt;ago&lt;span class="w"&gt;   &lt;/span&gt;122MB
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And the operational complexity overhead. Did you know that by default Docker
+&lt;a href="https://www.jeffgeerling.com/blog/2020/be-careful-docker-might-be-exposing-ports-world"&gt;completely sidesteps your firewall&lt;/a&gt;? That even if you specifically tell it
+to only listen to a port on localhost, it may or may not still expose it to the
+whole world? That this remains an &lt;a href="https://github.com/moby/moby/issues/22054"&gt;open bug since 2016&lt;/a&gt;? This isn&amp;rsquo;t one of
+those security bogeyman stories either, actual people have been &lt;a href="https://blog.newsblur.com/2021/06/28/story-of-a-hacking/"&gt;bitten by
+it&lt;/a&gt;. At this point cloud apologists would probably jump in and point out
+how this isn&amp;rsquo;t an issue if you&amp;rsquo;re running on &lt;span class="caps"&gt;GCP&lt;/span&gt; or &lt;span class="caps"&gt;AWS&lt;/span&gt; because they have
+another layer of firewall that locks down every port by default that you can
+setup on their totally usable web console or infrastructure-as-code it in your
+cloudformations or your terraformses or, actually, do you have a moment to talk
+about our lord and savior&amp;nbsp;Cthulhubernetes&amp;ndash;&lt;/p&gt;
+&lt;p&gt;But I&amp;nbsp;digress.&lt;/p&gt;
+&lt;p&gt;I guess what I was trying to say is, throwing abstractions over complex
+procedures is simply shifting the costs elsewhere. Shipping your software in a
+Dockerfile is fine, but making your distribution so simple that people can
+easily write a couple of lines of Dockerfile for it by themselves is more
+valuable. Simple distribution is simple to deploy regardless of whether you&amp;rsquo;re
+using docker, packer, ansible, pyinfra, podman, nomad, k8s, k3s, an
+impenetrable shell script some dude wrote 2 years ago who just left the company
+last month&amp;hellip; or any combination of the above. The point is &lt;strong&gt;you shouldn&amp;rsquo;t be
+forced to use more heavyweight solutions just because the software is a pain in
+the butt to setup manually&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;And other people &lt;em&gt;have&lt;/em&gt; been trying to make python application distribution&amp;nbsp;simpler:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://shiv.readthedocs.io/en/latest/"&gt;shiv&lt;/a&gt; bundles everything but the python&amp;nbsp;interpreter&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/indygreg/PyOxidizer"&gt;PyOxidizer&lt;/a&gt; bundles everything &lt;em&gt;including&lt;/em&gt; the python&amp;nbsp;interpreter&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://nuitka.net/"&gt;nuika&lt;/a&gt; actually compiles your python application into an executable,
+  unlike PyInstaller which just generates a self-extracting&amp;nbsp;archive.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We&amp;rsquo;ll get there.&amp;nbsp;Someday.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Well actually you still need to &lt;code&gt;apt install python3-apsw&lt;/code&gt;, but that&amp;rsquo;s
+  only because apsw &lt;a href="https://rogerbinns.github.io/apsw/download.html#easy-install-pip-pypi"&gt;refuses&lt;/a&gt; to provide a binary wheel on pypi. It can be
+  replaced by the standard library sqlite3 module anyway - I only picked apsw
+  because it exposes essentially the same &lt;span class="caps"&gt;API&lt;/span&gt; as the SQLite C library, which
+  helped when I was learning to use SQLite properly for the first time.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Even with the above, pytaku still won&amp;rsquo;t run out of the box because it
+  needs a &lt;a href="https://github.com/nhanb/gae-proxy/"&gt;crappy proxy&lt;/a&gt; in order to
+  bypass mangasee&amp;rsquo;s strict cloudflare protection. I know it&amp;rsquo;s lame but pytaku
+  is practically a web scraper project and there&amp;rsquo;s no way to make it work
+  reliably without a proxy pool anyway. I hope this doesn&amp;rsquo;t distract you from
+  the point of the article though.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="posts"></category></entry><entry><title>Opening http link under the cursor in vim</title><link href="https://old.hi.imnhan.com/posts/opening-http-link-under-the-cursor-in-vim/" rel="alternate"></link><published>2021-08-07T11:37:00+07:00</published><updated>2021-08-07T11:37:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2021-08-07:/posts/opening-http-link-under-the-cursor-in-vim/</id><summary type="html">&lt;p&gt;Mr. &lt;a href="https://www.walterbright.com/"&gt;Walter Bright&lt;/a&gt;, creator of the D
+programming language, recently
+&lt;a href="https://news.ycombinator.com/item?id=28090272"&gt;commented&lt;/a&gt; on Hacker&amp;nbsp;News:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;And for bug fixes, reference the issue which often gives a detailed
+explanation for why the code is a certain&amp;nbsp;way:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/dlang/dmd/blob/master/src/dmd/backend/cgxmm.d#L1210"&gt;https://github.com/dlang/dmd/blob/master/src/dmd/backend/cgxmm.d#L1210&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Ever since …&lt;/p&gt;&lt;/blockquote&gt;</summary><content type="html">&lt;p&gt;Mr. &lt;a href="https://www.walterbright.com/"&gt;Walter Bright&lt;/a&gt;, creator of the D
+programming language, recently
+&lt;a href="https://news.ycombinator.com/item?id=28090272"&gt;commented&lt;/a&gt; on Hacker&amp;nbsp;News:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;And for bug fixes, reference the issue which often gives a detailed
+explanation for why the code is a certain&amp;nbsp;way:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/dlang/dmd/blob/master/src/dmd/backend/cgxmm.d#L1210"&gt;https://github.com/dlang/dmd/blob/master/src/dmd/backend/cgxmm.d#L1210&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Ever since I enhanced the editor I use to open the browser on links, this
+sort of thing has proven to be very, very&amp;nbsp;handy.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I&amp;rsquo;ve never had any issue with opening links from vim: I have &lt;code&gt;&amp;lt;leader&amp;gt;y&lt;/code&gt; set up
+in Visual mode to yank stuff into the system-wide clipboard which I can then
+paste into the browser. However, ever since I mapped &lt;code&gt;&amp;lt;leader&amp;gt;gh&lt;/code&gt; to trigger
+&lt;a href="https://github.com/tpope/vim-fugitive/blob/2dc08dfe354ed5400f5cdb3d5009dcd4024aac8a/doc/fugitive.txt#L213"&gt;&lt;code&gt;:GBrowse&lt;/code&gt;&lt;/a&gt; that opens a browser tab instantly, the old &amp;ldquo;select, copy,
+alt-tab to browser, ctrl+t, ctrl+v&amp;rdquo; flow started to feel&amp;hellip; prehistoric. Mr.
+Bright&amp;rsquo;s comment gave me the final nudge to actually go ahead and set it&amp;nbsp;up.&lt;/p&gt;
+&lt;p&gt;The good folks from the &lt;a href="https://stackoverflow.com/questions/9458294/open-url-under-cursor-in-vim-with-browser"&gt;developer encyclopedia&lt;/a&gt; suggested &lt;code&gt;gx&lt;/code&gt; but for some
+reason, setting &lt;code&gt;g:netrw_browsex_viewer&lt;/code&gt; &lt;a href="https://github.com/vim/vim/issues/4738"&gt;didn&amp;rsquo;t seem to do anything&lt;/a&gt; so the
+command would always &lt;code&gt;wget&lt;/code&gt; the link then tell the browser to open that
+downloaded file. Therefore, I cobbled together this snippet which was adapted
+from those stackoverflow &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; github&amp;nbsp;threads:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;function&lt;/span&gt;&lt;span class="nf"&gt;! OpenURL&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;let&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;matchstr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;expand&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;lt;cWORD&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;https\=:\/\/[^ &amp;gt;,;()]*&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;!&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;let&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;shellescape&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;let&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;command&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;!xdg-open &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;command&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;silent&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;exec&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;command&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="k"&gt;else&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;No URL found under cursor.&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;endif&lt;/span&gt;
+&lt;span class="n"&gt;endfunction&lt;/span&gt;
+
+&lt;span class="s"&gt;nnoremap&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;gl&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;:call&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;OpenURL()&amp;lt;cr&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;(if you&amp;rsquo;re on a Mac, replacing &lt;code&gt;xdg-open&lt;/code&gt; with &lt;code&gt;open&lt;/code&gt; will probably
+do the same&amp;nbsp;thing)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Now whenever I have my cursor on an http(s) url, I can type &lt;code&gt;gl&lt;/code&gt; from normal
+mode and xdg-open will use my default browser to open it up. This could be
+extended to any other scheme like &lt;code&gt;mailto&lt;/code&gt; or &lt;code&gt;ftp&lt;/code&gt; but I don&amp;rsquo;t have any
+practical use for them right now so that will&amp;nbsp;do.&lt;/p&gt;
+&lt;p&gt;One drawback is if there&amp;rsquo;s a whitespace in the &lt;span class="caps"&gt;URL&lt;/span&gt; (which is bad practice
+anyway), my regex won&amp;rsquo;t match the whole thing. In such cases I&amp;rsquo;d rather resort
+to good old manual visual mode than try to be clever and make my &lt;span class="caps"&gt;URL&lt;/span&gt; detecting
+logic exponentially more complex. I&amp;rsquo;d take simple software with obvious, easily
+understood behavior over overcomplicated, (possibly) subtly broken balls of mud
+any&amp;nbsp;day.&lt;/p&gt;
+&lt;p&gt;By the way, if you looked at my script and got spooked by the idea of executing
+a shell command composed from arbitrary, potentially unsafe input (i.e. text
+file content), don&amp;rsquo;t worry: that&amp;rsquo;s what &lt;a href="https://learnvimscriptthehardway.stevelosh.com/chapters/32.html#escaping-shell-command-arguments"&gt;&lt;code&gt;shellescape()&lt;/code&gt;&lt;/a&gt; is&amp;nbsp;for.&lt;/p&gt;
+&lt;h2 id="but-why-stop-there"&gt;But why stop there?&lt;a class="headerlink" href="#but-why-stop-there" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;We&amp;rsquo;re using Jira at work (I know, don&amp;rsquo;t ask), and we have a convention to
+include the Jira ticket in all top-level git commit messages like this (French&amp;nbsp;optional):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;[SRE-123456] Finally fix the goddamn pipeline
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;That&amp;rsquo;s no &lt;span class="caps"&gt;URL&lt;/span&gt;, but the jira ticket &lt;span class="caps"&gt;ID&lt;/span&gt; pattern is pretty simple, so I simply
+altered the regexp a bit like&amp;nbsp;this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;function&lt;/span&gt;&lt;span class="nf"&gt;! OpenJira&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;let&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;jira_id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;toupper&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;matchstr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;expand&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;lt;cWORD&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;\c\(id2\|sre\|csi\)-[0-9]\+&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;jira_id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;!&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;let&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;command&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;!xdg-open https://my-company.atlassian.net/browse/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;jira_id&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;command&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;silent&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;exec&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;command&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="k"&gt;else&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;No Jira ticket found under cursor.&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;endif&lt;/span&gt;
+&lt;span class="n"&gt;endfunction&lt;/span&gt;
+&lt;span class="s"&gt;nnoremap&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;gj&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;:call&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;OpenJira()&amp;lt;cr&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Voila! Now I can press &lt;code&gt;gj&lt;/code&gt; to open any atlassian ticket from just its &lt;span class="caps"&gt;ID&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Some interesting&amp;nbsp;points:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ID2/SRE/CSI&lt;/code&gt; are the prefixes that I know of. No idea if there are any
+  other. Would be trivial to add later&amp;nbsp;anyway.&lt;/li&gt;
+&lt;li&gt;Because the pattern of l:jira_id is very simple, I don&amp;rsquo;t even need to
+  shellescape() this&amp;nbsp;one.&lt;/li&gt;
+&lt;li&gt;I didn&amp;rsquo;t even bother to refactor common stuff between the OpenURL() and&amp;nbsp;OpenJira().&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;On a more big-picture note, I can afford to make seemingly sloppy decisions
+precisely because this serves only myself, and my specific use cases are
+usually narrow. It&amp;rsquo;s not very general, but it works, and works precisely the
+way I want it. This is one of the reasons I&amp;rsquo;ve always preferred simple tooling
+that I can build upon, rather than following the prescribed workflows of more
+full-fledged&amp;nbsp;IDEs.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m not bashing IDEs, and I&amp;rsquo;m in no way promoting vim or &lt;a href="https://github.com/DigitalMars/med"&gt;rolling your own
+emacs&lt;/a&gt;. I&amp;rsquo;m firmly in the &amp;ldquo;use whatever
+you&amp;rsquo;re comfortable with&amp;rdquo; camp. I think the whole idea of editor/&lt;span class="caps"&gt;IDE&lt;/span&gt; wars is
+juvenile, dumb and counterproductive (all software sucks in some way anyway,
+fight me). Showing nifty tricks you can do with your tools, inspiring others to
+either check them out or implement those on their own tools, just like how Mr.
+Bright has done with his little comment, is a much better use of everyone&amp;rsquo;s
+time. I&amp;nbsp;think.&lt;/p&gt;</content><category term="posts"></category></entry><entry><title>The video streaming finale, or why put.io is awesome</title><link href="https://old.hi.imnhan.com/posts/the-video-streaming-finale-or-why-putio-is-awesome/" rel="alternate"></link><published>2020-10-21T11:45:00+07:00</published><updated>2020-10-21T11:45:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2020-10-21:/posts/the-video-streaming-finale-or-why-putio-is-awesome/</id><summary type="html">&lt;p&gt;&lt;a href="/posts/streaming-videos-from-google-drive-a-second-attempt/"&gt;Previously&lt;/a&gt;,
+&lt;a href="/posts/towards-an-acceptable-video-playing-experience/"&gt;previously&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I ditched the whole self hosted mess and just bought a &lt;a href="https://put.io"&gt;put.io&lt;/a&gt;
+subscription instead. This has become the smoothest, most no-nonsense video
+streaming experience I&amp;rsquo;ve ever&amp;nbsp;had.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s a&amp;nbsp;seedbox.&lt;/p&gt;
+&lt;p&gt;It&amp;nbsp;transcodes.&lt;/p&gt;
+&lt;p&gt;It&amp;nbsp;streams.&lt;/p&gt;
+&lt;p&gt;It has a web-based video player that lets me pick&amp;nbsp;subtitles …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="/posts/streaming-videos-from-google-drive-a-second-attempt/"&gt;Previously&lt;/a&gt;,
+&lt;a href="/posts/towards-an-acceptable-video-playing-experience/"&gt;previously&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I ditched the whole self hosted mess and just bought a &lt;a href="https://put.io"&gt;put.io&lt;/a&gt;
+subscription instead. This has become the smoothest, most no-nonsense video
+streaming experience I&amp;rsquo;ve ever&amp;nbsp;had.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s a&amp;nbsp;seedbox.&lt;/p&gt;
+&lt;p&gt;It&amp;nbsp;transcodes.&lt;/p&gt;
+&lt;p&gt;It&amp;nbsp;streams.&lt;/p&gt;
+&lt;p&gt;It has a web-based video player that lets me pick&amp;nbsp;subtitles.&lt;/p&gt;
+&lt;p&gt;In cases when the subtitles aren&amp;rsquo;t recognized, or when I want to switch between
+audio tracks, I can always drag-n-drop the original file&amp;rsquo;s streaming &lt;span class="caps"&gt;URL&lt;/span&gt; from
+the browser straight to an mpv launcher like&amp;nbsp;this:&lt;/p&gt;
+&lt;video controls&gt;
+  &lt;source src="/images/put.io_01_mpv.mp4" type="video/mp4"&gt;
+  &lt;a href="/images/put.io_01_mpv.mp4"&gt;Video: /images/put.io_01_mpv.mp4&lt;/a&gt;
+&lt;/video&gt;
+
+&lt;p&gt;It also has a open source third-party &lt;a href="https://github.com/DSteve595/Put.io"&gt;Android app&lt;/a&gt; that lets me browse and
+stream via mpv-android. As icing on the cake, this app supports casting to
+Chromecast-enabled TVs - everything Just Works&amp;nbsp;(tm).&lt;/p&gt;
+&lt;p&gt;The above is only possible because put.io exposes a powerful, well-documented
+&lt;span class="caps"&gt;API&lt;/span&gt; for everyone to play&amp;nbsp;with.&lt;/p&gt;
+&lt;p&gt;The web player is clean, snappy (see that, Google Drive team?) and has
+autoplay disabled by default (screw you,&amp;nbsp;Netflix).&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s refreshing to find software that works &lt;em&gt;for&lt;/em&gt; instead of &lt;em&gt;against&lt;/em&gt; its
+users these&amp;nbsp;days.&lt;/p&gt;</content><category term="posts"></category></entry><entry><title>I did NOT sign that online petition!</title><link href="https://old.hi.imnhan.com/posts/i-did-not-sign-that-rmit-sc-petition/" rel="alternate"></link><published>2016-03-12T01:13:00+07:00</published><updated>2016-03-12T01:13:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2016-03-12:/posts/i-did-not-sign-that-rmit-sc-petition/</id><summary type="html">&lt;p&gt;This evening I received a rather strange&amp;nbsp;email:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/rmitsc_01_wtf.png"&gt;&lt;/p&gt;
+&lt;p&gt;Um&amp;hellip; I don&amp;rsquo;t remember signing any petition recently (or ever, for that&amp;nbsp;matter)?&lt;/p&gt;
+&lt;h2 id="what-happened"&gt;What happened?&lt;a class="headerlink" href="#what-happened" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Apparently someone used my &lt;span class="caps"&gt;RMIT&lt;/span&gt; student email address to sign some petition for disbanding the
+university&amp;rsquo;s Student Council. Said petition was apparently started by some …&lt;/p&gt;</summary><content type="html">&lt;p&gt;This evening I received a rather strange&amp;nbsp;email:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/rmitsc_01_wtf.png"&gt;&lt;/p&gt;
+&lt;p&gt;Um&amp;hellip; I don&amp;rsquo;t remember signing any petition recently (or ever, for that&amp;nbsp;matter)?&lt;/p&gt;
+&lt;h2 id="what-happened"&gt;What happened?&lt;a class="headerlink" href="#what-happened" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Apparently someone used my &lt;span class="caps"&gt;RMIT&lt;/span&gt; student email address to sign some petition for disbanding the
+university&amp;rsquo;s Student Council. Said petition was apparently started by some Ms. Trần Ngọc Tuệ Mẫn -
+Student Council&amp;rsquo;s vice president. Well&amp;hellip; yay for free speech, I guess? Anyway, my name was really
+among the signers&amp;nbsp;list:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/rmitsc_02_names.png"&gt;&lt;/p&gt;
+&lt;p&gt;How did this happen? Well, turns out &lt;strong&gt;iPetition does not require email confirmation upon
+signing&lt;/strong&gt;, so anyone can effectively enter any email and name they want and the stupid website will
+happily accept that as an absolutely definitely most positively legit supporter of your cause. Cool&amp;nbsp;huh?&lt;/p&gt;
+&lt;p&gt;Upon further inspection, almost all of the signer names are in one same format: the one that &lt;span class="caps"&gt;RMIT&lt;/span&gt;
+uses for its student names. So apparently a very motivated supporter of Ms. Mẫn&amp;rsquo;s&amp;hellip; interesting
+campaign has been helpful enough to go through &lt;span class="caps"&gt;RMIT&lt;/span&gt; students&amp;rsquo; IDs and names and sign us up, without
+us even having to know what it&amp;rsquo;s all about. Gee,&amp;nbsp;thanks!&lt;/p&gt;
+&lt;h2 id="why-do-i-even-care"&gt;Why do I even care?&lt;a class="headerlink" href="#why-do-i-even-care" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I just don&amp;rsquo;t like people using my name without my consent. More importantly, I have my reasons to
+disagree with the sentiments expressed in her petition description. Also I thought this could be a
+somewhat useful public service announcement, or a mildly entertaining daily wtf story. I don&amp;rsquo;t&amp;nbsp;know.&lt;/p&gt;
+&lt;p&gt;Hell, let&amp;rsquo;s throw in some of my own random thoughts to make this more like a blog&amp;nbsp;post:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;What&amp;rsquo;s with these petition websites? Have people actually achieved anything using these? Even if
+  a petition website does send confirmation emails, what&amp;rsquo;s stopping me from using trash addresses?
+  The signers&amp;rsquo; email addresses are not displayed anyway so president@rmit.edu.vn won&amp;rsquo;t be too
+  different from lol0042@spam.me now, will it? If you&amp;rsquo;re an official co-leader of something
+  official who wants to do something official about it, maybe try a more, I don&amp;rsquo;t know, official&amp;nbsp;channel?&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The number of signers keep going up steadily, but slowly. Maybe our friendly neighborhood
+  signerman is doing it all by hand instead of a script? If it&amp;rsquo;s the former&amp;hellip; let&amp;rsquo;s say I do
+  admire the dedication &lt;strike&gt;and abhor the absolute stupidity&lt;/strike&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Is it normal for a student council to be this full of&amp;nbsp;drama?&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;That concludes my mostly pointless blog post. Hopefully I&amp;rsquo;ll come up with something actually worth
+sharing soon. Until then, have an awesome&amp;nbsp;weekend!&lt;/p&gt;</content><category term="posts"></category></entry><entry><title>My first DIY fightstick: Part 2</title><link href="https://old.hi.imnhan.com/posts/my-first-diy-fightstick-part-2/" rel="alternate"></link><published>2016-01-23T17:10:00+07:00</published><updated>2016-01-23T17:10:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2016-01-23:/posts/my-first-diy-fightstick-part-2/</id><summary type="html">&lt;p&gt;It&amp;rsquo;s been a while since I &lt;a href="https://old.hi.imnhan.com/posts/my-first-diy-fightstick-part-1/"&gt;started&lt;/a&gt; my arcade stick project. To be honest I got lazy and paused
+the whole thing for a while, but yesterday I needed a distraction so&amp;hellip; everything came together
+much more nicely than I&amp;nbsp;thought!&lt;/p&gt;
+&lt;h2 id="i-did-it"&gt;I did it!&lt;a class="headerlink" href="#i-did-it" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I was almost done in …&lt;/p&gt;</summary><content type="html">&lt;p&gt;It&amp;rsquo;s been a while since I &lt;a href="https://old.hi.imnhan.com/posts/my-first-diy-fightstick-part-1/"&gt;started&lt;/a&gt; my arcade stick project. To be honest I got lazy and paused
+the whole thing for a while, but yesterday I needed a distraction so&amp;hellip; everything came together
+much more nicely than I&amp;nbsp;thought!&lt;/p&gt;
+&lt;h2 id="i-did-it"&gt;I did it!&lt;a class="headerlink" href="#i-did-it" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I was almost done in Part 1, except for the fact that button holes on the top panels didn&amp;rsquo;t align,
+and the topmost panel flexed a bit because of imprecise screw&amp;nbsp;holes:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Ewww" src="/images/fightstick_24_gap.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;To fix the button holes, I simply wrapped my roughest sandpaper around the drill bit and used it as
+a poor man&amp;rsquo;s sander to make the holes slightly bigger, just enough for buttons to fit. This took a
+while because the sandpaper pieces kept failing on me. Good thing I stock a huge roll in the first
+place!&amp;nbsp;:-)&lt;/p&gt;
+&lt;p&gt;The flexing panel was surprisingly trivial to fix: I simply made one corner&amp;rsquo;s hole a bit bigger to
+allow its screw to go all the way in properly. No more stupid&amp;nbsp;gaps!&lt;/p&gt;
+&lt;p&gt;Now that every piece was how it should be, the fun part began: assembling. The inside looked like&amp;nbsp;this:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick2_01_wires.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Notice the knot where the &lt;span class="caps"&gt;USB&lt;/span&gt; cable poked out? It was there as a safeguard against pulling so that
+the &lt;span class="caps"&gt;PCB&lt;/span&gt; doesn&amp;rsquo;t get yanked around. Later on I actually labeled every pair of wires for each button
+and secured the &lt;span class="caps"&gt;PCB&lt;/span&gt; better with more resilient tape, but I forgot to take photos and I&amp;rsquo;m now too
+lazy to open up the whole thing again so&amp;hellip; you get the&amp;nbsp;idea.&lt;/p&gt;
+&lt;p&gt;As for the top panel artwork, I planned quite a few colored designs, but was too lazy to go to a
+printing shop. As luck would have it, I had a black and white printer at home, so I grabbed some
+random Galford image on the internet and printed out one sheet just to see how it would look. It
+turned out much better than expected so I kept it that&amp;nbsp;way.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick2_02_top.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Note that I bought translucent buttons. These are worth the higher price tag because it is possible
+to take them apart and &lt;a href="http://forums.shoryuken.com/discussion/25926/guide-how-to-put-art-under-clear-seimitsu-buttons"&gt;insert artwork pieces&lt;/a&gt; under the cover. Just google custom fightsticks
+and you&amp;rsquo;ll find people making use of these buttons with &lt;a href="http://static.giantbomb.com/uploads/original/2/25628/2658140-photo+oct+04,+7+24+53+pm.jpg"&gt;stunning&lt;/a&gt; &lt;a href="http://technabob.com/blog/wp-content/uploads/2011/09/custom-steampunk-fight-stick-by-sam-kurd-aka-b15sdm-designs.jpg"&gt;results&lt;/a&gt;. But then again,
+I&amp;rsquo;m a lazy butt so my minimalistic design actually saved me from some tedious button modding.
+Maybe when I get better inspirations,&amp;nbsp;maybe.&lt;/p&gt;
+&lt;p&gt;Following the monochrome theme, the placeholder &amp;ldquo;Ken Flowchart&amp;rdquo; bottom piece from last post became
+official (I also trimmed the excess paper&amp;nbsp;later):&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_23_bottom.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Oh, and here&amp;rsquo;s a front shot for completeness&amp;rsquo;&amp;nbsp;sake:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick2_03_front.jpg"&gt;&lt;/p&gt;
+&lt;h2 id="thoughts"&gt;Thoughts&lt;a class="headerlink" href="#thoughts" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;All in all, this turned out much better than I expected. The whole thing feels solid to play with,
+and the plexiglass top panel makes a nice feeling palm rest. However, since I went a bit liberal on
+panel layers, it&amp;rsquo;s a tad heavier than my previous stick (which is already heavier than your average
+big brand sticks). On the flip side, I can be more aggressive with my joystick spinning sessions
+thanks to the extra&amp;nbsp;weight.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m also thinking of adding non-slip padding to the bottom. I almost exclusively play with the
+fightstick on my lap so it&amp;rsquo;s not actually necessary gameplay-wise, but without padding, the bottom
+screw heads stick out and would definitely scratch my table whenever I place the stick on it.
+Better be safe than&amp;nbsp;sorry!&lt;/p&gt;
+&lt;p&gt;That&amp;rsquo;s it! This project has been fun, and to me it served as an awesome gateway drug to the &lt;span class="caps"&gt;DIY&lt;/span&gt;
+world. Hopefully I inspired some of you to start your own projects too. Let me know how it&amp;nbsp;goes!&lt;/p&gt;</content><category term="posts"></category></entry><entry><title>My first DIY fightstick: Part 1</title><link href="https://old.hi.imnhan.com/posts/my-first-diy-fightstick-part-1/" rel="alternate"></link><published>2015-12-08T12:50:00+07:00</published><updated>2015-12-08T12:50:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2015-12-08:/posts/my-first-diy-fightstick-part-1/</id><summary type="html">&lt;p&gt;Ever since I started practicing Street Fighter seriously (albeit with modest results), I&amp;rsquo;ve
+always wanted to make myself a custom fightstick. Now that I&amp;rsquo;m not working full-time for anyone,
+there&amp;rsquo;s no better time to Just Do&amp;nbsp;It.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;ve done any research on &lt;span class="caps"&gt;DIY&lt;/span&gt; fightsticks, you …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Ever since I started practicing Street Fighter seriously (albeit with modest results), I&amp;rsquo;ve
+always wanted to make myself a custom fightstick. Now that I&amp;rsquo;m not working full-time for anyone,
+there&amp;rsquo;s no better time to Just Do&amp;nbsp;It.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;ve done any research on &lt;span class="caps"&gt;DIY&lt;/span&gt; fightsticks, you&amp;rsquo;ll know that the 2 best places to find guides
+are &lt;a href="http://www.slagcoin.com/"&gt;Slagcoin&lt;/a&gt; and &lt;a href="http://forums.shoryuken.com/categories/tech-talk"&gt;Shoryuken Tech Talk&lt;/a&gt;. I decided to follow the &lt;a href="http://www.slagcoin.com/joystick/example2.html"&gt;basic
+design&lt;/a&gt; on&amp;nbsp;Slagcoin:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="http://www.slagcoin.com/joystick/example2/simple1.jpg"&gt;&lt;/p&gt;
+&lt;h2 id="materials-and-tools"&gt;Materials and tools&lt;a class="headerlink" href="#materials-and-tools" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;If you live in Hồ Chí Minh City like me, you can probably get everything you need from shops on
+Bạch Đằng Street. The only hard part for me was convincing a small wood shop to sell &lt;span class="caps"&gt;MDF&lt;/span&gt; panels cut
+to my specifications in small&amp;nbsp;quantity:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;4 pieces x 30cm x 20cm x 1cm&amp;nbsp;*&lt;/li&gt;
+&lt;li&gt;2 pieces x 20cm x 4cm x&amp;nbsp;2cm&lt;/li&gt;
+&lt;li&gt;2 pieces x 20cm x 7cm x&amp;nbsp;2cm&lt;/li&gt;
+&lt;li&gt;1 piece x 26cm x 4cm x&amp;nbsp;2cm&lt;/li&gt;
+&lt;li&gt;4 pieces x 34cm x 7cm x 2cm&amp;nbsp;*&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;All that set me back 120,000 &lt;span class="caps"&gt;VND&lt;/span&gt;. The cost was mostly for cutting labor instead of actual material.
+The items with asterisks (*) are those I bought in abundance to make room for drilling&amp;nbsp;errors.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_01_mdf.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;The top panel would be layered with 1 &lt;span class="caps"&gt;MDF&lt;/span&gt; and 2 plexiglass pieces (mad illustrating skillz, I&amp;nbsp;know):&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_02_top_plan.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;The bottom would simply be 1 &lt;span class="caps"&gt;MDF&lt;/span&gt; and 1 plexiglass so I could also insert bottom&amp;nbsp;artwork.&lt;/p&gt;
+&lt;p&gt;Since I had zero woodworking experience, I joined the &lt;span class="caps"&gt;MDF&lt;/span&gt; pieces with simple butt joints and good
+old wood glue. You&amp;rsquo;ll notice that there&amp;rsquo;s a significant gap on one corner - turns out the shop
+wasn&amp;rsquo;t too accurate with their cutting. It&amp;rsquo;s not shown here but eventually I had to saw a longer
+&lt;span class="caps"&gt;MDF&lt;/span&gt; piece to replace&amp;nbsp;it.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_03_glue.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;I already had a hand drill laying around so all it took was buying a couple of hole saws - 24mm and
+30mm in diameter respectively. The bigger one was used for drilling main button holes while the
+other was for joystick hole and smaller front side&amp;nbsp;buttons.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_04_hole_saw.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Don&amp;rsquo;t buy&lt;/strong&gt; hole saws like the one below - you will not be able to drill through thick panels
+(like the 20mm thick one I&amp;nbsp;bought):&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_05_nope_saw.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;As for the actual parts, I ordered the joystick and buttons from &lt;a href="https://www.akishop.jp/"&gt;Akishop&lt;/a&gt;. It ships from
+Japan so the shipping cost to Vietnam is much more reasonable than if I buy from the &lt;span class="caps"&gt;US&lt;/span&gt;. I also
+bought a &lt;a href="http://www.ebay.com/itm/Zero-Delay-USB-Encoder-to-PC-Joystick-For-Arcade-DIY-KIT-Sanwa-Parts-MAME-/191558265304?hash=item2c99c329d8#shpCntId"&gt;Zero Delay &lt;span class="caps"&gt;PCB&lt;/span&gt; kit&lt;/a&gt; from ebay. This one even offers free shipping since it&amp;rsquo;s from
+China. This kit offers easy solder-free wires too so it saved me from a lot of trouble (I still
+can&amp;rsquo;t find where to quick-disconnect terminals to this date). I connected everything to my &lt;span class="caps"&gt;PC&lt;/span&gt; to
+test if things worked as&amp;nbsp;expected:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_26_electronics.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Quick note: the popular wisdom is to buy screw-in buttons for thick panels and scap-in for thin
+ones. However, as my panel is &lt;em&gt;way&lt;/em&gt; too thick even for screw-ins, snap-ins are actually the better
+choice: you just need to put the buttons in normally - the 2 sides of the button will push against
+the hole and keep it there fairly firmly. I never had a problem with my previous stick which was
+build this&amp;nbsp;way.&lt;/p&gt;
+&lt;h2 id="actually-making-it"&gt;Actually making it&lt;a class="headerlink" href="#actually-making-it" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I drilled holes in the front side: first using the 30mm bit to drill halfway, then went all the way
+with the 24mm bit. This allows a small button to be placed deep into the case, avoiding
+accidentally button&amp;nbsp;presses.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_06_front_holes.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Then I glued the case body together. I didn&amp;rsquo;t have big clamps laying around so I had to make do
+with an elastic string. It worked terribly&amp;nbsp;though.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_07_glue_body.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Note that the bottom panel was just there to keep the whole thing in shape. I took it out&amp;nbsp;later:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_08_glue_body2.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;See the gap in the top left corner? That&amp;rsquo;s the gap I was talking about earlier. Good thing I had a
+spare piece laying around, so I sawed it to the correct length to use as a&amp;nbsp;replacement:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_09_saw_side.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Now everything fitted together but there was some excess on one long side. Much sanding&amp;nbsp;awaits!&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_10_excess.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Initial sanding effort with 140 grit&amp;nbsp;sandpaper:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_11_sanded.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;By the way, I recommend using a sanding block. It helps you apply more pressure evenly. I simply
+wrapped my sandpaper around a spare piece of &lt;span class="caps"&gt;MDF&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_12_sanding_block.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Now on to the inner sides. These would support the top and bottom panels. I used a long piece of
+scrap plexiglass to apply pressure instead of a clamp. This time I put one 10mm-thick wood panel
+and one 3mm-thick plexiglass panel under it to make sure the inner supports are glued at the
+correct&amp;nbsp;position.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_13_inner_support.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;With all 3 inner sides&amp;nbsp;glued:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_14_inner_support2.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Now you must be wondering why I had 2 inner pieces on the left side. I originally wanted to save
+some space and weight by sawing those into shorter support bits instead of long whole pieces that
+covered the full length. After sawing the first piece I decided that it wasn&amp;rsquo;t worth the effort
+anyway so&amp;hellip; there you have&amp;nbsp;it.&lt;/p&gt;
+&lt;p&gt;Here comes the next challenge: putting paint on the &lt;span class="caps"&gt;MDF&lt;/span&gt;. There is an &lt;a href="http://forums.shoryuken.com/discussion/67501/how-to-paint-mdf-to-a-mirror-finish-worklog"&gt;extremely elaborate
+method&lt;/a&gt; explained on Shoryuken Tech Talk that helps you achieve a mirror-like glossy
+finish. Of course I don&amp;rsquo;t have the tools and patience to follow all that, but I followed the first
+few steps (cover edges with non-absorbent material, sand and spray paint multiple times) to achieve
+an acceptably smooth&amp;nbsp;finish.&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s the first step: cover edges with non-absorbent material. The tutorial suggested using
+spackling, which I have no idea how to obtain from here. I settled with something Vietnamese people
+&amp;ldquo;matic&amp;rdquo; (mastic, perhaps?) which my friends said was to be used for the same purpose. The thing was
+yellow-ish and much more runny than spackling. It was also difficult as hell to work with: the
+moment it&amp;rsquo;s spread on the &lt;span class="caps"&gt;MDF&lt;/span&gt; edge, it starts drying, at which point you can&amp;rsquo;t touch it again
+unless you want an ugly grungy finish (is that even a&amp;nbsp;word?):&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_15_mastic.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;I waited for the yellow thing to dry, then sanded it again. After a first few coats with glossy
+black spray paint, things didn&amp;rsquo;t look too&amp;nbsp;sexy:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_16_first_coat.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;It did get better with sanding (1200 grit) and more coats though. But then I made the most stupid
+decision: glueing the top panel on before&amp;nbsp;drilling:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_17_top_panel.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Now why was this bad? Because now I would be forced to drill top panel holes &lt;em&gt;with&lt;/em&gt; the whole body
+attached, which will expose the whole thing to sawdust, which was generally &lt;span class="caps"&gt;PITA&lt;/span&gt; to clean up - the
+top panel made it a closed shape with corners and spaces all over the place. Also, if I screwed up
+the top &lt;span class="caps"&gt;MDF&lt;/span&gt; panel (which I eventually kinda did), the whole thing would be&amp;nbsp;ruined.&lt;/p&gt;
+&lt;p&gt;As if that wasn&amp;rsquo;t enough, I did paint it too. The paint layer would later make disgusting drill&amp;nbsp;holes:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_18_joystick_hole.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;But I&amp;rsquo;m getting ahead of myself. Here&amp;rsquo;s how the case looked after a few more black coats and one
+clear coat (also put buttons in there to see how they&amp;nbsp;fit):&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_19_finished_coat.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;I did drill an extra button hole because I realized I&amp;rsquo;d need the &amp;ldquo;Playstation&amp;rdquo; button too if I want
+to use a &lt;span class="caps"&gt;PS4&lt;/span&gt; controller &lt;span class="caps"&gt;PCB&lt;/span&gt; later (which I plan to do). Unfortunately I only ordered 2 small
+buttons from Akishop so I had to use a green Chinese button I had laying&amp;nbsp;around.&lt;/p&gt;
+&lt;p&gt;Now here comes the hard part: drilling the top panel. As mentioned earlier, the top panel would be&amp;nbsp;3-layer:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_02_top_plan.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;I placed all 3 pieces onto the case, but with the 4mm plexiglass on top (in the plan it&amp;rsquo;s supposed
+to be in the middle - I&amp;rsquo;ll explain later). Then I printed the Blast City button layout found on
+Slagcoin and taped it onto the whole&amp;nbsp;thing:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_20_top_layout.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Notice the extra two holes I drew above and below the joystick hole. Those are for screw holes for
+mounting the joystick. This is why I put the 4mm piece on top: I was going to drill these two holes
+on the 4mm piece only to leave room for screw heads. This way I didn&amp;rsquo;t need to &amp;ldquo;route&amp;rdquo; the extra 2
+holes on my &lt;span class="caps"&gt;MDF&lt;/span&gt; piece like the original plan (I was afraid the 10mm &lt;span class="caps"&gt;MDF&lt;/span&gt; thickness was already too&amp;nbsp;thin).&lt;/p&gt;
+&lt;p&gt;After drilling the necessary holes, I removed the plexiglass pieces and drilled the aformentioned 2
+joystick mounting holes into to &lt;span class="caps"&gt;MDF&lt;/span&gt;, then I placed the joystick mounting plate onto the surface to
+plot the rectangular part that needed to be cut&amp;nbsp;off:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_21_joystick_square.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Since I don&amp;rsquo;t have any power tool, I used my handy hand drill with the circular hole saw to
+gradually drill out the&amp;nbsp;shape:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_22_joystick_drills.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;After much sanding and&amp;nbsp;cleaning:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_18_joystick_hole.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;See the glorious tears? That&amp;rsquo;s what premature painting does to you. Friends don&amp;rsquo;t let friends paint&amp;nbsp;prematurely!&lt;/p&gt;
+&lt;p&gt;Anyway, I also drilled 3 hole on the bottom to install the bottom pieces (1 &lt;span class="caps"&gt;MDF&lt;/span&gt; &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; 1 plexiglass). I
+also printed a quick picture as a placeholder artwork to see how it would&amp;nbsp;look:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_23_bottom.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;As I was excited to finish the putting the top panel together, I hit a wall: because I couldn&amp;rsquo;t
+possibly drill perfectly perpendicular screw holes, they could not property&amp;nbsp;attach:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_25_loose_screw.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Also, thanks to the switching positions between the two plexiglass pieces, the button holes didn&amp;rsquo;t
+align anymore. I had to waste a buttload of time sanding the lower piece&amp;rsquo;s holes to make them&amp;nbsp;bigger.&lt;/p&gt;
+&lt;p&gt;But that&amp;rsquo;s not even the worst issue: because the screw holes were not aligned, once I screwed all
+four corners, the top plexiglass piece flexed, creating a blatantly noticeable&amp;nbsp;gap:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/fightstick_24_gap.jpg"&gt;&lt;/p&gt;
+&lt;h2 id="um-thats-it-for-now"&gt;Um&amp;hellip; that&amp;rsquo;s it (for now).&lt;a class="headerlink" href="#um-thats-it-for-now" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;That&amp;rsquo;s all of my progress so far. I&amp;rsquo;m visiting my &lt;a href="http://fablabsaigon.org/"&gt;local Fablab&lt;/a&gt;, which is advertised to
+have &lt;span class="caps"&gt;CNC&lt;/span&gt; machines and laser cutters so I&amp;rsquo;ll probably have a chance to produce more accurate panels.
+Hell, I may even redo the whole thing using machine-cut pieces for absolute accuracy and save
+myself from a world of&amp;nbsp;pain.&lt;/p&gt;
+&lt;p&gt;I took a lot of photos as I went, so if you want to see more photos of my progress, just check out
+my &lt;a href="https://www.flickr.com/photos/nhanb/albums/72157661059385592"&gt;flickr album&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Till next&amp;nbsp;time!&lt;/p&gt;</content><category term="posts"></category></entry><entry><title>Look ma, no stock theme!</title><link href="https://old.hi.imnhan.com/posts/look-ma-no-stock-theme/" rel="alternate"></link><published>2015-06-05T13:54:00+07:00</published><updated>2015-06-05T13:54:00+07:00</updated><author><name>Bùi Thành Nhân</name></author><id>tag:old.hi.imnhan.com,2015-06-05:/posts/look-ma-no-stock-theme/</id><summary type="html">&lt;p&gt;&lt;strong&gt;2023 Update&lt;/strong&gt;: I just realized that em dashes in certain default sans-serif
+fonts look terrible (no space around the dash), so I now explicitly use Source
+Sans Pro and Ubuntu Mono. Using specific fonts allow me to fine-tune my
+typography again (e.g. making code block text a bit&amp;nbsp;smaller …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;strong&gt;2023 Update&lt;/strong&gt;: I just realized that em dashes in certain default sans-serif
+fonts look terrible (no space around the dash), so I now explicitly use Source
+Sans Pro and Ubuntu Mono. Using specific fonts allow me to fine-tune my
+typography again (e.g. making code block text a bit&amp;nbsp;smaller).&lt;/p&gt;
+&lt;p&gt;The extra http load is not that bad: each woff2 font variant averages at &lt;span class="caps"&gt;50KB&lt;/span&gt;,
+and is only loaded if a page&amp;rsquo;s content actually calls for it. A particularly
+&lt;a href="http://localhost:8000/posts/working-with-sqlite-in-python-without-an-orm-or-migration-framework/"&gt;bad case&lt;/a&gt; loads 6 variants, clocking in at ~&lt;span class="caps"&gt;300KB&lt;/span&gt;. I can live with&amp;nbsp;that.&lt;/p&gt;
+&lt;p&gt;I also took this chance to go full black-on-white, which I think looks way
+crisper than&amp;nbsp;black-on-cornsilk.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2020 Update&lt;/strong&gt;: I bit the bullet and removed all web fonts, relying on the
+browser&amp;rsquo;s configured sans-serif/monospace fonts instead. It&amp;rsquo;s probably fine,
+since even stock fonts seem to cover Vietnamese glyphs well these days.
+Otherwise, people who care enough to be bothered by fallback fonts are likely
+to know how to configure their browser with proper fonts&amp;nbsp;anyway.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2017 Update&lt;/strong&gt;: Now that I like high contrast more, I just updated the
+theme to a black/white/red palette with a &lt;a href="https://github.com/adobe-fonts/source-serif-pro"&gt;high-quality serif font&lt;/a&gt;
+instead. Thanks &lt;a href="https://practicaltypography.com/"&gt;Mr. Butterick&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;The original post&amp;nbsp;follows.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;I just redesigned my&amp;nbsp;blog.&lt;/p&gt;
+&lt;p&gt;To be totally honest, the previous design was not mine at all. I&amp;rsquo;ve always been using
+&lt;a href="https://github.com/duilio/pelican-octopress-theme/"&gt;pelican-octopress-theme&lt;/a&gt;, which is a Pelican port of the default theme for Octopress. It&amp;rsquo;s not
+that I have anything to complain about that theme: it was clean, readable and easy on the eyes. I
+just want my site to look unique. Content is king, sure, but it wouldn&amp;rsquo;t hurt to stand out from the
+crowd once in a&amp;nbsp;while.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m not a professional designer, but everything turned out quite well if I could say so. In this
+post I&amp;rsquo;ll explain my design goals and how I (hopefully) achieved&amp;nbsp;them.&lt;/p&gt;
+&lt;h2 id="clean-and-lightweight"&gt;Clean and lightweight&lt;a class="headerlink" href="#clean-and-lightweight" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The web is messy. I&amp;rsquo;m not talking blinking-marquee-fire-animated-header messy (thank god we&amp;rsquo;re done
+with that&amp;hellip; &lt;a href="https://developers.google.com/fonts/docs/getting_started#Effects"&gt;or are we?&lt;/a&gt;). I&amp;rsquo;m talking megabytes-of-useless-javascript-and-css messy. For
+whatever reason, some people now think it&amp;rsquo;s cool to include Bootstrap/Foundation to every project,
+or to include that new shiny parallax library to ruin scrolling for everybody. Oh, and don&amp;rsquo;t forget
+the marvellous invention that is &lt;a href="https://xkcd.com/1309/"&gt;&amp;ldquo;infinite scrolling&amp;rdquo;&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="https://imgs.xkcd.com/comics/infinite_scrolling.png"&gt;&lt;/p&gt;
+&lt;p&gt;In fact, the main motivation of my new theme is &lt;a href="http://motherfuckingwebsite.com/"&gt;this satire page&lt;/a&gt; on the sad state of the web
+we&amp;rsquo;re in&amp;nbsp;today.&lt;/p&gt;
+&lt;p&gt;That&amp;rsquo;s why I decided to do no fancy cosmetic &lt;span class="caps"&gt;JS&lt;/span&gt; and try to keep my use of static assets to a&amp;nbsp;minimum:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="" src="/images/mofo_01_loads.png"&gt;&lt;/p&gt;
+&lt;p&gt;I guess there&amp;rsquo;s nothing I can do about the font files though, since I need to make sure my
+Vietnamese posts are rendered in a font that supports it. Oh well, at least it looks&amp;nbsp;awesome.&lt;/p&gt;
+&lt;h2 id="content-is-king"&gt;Content is king&lt;a class="headerlink" href="#content-is-king" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;No more distracting sidebar with &amp;ldquo;latest news&amp;rdquo;, &amp;ldquo;related posts&amp;rdquo;, etc. with thumbnails popping up
+all over the place, just a good old article body from start to&amp;nbsp;finish.&lt;/p&gt;
+&lt;h2 id="easy-on-the-eye"&gt;Easy on the eye&lt;a class="headerlink" href="#easy-on-the-eye" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;While &lt;a href="http://bettermotherfuckingwebsite.com/"&gt;bettermotherfuckingwebsite&lt;/a&gt; does a good job at demonstrating how far you can go with a
+few simple &lt;span class="caps"&gt;CSS&lt;/span&gt; rules (hint: very far), I found Tommi Kaikkonen&amp;rsquo;s &lt;a href="http://www.kaikkonendesign.fi/typography/"&gt;Interactive Guide to Blog
+Typography&lt;/a&gt; much more comprehensive and informative. I implemented many of the ideas found
+in that&amp;nbsp;guide:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Big body&amp;nbsp;font&lt;/li&gt;
+&lt;li&gt;Constrained line width to aid&amp;nbsp;reading&lt;/li&gt;
+&lt;li&gt;Generous line height, liberal whitespace to help with visual&amp;nbsp;hierarchy&lt;/li&gt;
+&lt;li&gt;Lower background-foreground contrast. I also find the slightly yellow-ish background somewhat&amp;nbsp;soothing.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="thats-it"&gt;That&amp;rsquo;s it!&lt;a class="headerlink" href="#thats-it" title="Permanent link"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;You can find the source code to my theme &lt;a href="https://github.com/nhanb/motherfucking-pelican-theme"&gt;on GitHub&lt;/a&gt;. I don&amp;rsquo;t recommend using it as-is though,
+since I haven&amp;rsquo;t implemented many required templates (authors, tags, categories, etc.) because I
+don&amp;rsquo;t use them. There&amp;rsquo;s also the hardcoded content in footer and probably a few more places. Maybe
+someday I&amp;rsquo;ll stop being lazy and fix all that. &lt;em&gt;Maybe&lt;/em&gt;.&lt;/p&gt;</content><category term="posts"></category></entry></feed>

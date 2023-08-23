@@ -1,0 +1,54 @@
+<!DOCTYPE html><html> <head><meta charset="utf-8"><title>Introducing Pytaku—the only online manga reader you’ll ever need | Hi, I'm Nhân</title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/theme/css/font.css"><link rel="stylesheet" href="/theme/css/pygment.css"><link rel="stylesheet" href="/theme/css/main.css"><link rel="stylesheet" href="/theme/css/article.css"><meta name="twitter:card" content="summary"><meta name="twitter:creator" content="@nhanbt"><meta property="og:title" content="Introducing Pytaku—the only online manga reader you’ll ever need"><meta property="og:description" content="Heads up from 2021! This post describes a previous incarnation of Pytaku which is no longer alive. The new Pytaku is a slightly different thing which is being (relatively) actively developed on sourcehut. Pytaku is an online manga reader that scrapes..."><meta property="og:image" content="../../images/pytaku_01_chapter_progress.png"></head> <!--
+
+Why hello there, source viewer. Here's a dragon for no particular reason:
+
+       ^                       ^
+       |\   \        /        /|
+      /  \  |\__  __/|       /  \_
+     / /\ \ \ _ \/ _ /      /    \_
+    / / /\ \ {*}\/{*}      /  / \ \_
+    | | | \ \( (00) )     /  // |\ \_
+    | | | |\ \(V""V)\    /  / | || \|
+    | | | | \ |^--^| \  /  / || || ||
+   / / /  | |( WWWW__ \/  /| || || ||
+  | | | | | |  \______\  / / || || ||
+  | | | / | | )|______\ ) | / | || ||
+  / / /  / /  /______/   /| \ \ || ||
+ / / /  / /  /\_____/  |/ /__\ \ \ \ \_
+ | | | / /  /\______/    \   \__| \ \ \_
+ | | | | | |\______ __    \_    \__|_| \_
+ | | ,___ /\______ _  _     \_       \  |
+ | |/    /\_____  /    \      \__     \ |    /\_
+ |/ |   |\______ |      |        \___  \ |__/  \_
+ v  |   |\______ |      |            \___/     |
+    |   |\______ |      |                    __/
+     \   \________\_    _\               ____/
+   __/   /\_____ __/   /   )\_,      _____/
+  /  ___/  \____/  ___/___)    \______/
+  VVV  V        VVV  V
+
+(ripped off from http://www.retrojunkie.com/asciiart/myth/dragons.htm)
+
+--> <body> <div id="main"> <header> <h1 id="site-name"><a href="/">Hi, I'm Nhân</a></h1> <h2 id="site-subtitle">and this is my humble corner on the intertubes.</h2> </header> <nav> <ul class="navbar" id="left-navbar"> <li><a href="/">Blog</a></li> <li><a href="../../about/">About</a></li> <li><a href="../../projects/">Projects</a></li> </ul> <ul class="navbar" id="right-navbar"> <li><a href="https://cv.imnhan.com">CV</a></li> <li><a href="/feeds/atom.xml">Feed</a></li> </ul> <div class="clearfix"></div> </nav> <div id="content"> <div class="article-content"> <article> <h1 class="article-title"> Introducing Pytaku—the only online manga reader you’ll ever need </h1> <time datetime="2015-01-02 21:19:00+07:00"> January 02, 2015 </time> <blockquote> <p><strong>Heads up from 2021!</strong> This post describes a previous incarnation of Pytaku which is no longer alive. The new Pytaku is a slightly different thing which is being (relatively) actively developed <a href="https://sr.ht/~nhanb/pytaku/">on sourcehut</a>.</p> </blockquote> <p><a href="https://pytaku.appspot.com">Pytaku</a> is an online manga reader that scrapes data from multiple Vietnamese and English manga sites, giving you one single place to keep track of your reading progress and watch for new chapters with ease. Here are some of the features implemented so&nbsp;far:</p> <h2 id="lightning-fast-ad-free-reading-experience">Lightning fast, ad-free reading experience<a class="headerlink" href="#lightning-fast-ad-free-reading-experience" title="Permanent link">#</a></h2> <p>All pages in a chapter are loaded at once, unlike most other sites that only let you view one page at a time, forcing you to reload their distracting advertisements and disrupt you flow (especially for people with not-so-fast internet&nbsp;connection).</p> <p>And it gets better: using state-of-the-art <span class="caps">AJAX</span> dark magic, even navigation between chapters is lightning fast. Loaded pages are cached, so pressing &ldquo;Back&rdquo; or &ldquo;Forward&rdquo; on your browser happens&nbsp;instantly.</p> <h2 id="keep-track-of-your-reading-progress-automatically">Keep track of your reading progress. Automatically.<a class="headerlink" href="#keep-track-of-your-reading-progress-automatically" title="Permanent link">#</a></h2> <p>Each logged in user will have a nice badge on each chapter showing their progress: (keeping a chapter page open for a few seconds registers it as &ldquo;reading&rdquo;, and scrolling to the bottom marks it as&nbsp;&ldquo;finished&rdquo;)</p> <p><img alt="Chapter progress badge" src="/images/pytaku_01_chapter_progress.png"></p> <h2 id="bookmark-series-to-watch-for-updates">Bookmark series to watch for updates<a class="headerlink" href="#bookmark-series-to-watch-for-updates" title="Permanent link">#</a></h2> <p>Maintain a list of series so you can have one single place to find out whether there are new chapters for the series you&nbsp;love.</p> <p><img alt="Bookmarked series" src="/images/pytaku_02_bookmarked_series.png"></p> <h2 id="english-vietnamese-and-support-for-other-languages">English, Vietnamese and support for other languages<a class="headerlink" href="#english-vietnamese-and-support-for-other-languages" title="Permanent link">#</a></h2> <p>Pytaku comes in English by default and configurable to be in Vietnamese. If you want to translate it to your own language, feel free to follow the example from the <a href="https://github.com/nhanb/pytaku-old-gae/blob/master/frontend/languages/en.yaml">English language file</a> and send me a pull&nbsp;request.</p> <p><img alt="Vietnamese interface" src="/images/pytaku_03_vietnamese.png"></p> <h2 id="open-source-and-free-to-run-your-own-site">Open source and free to run your own site<a class="headerlink" href="#open-source-and-free-to-run-your-own-site" title="Permanent link">#</a></h2> <p>Pytaku&rsquo;s source code is released under the free-as-in-freedom <a href="https://www.gnu.org/licenses/quick-guide-gplv3.html">GPLv3</a> and <a href="https://github.com/nhanb/pytaku-old-gae/">put on GitHub</a>. Since it&rsquo;s written to be run on Google App Engine which is free for small sites, tech-savvy people can set up their own private pytaku clone in a few minutes. Check out the <a href="https://github.com/nhanb/pytaku-old-gae/blob/master/README.markdown"><span class="caps">README</span> file</a> for&nbsp;instructions.</p> <h2 id="open-to-suggestions-and-hopefully-contructive-criticism">Open to suggestions and (hopefully contructive) criticism<a class="headerlink" href="#open-to-suggestions-and-hopefully-contructive-criticism" title="Permanent link">#</a></h2> <p>Want another manga site to be included as source? Need a feature that you think many others can benefit from? Feel free to open an issue on GitHub, or give me a shout on the official <a href="https://gitter.im/nhanb/pytaku">support chat room</a>.</p> <h2 id="give-it-a-spin">Give it a spin<a class="headerlink" href="#give-it-a-spin" title="Permanent link">#</a></h2> <p><a href="https://pytaku.appspot.com">Click here</a> to go to the app. Have fun!&nbsp;:)</p> </article> </div> <h2 id="comments">Comments</h2> <div id="disqus_thread"> <button id="showCommentBtn">Show comments via Disqus</button> <noscript><br>(enable JavaScript first though)</noscript> </div> <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    // These need to be defined in the outermost scope, apparently.
+    var disqus_shortname = 'nerdyweekly';
+    var disqus_identifier = '/posts/introducing-pytaku-the-only-online-manga-reader-youll-ever-need/';
+    var disqus_url = '../../posts/introducing-pytaku-the-only-online-manga-reader-youll-ever-need/';
+    var disqus_title = 'Introducing Pytaku—the only online manga reader you’ll ever need';
+
+    document.querySelector('#showCommentBtn').addEventListener('click', function (event) {
+        // Immediate visual feedback is always good:
+        event.target.disabled = true;
+        event.target.innerHTML = 'Loading comments...';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    });
+</script> </div> <footer> &copy; 2013–2023 Bùi Thành Nhân <br> Built with &#9829; and probably too much <a target="_blank" rel="noopener" href="https://www.alambe.vn/products/ca-phe-rang-xay-alambe-sai-gon">cà phê sữa đá</a>. <p class="easter-egg" style="display: none; font-size: .7em; margin: 0; color: var(--bg-color);"> Bored? Try entering the Konami code from your keyboard. </p> <script>
+        document.querySelector('.easter-egg').style.display = 'block';
+      </script> </footer> </div> <script src="/theme/konami.js"></script> </body> </html>

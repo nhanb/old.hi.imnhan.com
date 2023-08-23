@@ -1,0 +1,30 @@
+.article-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.article-list li {
+  margin-bottom: 1rem;
+  line-height: 1.1rem;
+}
+
+.article-list a {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.article-list time {
+  font-size: 0.9em;
+  display: block;
+  margin-top: 0.1rem;
+}
+
+@media (min-width: 780px) {
+  .article:hover::before {
+    position: absolute;
+    margin-left: -1rem;
+    color: var(--fg-color);
+    content: "$";
+  }
+}
