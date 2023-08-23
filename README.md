@@ -1,3 +1,8 @@
+# DEPRECATED
+
+I've migrated my blog to https://github.com/nhanb/hi.imnhan.com/ which uses my
+own static site generator called [s4g](https://github.com/nhanb/s4g).
+
 # My blog
 
 This is the source code for https://hi.imnhan.com using
