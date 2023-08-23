@@ -5,13 +5,13 @@ own static site generator called [s4g](https://github.com/nhanb/s4g).
 
 # My blog
 
-This is the source code for https://hi.imnhan.com using
+This is the source code for https://old.hi.imnhan.com using
 [Pelican](http://github.com/getpelican/pelican)
 
 # Dev environment
 
 - `make devserver` / `make stopserver` for local dev at port 8000
-- `make github` to publish to hi.imnhan.com
+- `make github` to publish
 
 Alternatively, if you find the `make dev/stopserver` workflow clumsy, manually run `pelican -r` and
 simple python http server to keep everything in the foreground:

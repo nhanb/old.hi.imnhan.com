@@ -10,7 +10,7 @@ from pelicanconf import *  # noqa
 # This file is only used if you use `make publish` or
 # explicitly specify it as your config file.
 
-SITEURL = "https://hi.imnhan.com"
+SITEURL = "https://old.hi.imnhan.com"
 RELATIVE_URLS = True
 
 DELETE_OUTPUT_DIRECTORY = True

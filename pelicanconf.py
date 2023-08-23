@@ -37,6 +37,7 @@ EXTRA_PATH_METADATA = {
     "extra/favicon.png": {"path": "favicon.png"},
     "extra/404.html": {"path": "404.html"},
     "extra/ping.html": {"path": "ping.html"},
+    "extra/robots.txt": {"path": "robots.txt"},
 }
 
 ARTICLE_PATHS = ["posts"]
